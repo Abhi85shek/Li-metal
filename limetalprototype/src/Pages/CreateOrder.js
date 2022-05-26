@@ -3,20 +3,20 @@ import {areas,costCenter,areaOfWork,locations} from "../data";
 const CreateOrder = () => {
 
     let result =costCenter;
-    const [area,setArea] =useState("");
+    // const [area,setArea] =useState("");
 
-    const areaHandler =(e)=>{
-        console.log(e.target.value);
-       result = costCenter.filter(cost => cost.linkedArea == e.target.value);
-
+    const areaHandler =(area)=>{
+        // console.log(e.target.value);
+       result = costCenter.filter(cost => cost.linkedArea == area);
+        console.log(result);
     };
-    console.log(area);
+  
     console.log(result);
   return (
     <div className='w-[25%]'>
         <div>
             <label for="area" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Area</label>
-            <select id="area" onChange={(e)=>{setArea(e.target.value);areaHandler(e)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select id="area" onChange={(e)=>{areaHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             
     {   areas.map((area)=>(
                 <option value={area.areaName}>{area.areaName}</option>
