@@ -2,7 +2,6 @@ import React from 'react'
 
 const SuppliersTable = () => {
   return (
-    
         <div class="flex flex-col mt-5">
         <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
             <div class="overflow-hidden shadow-md sm:rounded-lg">
