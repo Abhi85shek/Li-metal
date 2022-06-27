@@ -1,7 +1,5 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
-import { data } from 'autoprefixer';
-
 const CreateOrder = () => {
     const [areas,setAreas] = useState([]);
     const [areaValue,setAreaValue] = useState("");
@@ -35,7 +33,6 @@ const CreateOrder = () => {
     const generatePoNumber = async()=>{
         const result = await axios.post(`http://localhost:4000/generatePO`,{areaId:areaValue,costCenterId:costCenterValue,areaOfWorkId:areaOfWorkValue,locationId:locationValue});
         setPoGenerateData(result.data.PONumber);
-        // console.log(result.data.PONumber);
     };
     useEffect(()=>{
             getArea();
@@ -54,6 +51,17 @@ const CreateOrder = () => {
     },[]);
   return (
     <div className='w-[25%]'>
+        <div className='pt-5'>
+        <label for="location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Location</label>
+            <select id="location" required  onChange={(e)=>{setLocationValue(e.target.value)}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Choose a Location</option>
+            {
+                locations.map((location)=>(
+                    <option value={location.id}>{location.locationName}</option>
+                ))
+            }
+            </select>
+        </div>
         <div>
             <label for="area" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Area</label>
             <select id="area" onChange={(e)=>{setAreaValue(e.target.value)}} value={areaValue} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -86,17 +94,7 @@ const CreateOrder = () => {
             }
             </select>
         </div>
-        <div className='pt-5'>
-        <label for="location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Location</label>
-            <select id="location" required  onChange={(e)=>{setLocationValue(e.target.value)}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Choose a Location</option>
-            {
-                locations.map((location)=>(
-                    <option value={location.id}>{location.locationName}</option>
-                ))
-            }
-            </select>
-        </div>
+        
         <div className='text-center mt-4'>
             <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={generatePoNumber}>Generate PO Number</button>
         </div>

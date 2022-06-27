@@ -3,6 +3,7 @@ import { useRecoilValue,useRecoilState } from 'recoil';
 import serviceDetailsAtom from '../atoms/ServiceState';
 import deleteModalAtom from '../atoms/deleteModalAtom';
 import confirmModalAtom from '../atoms/confirmModalAtom';
+import { v4 as uuidv4 } from "uuid";
 import DeleteModal from './DeleteModal';
 const AddServiceTable = () => {
 
@@ -50,14 +51,12 @@ const AddServiceTable = () => {
                 <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                   Action
                 </th>
-                
               </tr>
             </thead>
             <tbody>
-
             {  serviceDetails.length > 0   &&
                 serviceDetails.map((list)=>(
-                  <tr className="bg-gray-100 border-b">
+                  <tr className="bg-gray-100 border-b" key={list.id}>
                       <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         {list.serviceName}
                       </td>

@@ -1,19 +1,26 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
+import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import serviceDetailsAtom from '../atoms/ServiceState';
 import editModalAtom from '../atoms/editModelState';
 import { v4 as uuidv4 } from 'uuid';
 const AddServicesForm = () => {
 
-  // Get Recoil State
   const [serviceModalState,setServiceModalState] = useRecoilState(editModalAtom);
   const [serviceDetails,setServiceDetails] =useRecoilState(serviceDetailsAtom);
+  const [allProducts,setAllProducts] = useState([]);
   const [service,setService] = useState("");
   const [description,setDescription] = useState("");
   const [quantity,setQuantity] = useState("");
   const [tax,setTax] = useState("");
   const [rate,setRate] =useState("");
   const [totalAmount,setTotalAmount] =useState(0);
+
+  const getAllProducts = async()=>{
+      const result = await axios.get("http://localhost:4000/allProducts");
+      setAllProducts(result.data);
+      
+  }; 
   const serviceHandler =(e)=>{
     setService(e.target.value);
   }
@@ -39,11 +46,9 @@ const AddServicesForm = () => {
       {
         setTax("HST OFF");
       }
-    
   };
 
   const addServiceHandler=(e)=>{
-
     e.preventDefault();
     setServiceDetails((oldVinDetails)=>[
       ...oldVinDetails,
@@ -56,7 +61,6 @@ const AddServicesForm = () => {
         tax:tax,
         totalAmount:quantity* rate
        }
-     
  ]);
     setServiceModalState(true);
     setService("");
@@ -64,16 +68,25 @@ const AddServicesForm = () => {
     setDescription("");
     setRate("");
   };
-  
+  useEffect(()=>{
+    getAllProducts();
+  },[]);
+
   return (
     <form className="w-full max-w-lg">
-    <div className="w-full mb-6 md:mb-0">
-      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="service">
-        Service Name
-      </label>
-      <input className="appearance-none block w-full text-gray-700 border border-gray-700 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="service" type="text" value={service} placeholder="Electrolyzer Development" onChange={serviceHandler} />   
-    </div>
-   <div className="w-full ">
+    <div className='pt-5'>
+        <label htmlFor="costCenter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Service</label>
+            <select id="costCenter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Choose a Service</option>
+                    {
+                         allProducts.map((product)=>( 
+                            <option value={product.id} key={product.id}>{product.serviceName}</option>
+                        )
+                        )
+                    }
+            </select>
+        </div>
+   <div className="w-full mt-4">
       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">
         Description
       </label>

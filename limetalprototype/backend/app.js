@@ -9,6 +9,7 @@ const db = require('./helpers/db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const poRoutes =require("./routes/poGenerate");
+const products = require("./routes/products");
 global.db = db;
 var app = express();
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/',products);
 app.use(poRoutes);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
