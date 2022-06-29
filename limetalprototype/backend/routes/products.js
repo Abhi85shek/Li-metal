@@ -3,13 +3,28 @@ var router = express.Router();
 const db = require('../helpers/db');
 
 
-
 // Get All Product API
 
+router.get("/allProducts",(req,res)=>{
 
-router.get('/allProducts',(req,res)=>{
+        db.query("SELECT * FROM allservices",(err,result)=>{
+            if(err)
+                {
+                    throw err;
+                }
+            res.send(result);
 
-    db.query("SELECT * FROM allservices",(err,result)=>{
+        });
+
+
+
+});
+
+// Get All Product API WHICH ARE CURRENTLY ACTIVE
+
+router.get('/allProductsActive',(req,res)=>{
+
+    db.query("SELECT * FROM allservices WHERE active=?",[1],(err,result)=>{
         if(err)
             {
                 throw err;
@@ -24,6 +39,7 @@ router.get('/allProducts',(req,res)=>{
 
 router.post("/createProduct",(req,res)=>{
 
+    
     const {productName} = req.body;
     const {productDescription} = req.body;
     const {type} = req.body;
@@ -54,19 +70,18 @@ router.post("/sortByType",(req,res)=>{
     });
 });
 
-// DELETE Product API
+// Archive Product API
 
-router.post("/deleteProductById",(req,res)=>{
+router.post("/archiveProductById",(req,res)=>{
 
     const {id} =req.body;
 
-    db.query("DELETE FROM allservices WHERE id=?",[id],(err,result)=>{
-
+    db.query("UPDATE allservices SET active=? WHERE id=?",[0,id],(err,result)=>{
         if(err)
         {
             throw err;
         }
-        res.status(204).send({message:"Product Deleted Successfully"});
+        res.json({message:"Product Archive Successfully"});
     });
 });
 

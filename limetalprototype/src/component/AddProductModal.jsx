@@ -21,14 +21,25 @@ const AddProductModal = () => {
           
           <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">Add Product Details</h3>
-            <div className="mt-3 w-[100%]" >
+            <div className="mt-3 w-[100%] flex">
                 <form>
-                    <div className='flex'>
+                    <div className='flex items-center'>
                         <label htmlFor='productName' className='block text-gray-700 text-sm font-bold mb-2'>Product Name</label>
                         <input type="text" id="productName" className='class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'/>
                     </div>
-
-
+                    <div className="w-full mt-4">
+                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">
+                                Description
+                        </label>
+                        <textarea className='form-control block w-full px-3 py-1.5 border-gray-700 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-700 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none' id="description" placeholder='Description'></textarea>
+                    </div>
+                    <div className='flex items-center'>
+                        <label htmlFor='productName' className='block text-gray-700 text-sm font-bold mb-2'>Type</label>
+                        <input type="text" id="productName" className='class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'/>
+                    </div>
+                    <div className='flex'>
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
+                    </div>
                 </form>
 
 

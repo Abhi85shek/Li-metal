@@ -17,15 +17,12 @@ const AddServicesForm = () => {
   const [totalAmount,setTotalAmount] =useState(0);
 
   const getAllProducts = async()=>{
-      const result = await axios.get("http://localhost:4000/allProducts");
+      const result = await axios.get("http://localhost:4000/allProductsActive");
       setAllProducts(result.data);
       
   }; 
-  const serviceHandler =(e)=>{
-    setService(e.target.value);
-  }
   
-  const descriptionHandler= (e)=>{
+  const descriptionHandler= (e)=>{ 
     setDescription(e.target.value);
   };
 
@@ -76,11 +73,11 @@ const AddServicesForm = () => {
     <form className="w-full max-w-lg">
     <div className='pt-5'>
         <label htmlFor="costCenter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Service</label>
-            <select id="costCenter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select id="costCenter"  onChange={(e)=>{setService(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option selected>Choose a Service</option>
                     {
                          allProducts.map((product)=>( 
-                            <option value={product.id} key={product.id}>{product.serviceName}</option>
+                            <option value={product.serviceName} key={product.id}>{product.serviceName}</option>
                         )
                         )
                     }

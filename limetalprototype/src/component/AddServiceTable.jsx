@@ -10,15 +10,13 @@ const AddServiceTable = () => {
   const [showModal,setShowModal] = useRecoilState(deleteModalAtom);
   const [confirmModal,setConfirmModal] = useRecoilState(confirmModalAtom);
   const [selectedService,setSelectedService] = useState(null);
-  // const[servicesList,setservicesList] = useRecoilState(serviceDetailsAtom);
-
+ 
     const serviceDetails = useRecoilValue(serviceDetailsAtom);
     const editHandler =(service)=>{
       setShowModal(true);
       setSelectedService(service);
-      console.log(selectedService);
+      
     };
-
 
   return (
     <>
