@@ -7,6 +7,7 @@ import addProductModalAtom from '../atoms/addProductModalAtom';
 import { useRecoilState,useRecoilValue} from 'recoil';
 import ProductArchiveModal from '../component/ProductArchiveModal';
 import archiveProductModalAtom from '../atoms/archiveProductModalAtom';
+import { BsSearch } from "react-icons/bs";
 const AllProducts = () => {
 
     const [showModal,setShowModal] = useRecoilState(addProductModalAtom);
@@ -15,11 +16,17 @@ const AllProducts = () => {
     const [selectedArchivedProduct,setSelectedArchivedProduct] = useState(null);
     const [totalRecords,setTotalRecords] = useState(0);
     let [currentPage,setCurrentPage] = useState(0);
+    let [searchProduct, setsearchProduct]=useState("")
     const currentCount =10;
     let totalNumberOfPages;
 
     const getAllProducts = async ()=>{
         const result = await axios.get(`http://localhost:4000/allProducts/${currentPage}/${currentCount}`);
+        setAllProducts(result.data.data.cur_records);
+        setTotalRecords(result.data.data.total_count);
+    };
+    const getProductByName = async ()=>{
+        const result = await axios.get(`http://localhost:4000/allProducts/${searchProduct}`);
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };
@@ -54,6 +61,13 @@ const AllProducts = () => {
    {archiveShowModal ? <ProductArchiveModal  product={selectedArchivedProduct} /> : " "}
     {/* <div>Products Page</div> */}
     <CreateProduct />
+    <div className='w-full px-40 py-2 '>
+        <div className='w-full flex border-[#6BA4B8] border-2 border- h-14 rounded-md pl-4 '>
+        <BsSearch size={28} className='mt-3 text-slate-400 text-xl'/>
+        <input placeholder='Search Product by Name....' className='w-full text-xl text-slate-400 px-4 focus:outline-none shadow-md ' onChange={(val)=>{setsearchProduct(val.target.value);console.log(searchProduct)}}/>
+        <button type="button" onClick={getProductByName}  class="w-40 text-white bg-[#417587] hover:bg-[#417587] focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-2 h-13 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Search</button>
+        </div>
+    </div>
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-6 mt-4">
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
