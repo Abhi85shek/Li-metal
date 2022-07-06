@@ -17,8 +17,6 @@ router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
     };
 
      res.status(201).send({message:"Successfull",data:result});
-
-
         // db.query("SELECT * FROM allservices",(err,result)=>{
         //     if(err)
         //         {
@@ -27,8 +25,6 @@ router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
         //     res.send(result);
 
         // });
-
-
 
 });
 
