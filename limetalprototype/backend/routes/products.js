@@ -15,7 +15,6 @@ router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
         cur_records:cur_records,
         message:"Success"
     };
-
      res.status(201).send({message:"Successfull",data:result});
         // db.query("SELECT * FROM allservices",(err,result)=>{
         //     if(err)
@@ -25,9 +24,9 @@ router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
         //     res.send(result);
 
         // });
-
 });
 
+// API for 
 // Get All Product API WHICH ARE CURRENTLY ACTIVE
 
 router.get('/allProductsActive',(req,res)=>{
