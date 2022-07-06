@@ -9,7 +9,7 @@ router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
     let total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM allservices`);
 
     let cur_records = await db.runQuery(`SELECT * FROM allservices LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
-    
+
     let result ={
         total_count:total_count_array[0].total_records,
         cur_records:cur_records,
@@ -111,7 +111,28 @@ router.post("/updateProduct",(req,res)=>{
         }
         res.status(201).send({message:"Product Upated Successfully"});
     });
-
 });
+
+ // API for searching a Product
+
+    router.post("/searchOrder/:curr_page/:curr_count",async (req,res)=>{
+
+        const {productName} = req.body;
+        
+        const total_count_array =  await db.runQuery(`SELECT COUNT(*) FROM allservices WHERE serviceName LIKE '${productName}%'`);
+
+        let cur_records = await db.runQuery(`SELECT * FROM allservices WHERE serviceName LIKE '${productName}%' LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+
+        console.log(total_count_array);
+        console.log(cur_records);
+
+        let result ={
+            total_count:total_count_array[0].total_records,
+            cur_records:cur_records,
+            message:"Success"
+      };
+      res.status(201).send({message:"Successfull",data:result});
+    });
+
 
 module.exports = router;
