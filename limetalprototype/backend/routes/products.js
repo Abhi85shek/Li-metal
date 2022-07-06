@@ -119,7 +119,7 @@ router.post("/updateProduct",(req,res)=>{
 
         const {productName} = req.body;
         
-        const total_count_array =  await db.runQuery(`SELECT COUNT(*) FROM allservices WHERE serviceName LIKE '${productName}%'`);
+        const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM allservices WHERE serviceName LIKE '${productName}%'`);
 
         let cur_records = await db.runQuery(`SELECT * FROM allservices WHERE serviceName LIKE '${productName}%' LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
 
