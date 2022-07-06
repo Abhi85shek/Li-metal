@@ -1,17 +1,37 @@
 import { ToastContainer, toast } from 'react-toastify';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import axios from 'axios';
 import archiveProductModalAtom from '../atoms/archiveProductModalAtom';
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from 'react';
 const ProductArchiveModal = ({product}) => {
-
-    const [showModal,setShowModal] = useRecoilState(archiveProductModalAtom);
     
+    const [showModal,setShowModal] = useRecoilState(archiveProductModalAtom);
+    let toogle =false;
     const archiveProductHandler = async() =>{
         setShowModal(false);
-        const result = await axios.post("http://localhost:4000/archiveProductById",{id:product.id}); 
-        alert("Archive Done");
+        toogle = !toogle;
+        console.log(toogle);
+        let active;
+        if(toogle)
+            {
+                active = 1;
+            }
+            else
+            {
+                active = 0;
+            }
+        const result = await axios.post("http://localhost:4000/archiveProductById",{id:product.id,active:active}); 
+        if(active == 1)
+        {
+            alert("UnArchive Done");
+        }
+        else
+        {
+            alert("Archive Done");
+        }
+        
         // toast.success('Archive Succesfully Done', {
         //     position: "top-center",
         //     autoClose: 5000,
@@ -22,6 +42,9 @@ const ProductArchiveModal = ({product}) => {
         //     progress: undefined,
         //     });
     };
+    // useEffect(()=>{
+        
+    // },[archiveProductHandler]);
   return (
     <div className='bg-red-700'>
     <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">

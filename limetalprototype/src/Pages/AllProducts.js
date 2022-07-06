@@ -13,19 +13,40 @@ const AllProducts = () => {
     const [archiveShowModal,setArchiveShowModal] = useRecoilState(archiveProductModalAtom);
     const [allProducts,setAllProducts] = useState([]);
     const [selectedArchivedProduct,setSelectedArchivedProduct] = useState(null);
+    const [totalRecords,setTotalRecords] = useState(0);
+    let [currentPage,setCurrentPage] = useState(0);
+    const currentCount =10;
+    let totalNumberOfPages;
+
     const getAllProducts = async ()=>{
-        const result = await axios.get("http://localhost:4000/allProducts");
-        setAllProducts(result.data);
+        const result = await axios.get(`http://localhost:4000/allProducts/${currentPage}/${currentCount}`);
+        setAllProducts(result.data.data.cur_records);
+        setTotalRecords(result.data.data.total_count);
     };
+
     const archiveHandler =(product)=>{
             setArchiveShowModal(true);
             setSelectedArchivedProduct(product);
+    };
+
+    const previousPageHandler =()=>{
+
+        if(currentPage>0)
+        {
+            setCurrentPage(--currentPage);
+        }
+        
+    };
+
+    const nextPageHandler = ()=>{
+        setCurrentPage(++currentPage);
     };
 
     useEffect(()=>{
         getAllProducts();
     },[]);
 
+    totalNumberOfPages = Math.ceil(totalRecords/10);
   return (
     <>
     <Navbar />
@@ -79,6 +100,29 @@ const AllProducts = () => {
            }
         </tbody>
     </table>
+    <div className='inline-block py-2 min-w-full sm:px-6 flex lg:px-8 '>
+        <p>Page {currentPage+1}/{totalNumberOfPages}</p>
+    </div>
+    <div class="flex flex-col items-center">
+                 <span class="text-sm text-gray-700 dark:text-gray-400 mt-">
+                    Showing <span class="font-semibold text-gray-900 dark:text-white">{(currentPage*10)+1}</span> to <span class="font-semibold text-gray-900 dark:text-white">{currentPage*10 + 10 > totalRecords ? (currentPage*10 + 10)-(currentPage*10 + 10 - totalRecords) :currentPage*10 + 10  }</span> of <span class="font-semibold text-gray-900 dark:text-white">{totalRecords}</span> Entries
+                </span>
+   
+    <div className='inline-block py-6 min-w-full sm:px-6 flex lg:px-8 text-center space-x-5 justify-center'>
+                   
+                      <button type='button' onClick={previousPageHandler} className={currentPage == 0 ? 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-gray-400 rounded-lg border border-gray-300 opacity-70 cursor-no-drop dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  dark:hover:text-white'
+      : 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'} disabled={currentPage == 0 ? true : false}>
+                        <svg class="mr-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                            Previous</button>
+                      <button type='button' onClick={nextPageHandler} 
+                      className={currentPage+1 == totalNumberOfPages ? 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-gray-400 rounded-lg border border-gray-300 opacity-70 cursor-no-drop dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  dark:hover:text-white'
+                      : 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'} disabled={currentPage+1 == totalNumberOfPages ?true :false}>
+                          Next
+                        <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                       </button>
+
+    </div>
+</div>
 </div>
     </>
   )
