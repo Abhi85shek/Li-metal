@@ -21,15 +21,23 @@ const AllProducts = () => {
     let totalNumberOfPages;
 
     const getAllProducts = async ()=>{
+        
         const result = await axios.get(`http://localhost:4000/allProducts/${currentPage}/${currentCount}`);
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };
-    const getProductByName = async ()=>{
-        const result = await axios.get(`http://localhost:4000/allProducts/${searchProduct}`);
+    const getProductByNameForFirstSearch = async ()=>{
+        setCurrentPage(0)
+        const result = await axios.post(`http://localhost:4000/searchOrder/${0}/${currentCount}`, {productName:searchProduct});
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };
+    const getProductByName = async ()=>{
+        const result = await axios.post(`http://localhost:4000/searchOrder/${currentPage}/${currentCount}`, {productName:searchProduct});
+        setAllProducts(result.data.data.cur_records);
+        setTotalRecords(result.data.data.total_count);
+    };
+    
 
     const archiveHandler =(product)=>{
             setArchiveShowModal(true);
@@ -37,21 +45,45 @@ const AllProducts = () => {
     };
 
     const previousPageHandler =()=>{
-
         if(currentPage>0)
         {
             setCurrentPage(--currentPage);
         }
+
+        if(searchProduct.length>0 ){
+         getProductByName()
+        }
+        else{
+           getAllProducts()
+        }
+       
+        
         
     };
 
+    useEffect(()=>{
+        console.log("searching all products")
+        if(searchProduct.length==0){
+            getAllProducts()
+        }
+        else{
+            getProductByNameForFirstSearch()
+        }
+    },[searchProduct])
+
     const nextPageHandler = ()=>{
         setCurrentPage(++currentPage);
+        if(searchProduct.length>0)
+        {
+            getProductByName()
+        }
+        else{
+            getAllProducts();
+            }
+       
     };
 
-    useEffect(()=>{
-        getAllProducts();
-    },[currentPage]);
+   
 
     totalNumberOfPages = Math.ceil(totalRecords/10);
   return (
@@ -64,8 +96,8 @@ const AllProducts = () => {
     <div className='w-full px-40 py-2 '>
         <div className='w-full flex border-[#6BA4B8] border-2 border- h-14 rounded-md pl-4 '>
         <BsSearch size={28} className='mt-3 text-slate-400 text-xl'/>
-        <input placeholder='Search Product by Name....' className='w-full text-xl text-slate-400 px-4 focus:outline-none shadow-md ' onChange={(val)=>{setsearchProduct(val.target.value);console.log(searchProduct)}}/>
-        <button type="button" onClick={getProductByName}  class="w-40 text-white bg-[#417587] hover:bg-[#417587] focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-2 h-13 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Search</button>
+        <input placeholder='Start typing to search a product....' className='w-full text-xl text-slate-400 px-4 focus:outline-none  ' onChange={(val)=>{setsearchProduct(val.target.value)}}/>
+        {/* <button type="button" onClick={getProductByName}  class="w-40 text-white bg-[#5ba3bd] hover:bg-[#417587] focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-2 h-13 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Search</button> */}
         </div>
     </div>
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-6 mt-4">
@@ -106,7 +138,7 @@ const AllProducts = () => {
                         <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Edit</p>
                     </td>
                     <td className="px-6 py-4">
-                        <p onClick={()=>{archiveHandler(product)}} className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer">{product.active ==0 ? "UnArchive" : "Archive"}</p>
+                        <p onClick={()=>{archiveHandler(product)}} className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer">{product.active ==0 ? "Unarchive" : "Archive"}</p>
                     </td>
                 </tr>
                 )
@@ -125,12 +157,12 @@ const AllProducts = () => {
     <div className='inline-block py-6 min-w-full sm:px-6 flex lg:px-8 text-center space-x-5 justify-center'>
                    
                       <button type='button' onClick={previousPageHandler} className={currentPage == 0 ? 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-gray-400 rounded-lg border border-gray-300 opacity-70 cursor-no-drop dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  dark:hover:text-white'
-      : 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'} disabled={currentPage == 0 ? true : false}>
+      : 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'} disabled={currentPage == 0  ||(searchProduct.length>0 && totalRecords<10 )? true : false}>
                         <svg class="mr-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
                             Previous</button>
                       <button type='button' onClick={nextPageHandler} 
                       className={currentPage+1 == totalNumberOfPages ? 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-gray-400 rounded-lg border border-gray-300 opacity-70 cursor-no-drop dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  dark:hover:text-white'
-                      : 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'} disabled={currentPage+1 == totalNumberOfPages ?true :false}>
+                      : 'inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'} disabled={currentPage+1 == totalNumberOfPages ||(searchProduct.length>0 && totalRecords<10 ) ?true :false}>
                           Next
                         <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                        </button>
