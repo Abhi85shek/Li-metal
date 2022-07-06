@@ -44,7 +44,7 @@ const AllProducts = () => {
 
     useEffect(()=>{
         getAllProducts();
-    },[]);
+    },[currentPage]);
 
     totalNumberOfPages = Math.ceil(totalRecords/10);
   return (
