@@ -10,6 +10,7 @@ import App from './App';
 import AddService from './Pages/AddService';
 import AllProducts from './Pages/AllProducts';
 import Suppliers from './Pages/Suppliers';
+import SignIn from './Pages/SignIn';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,6 +22,7 @@ root.render(
       <Route path="/createOrder" element={<AddService />} />
       <Route path="/supplier" element={<Suppliers />} />
       <Route path='/allProducts' element={<AllProducts />} />
+      <Route path='/login' element={<SignIn />} />
     </Routes>
   </BrowserRouter>
   </RecoilRoot>

@@ -124,7 +124,7 @@ const AllProducts = () => {
         <tbody>
            { allProducts.map((product)=>
                 (
-                    <tr className={product.active === 0 ? "bg-white border-b  dark:bg-gray-800 dark:border-gray-700 bg-gradient-to-r from-rose-400": "bg-white border-b dark:bg-gray-800 dark:border-gray-700"} key={product.id} >
+                    <tr className={product.active === 0 ? "bg-white border-b  dark:bg-gray-800 dark:border-gray-700 ": "bg-white border-b dark:bg-gray-800 dark:border-gray-700"} key={product.id} >
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                         {product.serviceName}
                     </th>

@@ -5,7 +5,11 @@ module.exports = {
       {
     'raleway':['Raleway','sans-serif'],
       },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'metalImg': "url('./assets/signin1.jpg')",
+      }
+    },
   },
   plugins: [],
 }
