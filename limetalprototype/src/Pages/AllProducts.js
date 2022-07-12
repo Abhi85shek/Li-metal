@@ -8,6 +8,7 @@ import { useRecoilState,useRecoilValue} from 'recoil';
 import ProductArchiveModal from '../component/ProductArchiveModal';
 import archiveProductModalAtom from '../atoms/archiveProductModalAtom';
 import { BsSearch } from "react-icons/bs";
+import {AiFillFilter} from "react-icons/ai"
 const AllProducts = () => {
 
     const [showModal,setShowModal] = useRecoilState(addProductModalAtom);
@@ -17,6 +18,7 @@ const AllProducts = () => {
     const [totalRecords,setTotalRecords] = useState(0);
     let [currentPage,setCurrentPage] = useState(0);
     let [searchProduct, setsearchProduct]=useState("")
+    let types=["Service","Non Inventory"]
     const currentCount =10;
     let totalNumberOfPages;
 
@@ -110,8 +112,22 @@ const AllProducts = () => {
                 <th scope="col" className="px-6 py-3">
                     Description
                 </th>
-                <th scope="col" className="px-6 py-3">
-                    Type
+                <th scope="col" className=" px-6 py-3 ">
+                   <span className='flex flex-row flex-1 space-x-2 items-center'>
+                   Type 
+                    <AiFillFilter size={12} className="ml-2"/>
+                    </span>
+                    <div className='h-15 w-40 bg-white outline-2 border-2 outline-slate-600 absolute'>
+                       {types.map((type)=>{
+                        return(
+                            <div className='pt-1 h-7 normal-case font-medium hover:cursor-pointer hover:bg-[#6BA4B8] hover:text-white'>
+                                {type}
+                                </div>
+                        )
+                       })
+
+                       } 
+                    </div>
                 </th> 
                 <th scope="col" className="px-6 py-3">
                     Edit

@@ -3,7 +3,7 @@ import LoginForm from '../component/LoginForm';
 
 const SignIn = () => {
   return (
-    <div className='bg-metalImg bg-bottom bg-cover min-h-fit justify-center items-center'> 
+    <div className='bg-metalImg min-h-fit justify-center items-center'> 
         <LoginForm />
     </div>    
   )
