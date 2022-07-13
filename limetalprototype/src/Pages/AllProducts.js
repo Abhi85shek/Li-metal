@@ -18,6 +18,8 @@ const AllProducts = () => {
     const [totalRecords,setTotalRecords] = useState(0);
     let [currentPage,setCurrentPage] = useState(0);
     let [searchProduct, setsearchProduct]=useState("")
+    let [isTypeFilterVisible,setTypeFilterVisible]=useState(false)
+    let [filtersArray,setFiltersArray]=useState([])
     let types=["Service","Non Inventory"]
     const currentCount =10;
     let totalNumberOfPages;
@@ -46,6 +48,18 @@ const AllProducts = () => {
             setSelectedArchivedProduct(product);
     };
 
+  const  updateFiltersArray=(type)=>{
+    for (let value of filtersArray){
+    if(value==type){
+        console.log("here")
+        setFiltersArray(filtersArray.filter(item => item !== type))
+        return
+    }
+}
+        console.log("i am here")
+        setFiltersArray(arr=>[...arr,type])}
+  
+
     const previousPageHandler =()=>{
         if(currentPage>0)
         {
@@ -62,6 +76,13 @@ const AllProducts = () => {
         
         
     };
+
+    const applyFilters=async()=>{
+        console.log(filtersArray)
+        // const result = await axios.post(`http://localhost:4000/searchOrder/${currentPage}/${currentCount}`, {category:'type',filters:filters});
+        // setAllProducts(result.data.data.cur_records);
+        // setTotalRecords(result.data.data.total_count);
+    }
 
     useEffect(()=>{
         console.log("searching all products")
@@ -85,7 +106,15 @@ const AllProducts = () => {
        
     };
 
-   
+   const handleFilterReset=async()=>{
+    if(searchProduct.length>0)
+    {
+        getProductByName()
+    }
+    else{
+        getAllProducts();
+        }
+   }
 
     totalNumberOfPages = Math.ceil(totalRecords/10);
   return (
@@ -115,19 +144,29 @@ const AllProducts = () => {
                 <th scope="col" className=" px-6 py-3 ">
                    <span className='flex flex-row flex-1 space-x-2 items-center'>
                    Type 
-                    <AiFillFilter size={12} className="ml-2"/>
+                    <AiFillFilter onClick={()=>{setTypeFilterVisible(!isTypeFilterVisible)}} size={12} className="ml-2 hover:cursor-pointer"/>
                     </span>
-                    <div className='h-15 w-40 bg-white outline-2 border-2 outline-slate-600 absolute'>
-                       {types.map((type)=>{
+                    {isTypeFilterVisible?
+                    <div className='h-15 w-42 bg-white outline-2 border-2 outline-slate-600 absolute'> 
+                      { types.map((type)=>{
                         return(
-                            <div className='pt-1 h-7 normal-case font-medium hover:cursor-pointer hover:bg-[#6BA4B8] hover:text-white'>
-                                {type}
+                            <div className='p-1 h-7 items-center normal-case font-medium hover:cursor-pointer hover:bg-[#6BA4B8] hover:text-white'>
+                                <input type="checkbox"  id={type} name={type} onClick={()=>updateFiltersArray(type)} value={type}/>
+                                        <label className='mt-[-5px]' > {type}</label>
                                 </div>
                         )
                        })
-
-                       } 
-                    </div>
+                    }
+                    <div className='flex flex-row p-2'>
+                    <button type='button' onClick={applyFilters} className={'w-15 rounded inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-green-400'} >
+                        
+                            Apply</button>
+                            <button type='button' onClick={handleFilterReset} className={'w-15 rounded inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-blue-400'} >
+                        
+                            Reset</button>
+                            </div>
+                    </div>:null
+}
                 </th> 
                 <th scope="col" className="px-6 py-3">
                     Edit
