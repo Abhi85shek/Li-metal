@@ -68,7 +68,14 @@ const AllProducts = () => {
         }
 
         if(searchProduct.length>0 ){
-         getProductByName()
+           
+            if(filtersArray.length>0)
+            {
+                applyFiltersandSearch()
+            }
+            else{
+                getProductByName()
+            }
         }
         else{
             if (filtersArray.length>0){
@@ -84,22 +91,58 @@ const AllProducts = () => {
     };
 
     const applyFilters=async()=>{
+
+        // console.log(filtersArray)
+        if(searchProduct.length>0){
+          await  applyFiltersandSearch()
+        }
+        let filterString=""
+        if(filtersArray.length==1){
+            filterString=filtersArray[0]
+        }
+        else{
+        for(let filter of filtersArray)
+        {
+            filterString+="\'"+filter+"\',"
+        }
+        }
+        let newfilterString=filterString.substring(0,filterString.length-1)
+        console.log(newfilterString)
+        const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:newfilterString});
+        setAllProducts(result.data.data.cur_records);
+        setTotalRecords(result.data.data.total_count);
+        // setTypeFilterVisible(false)
+    }
+
+    const applyFiltersandSearch=async()=>{
         console.log(filtersArray)
         let filterString=filtersArray.join(",")
 
-        const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:filterString});
+        const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:filterString,productName:searchProduct});
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
-        setTypeFilterVisible(false)
+        // setTypeFilterVisible(false)
     }
+
 
     useEffect(()=>{
         console.log("searching all products")
         if(searchProduct.length==0){
-            getAllProducts()
+            if(filtersArray.length>0){
+                applyFiltersandSearch()
+            }
+            else{
+                getAllProducts()
+            }
         }
         else{
+            if(filtersArray.length>0){
+                applyFiltersandSearch()
+            }
+            else{
             getProductByNameForFirstSearch()
+            }
+
         }
     },[searchProduct])
 
@@ -108,8 +151,13 @@ const AllProducts = () => {
         if(searchProduct.length>0)
         {
             
-            getProductByName()
-            
+            if(filtersArray.length>0)
+            {
+                applyFiltersandSearch()
+            }
+            else{
+                getProductByName()
+            }
         }
         else{
             if (filtersArray.length>0){
