@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useRef, useState} from 'react';
 import Navbar from '../component/Navbar';
 import axios from 'axios';
 import CreateProduct from '../component/CreateProduct';
@@ -20,7 +20,8 @@ const AllProducts = () => {
     let [searchProduct, setsearchProduct]=useState("")
     let [isTypeFilterVisible,setTypeFilterVisible]=useState(false)
     let [filtersArray,setFiltersArray]=useState([])
-    let types=["Service","Non Inventory"]
+    const filterRef=useRef([])
+    let types=['Service','Non-Inventory']
     const currentCount =10;
     let totalNumberOfPages;
 
@@ -70,7 +71,12 @@ const AllProducts = () => {
          getProductByName()
         }
         else{
-           getAllProducts()
+            if (filtersArray.length>0){
+                applyFilters()
+            }
+            else{
+                getAllProducts()
+            }
         }
        
         
@@ -79,9 +85,12 @@ const AllProducts = () => {
 
     const applyFilters=async()=>{
         console.log(filtersArray)
-        // const result = await axios.post(`http://localhost:4000/searchOrder/${currentPage}/${currentCount}`, {category:'type',filters:filters});
-        // setAllProducts(result.data.data.cur_records);
-        // setTotalRecords(result.data.data.total_count);
+        let filterString=filtersArray.join(",")
+
+        const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:filterString});
+        setAllProducts(result.data.data.cur_records);
+        setTotalRecords(result.data.data.total_count);
+        setTypeFilterVisible(false)
     }
 
     useEffect(()=>{
@@ -98,15 +107,29 @@ const AllProducts = () => {
         setCurrentPage(++currentPage);
         if(searchProduct.length>0)
         {
+            
             getProductByName()
+            
         }
         else{
-            getAllProducts();
+            if (filtersArray.length>0){
+                applyFilters()
+            }
+
+            else{
+            getAllProducts();}
+
             }
        
     };
 
    const handleFilterReset=async()=>{
+    setTypeFilterVisible(false)
+      let  x=document.querySelectorAll('.checkbox')
+        for(let i=0; i<x.length; i++) {
+            x[i].checked= false;
+         }  
+      setFiltersArray([])
     if(searchProduct.length>0)
     {
         getProductByName()
@@ -148,10 +171,10 @@ const AllProducts = () => {
                     </span>
                     {isTypeFilterVisible?
                     <div className='h-15 w-42 bg-white outline-2 border-2 outline-slate-600 absolute'> 
-                      { types.map((type)=>{
+                      { types.map((type,i)=>{
                         return(
                             <div className='p-1 h-7 items-center normal-case font-medium hover:cursor-pointer hover:bg-[#6BA4B8] hover:text-white'>
-                                <input type="checkbox"  id={type} name={type} onClick={()=>updateFiltersArray(type)} value={type}/>
+                                <input type="checkbox" className='checkbox' ref={el => filterRef.current[i] = el}  id={type} name={type} onClick={()=>updateFiltersArray(type)} value={type}/>
                                         <label className='mt-[-5px]' > {type}</label>
                                 </div>
                         )
