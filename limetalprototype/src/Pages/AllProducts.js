@@ -69,79 +69,83 @@ const AllProducts = () => {
 
         if(searchProduct.length>0 ){
            
-            if(filtersArray.length>0)
-            {
-                applyFiltersandSearch()
-            }
-            else{
+          
                 getProductByName()
-            }
+            
         }
         else{
-            if (filtersArray.length>0){
-                applyFilters()
+           
+            if(filtersArray.length>0)
+            {
+              applyFilters()
             }
             else{
-                getAllProducts()
-            }
-        }
-       
-        
+              getAllProducts();}
+         
+      };
         
     };
 
     const applyFilters=async()=>{
 
-        // console.log(filtersArray)
-        if(searchProduct.length>0){
-          await  applyFiltersandSearch()
-        }
+        console.log(filtersArray)
+      
         let filterString=""
+        let newfilterString=""
         if(filtersArray.length==1){
-            filterString=filtersArray[0]
+            newfilterString="\'"+filtersArray[0]+"\'"
         }
         else{
         for(let filter of filtersArray)
         {
             filterString+="\'"+filter+"\',"
+            newfilterString=filterString.substring(0,filterString.length-1)
         }
-        }
-        let newfilterString=filterString.substring(0,filterString.length-1)
+    }
         console.log(newfilterString)
         const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:newfilterString});
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
         // setTypeFilterVisible(false)
+    
     }
 
-    const applyFiltersandSearch=async()=>{
-        console.log(filtersArray)
-        let filterString=filtersArray.join(",")
+    // const applyFiltersandSearch=async()=>{
+    //     console.log(filtersArray)
+    //     let filterString="";
+    //     let newfilterString=""
+    //     if(filtersArray.length==1){
+    //         newfilterString="\'"+filtersArray[0]+"\'"
+    //     }
+    //     else{
+    //     for(let filter of filtersArray)
+    //     {
+    //         filterString+="\'"+filter+"\',"
+    //         newfilterString=filterString.substring(0,filterString.length-1)
+    //     }
+    //     }
 
-        const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:filterString,productName:searchProduct});
-        setAllProducts(result.data.data.cur_records);
-        setTotalRecords(result.data.data.total_count);
-        // setTypeFilterVisible(false)
-    }
+    //     const result = await axios.post(`http://localhost:4000/advanceSearch/${currentPage}/${currentCount}`, {category:'Type',filter:newfilterString,searchWord:searchProduct});
+    //     setAllProducts(result.data.data.cur_records);
+    //     setTotalRecords(result.data.data.total_count);
+    //     // setTypeFilterVisible(false)
+    // }
 
 
     useEffect(()=>{
         console.log("searching all products")
         if(searchProduct.length==0){
-            if(filtersArray.length>0){
-                applyFiltersandSearch()
-            }
-            else{
+           
                 getAllProducts()
-            }
+            
         }
         else{
-            if(filtersArray.length>0){
-                applyFiltersandSearch()
-            }
-            else{
+         
             getProductByNameForFirstSearch()
+            if(filtersArray.length>0){
+                handleFilterReset()
             }
+            
 
         }
     },[searchProduct])
@@ -150,26 +154,20 @@ const AllProducts = () => {
         setCurrentPage(++currentPage);
         if(searchProduct.length>0)
         {
-            
-            if(filtersArray.length>0)
-            {
-                applyFiltersandSearch()
-            }
-            else{
+        
                 getProductByName()
-            }
+            
         }
         else{
-            if (filtersArray.length>0){
-                applyFilters()
-            }
-
-            else{
+          if(filtersArray.length>0)
+          {
+            applyFilters()
+          }
+          else{
             getAllProducts();}
-
-            }
        
     };
+    }
 
    const handleFilterReset=async()=>{
     setTypeFilterVisible(false)
