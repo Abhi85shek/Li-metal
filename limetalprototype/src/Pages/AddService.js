@@ -13,7 +13,6 @@ const AddService = () => {
 
   return (
     <>  
-    <Navbar />
     <div className='flex flex-col justify-center items-center pt-5 font-raleway '>
         <h1>AddService</h1>
         <AddServicesForm />

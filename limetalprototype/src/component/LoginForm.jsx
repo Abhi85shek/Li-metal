@@ -74,7 +74,7 @@ const LoginForm = () => {
   // Functionality After User Click Submit
     const loginHandler = async (event)=>{
     event.preventDefault();
-    const response = await axios.post("http://localhost:8000/users/login",{email,password});
+    const response = await axios.post("http://localhost:4000/users/login",{email,password});
     
     if(response.data.userValid)
     {
@@ -106,15 +106,8 @@ const LoginForm = () => {
       
       
 
-      auth.isLoggedIn=true;
-      if(JSON.parse(localStorage.getItem('userType')).userRole!=="admin")
-      {
-      navigate("/modalInfo");
-      }
-      else  
-      {
-        navigate("/dashboard");
-      }
+      auth.isLoggedIn=true
+      navigate("/createOrder");
     }
     else 
     {

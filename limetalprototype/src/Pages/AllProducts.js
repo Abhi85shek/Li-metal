@@ -188,7 +188,6 @@ const AllProducts = () => {
     totalNumberOfPages = Math.ceil(totalRecords/10);
   return (
     <>
-    <Navbar />
   { showModal ? <AddProductModal /> : " "}
    {archiveShowModal ? <ProductArchiveModal  product={selectedArchivedProduct} /> : " "}
     {/* <div>Products Page</div> */}
