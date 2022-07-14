@@ -122,6 +122,7 @@ router.post("/filterServices/:curr_page/:curr_count",async (req,res)=>{
   res.status(201).send({message:"Successfull",data:result});
 });
 
+
 // SEARCH BY PRODUCT AND TYPE
 
 router.post("/advanceSearch/:curr_page/:curr_count",async (req,res)=>{
@@ -129,9 +130,9 @@ router.post("/advanceSearch/:curr_page/:curr_count",async (req,res)=>{
    
     const {searchWord} = req.body;
 try{
-    const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM allServices WHERE serviceName LIKE '%${searchWord}%' AND type IN ('${searchWord}')`);
+    const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM allServices WHERE serviceName LIKE '%${searchWord}%' OR type IN ('${searchWord}')`);
 
-    let cur_records = await db.runQuery(`SELECT * FROM allServices WHERE serviceName LIKE '%${searchWord}%' AND type IN ('${searchWord}') LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+    let cur_records = await db.runQuery(`SELECT * FROM allServices WHERE serviceName LIKE '%${searchWord}%' OR type IN ('${searchWord}') LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
 
     let result ={
         total_count:total_count_array[0].total_records,
