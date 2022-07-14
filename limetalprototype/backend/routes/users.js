@@ -5,7 +5,6 @@ const checkAuth = require('../middleware/check-auth');
 const hashing  = require('../helpers/bcrypt');
 const bcrypt = require('bcrypt');
 
-hashing("admin123");
 router.post("/login",async (req,res)=>{
   const email = req.body.email;
   const password = req.body.password;
@@ -19,6 +18,7 @@ router.post("/login",async (req,res)=>{
       if(result.length!=0)
       {
               const Passwordmatch = await bcrypt.compare(password,result[0].password);
+              console.log(result);
               if(Passwordmatch)
               {
 
@@ -27,7 +27,7 @@ router.post("/login",async (req,res)=>{
                   const token = jwt.sign({
                           email:result[0].email
                   },process.env.ACCESS_TOKEN_SECRET,{expiresIn:'1h'});
-                  res.status(200).json({message:"Login Successful",userId:result[0].userid,userEmail:result[0].email,token,userType:result[0].userType,userValid:true,userName:result[0].fullName});
+                  res.status(200).json({message:"Login Successful",userId:result[0].userid,userEmail:result[0].email,token,userType:result[0].type,userValid:true});
               }
               else
               {
