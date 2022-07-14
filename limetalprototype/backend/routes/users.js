@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+const jwt =require('jsonwebtoken');
+const checkAuth = require('../middleware/check-auth');
+const hashing  = require('../helpers/bcrypt');
+router.use(checkAuth);
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+console.log(hashing("admin"));
+
 
 module.exports = router;

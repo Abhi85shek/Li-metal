@@ -113,9 +113,9 @@ router.post("/filterServices/:curr_page/:curr_count",async (req,res)=>{
     const {category} = req.body;
     const {filter} = req.body;
    
-    const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM allservices WHERE ${category} IN ('${filter}')`);
+    const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM allservices WHERE ${category} IN (${filter})`);
 
-    let cur_records = await db.runQuery(`SELECT * FROM allservices WHERE ${category} IN ('${filter}') LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+    let cur_records = await db.runQuery(`SELECT * FROM allservices WHERE ${category} IN (${filter}) LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
     let result ={
         total_count:total_count_array[0].total_records,
         cur_records:cur_records,
