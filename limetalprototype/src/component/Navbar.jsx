@@ -14,10 +14,10 @@ const Navbar = () => {
 
   return (
     <div>
-        <nav className="bg-[#6BA4B8] border-vlack-200 px-2 sm:px-4 py-2.5 text-white">
+        <nav className="bg-[#6BA4B8] border-vlack-200 px-2 sm:pl-4 py-2.5 text-white pr-8">
         <div className="flex flex-wrap justify-between items-center mx-auto">
         <a href="#" className="flex">
-            <img src={logo} alt="Logo" />
+           <Link to ="/"> <img src={logo} alt="Logo" /></Link>
             <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white"></span>
         </a> 
     <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">

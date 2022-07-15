@@ -9,6 +9,7 @@ import {useRecoilValue,useRecoilState} from 'recoil';
 import AllProducts from './Pages/AllProducts';
 import AddService from './Pages/AddService';
 import Suppliers from './Pages/Suppliers';
+import PageNotFound from "./Pages/PageNotFound";
 
 
 let logoutTimer;
@@ -89,6 +90,7 @@ function App() {
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
                 <Route exact path="/addService" element={<AddService />} /> 
                 <Route exact path="/allSuppliers" element={<Suppliers />} /> 
+                <Route path="*" element={<PageNotFound />} exact/>
 
         </Routes>  
     </BrowserRouter> 

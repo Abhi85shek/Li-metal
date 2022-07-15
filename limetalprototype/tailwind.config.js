@@ -7,7 +7,7 @@ module.exports = {
       },
     extend: {
       backgroundImage: {
-        'metalImg': "url('./assets/signin1.jpg')",
+        'metalImg': "url('./assets/limetalbgimg.png')",
       }
     },
   },

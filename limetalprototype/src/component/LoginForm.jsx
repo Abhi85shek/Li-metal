@@ -8,6 +8,7 @@ import userRoleAtom from "../atoms/userRole";
 import loggedInUserAtom from "../atoms/loggedInUser";
 import { useRecoilState } from "recoil";
 import firstTimeRegisterAtom from '../atoms/firstTimeRegister';
+import logo from '../../src/logo.png'
 // Toastify
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -119,9 +120,12 @@ const LoginForm = () => {
   };
   return (
         <div className='min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-        <div className="max-w-md w-full space-y-8 p-10 bg-clip-padding bg-opacity-80 backdrop-blur-sm rounded-2xl bg-white/30">
+        <div className="w-[35%]  space-y-8 p-10 bg-clip-padding bg-opacity-80 backdrop-blur-sm rounded-2xl bg-white/30">
         <div>
-            <h2 className="mt-6 text-center text-5xl font-extrabold text-gray-900">Li-Metal</h2>
+            <h2 className="mt-6 text-center text-4xl font-extrabold text-[#335663] leading-normal">Li-Metal Supply Management</h2>
+           <div className="flex flex-row justify-center items-center pt-8">
+            <img src={logo}/>
+            </div>
         </div>
             <form className="mt-8 space-y-6" method="POST" onSubmit={loginHandler}>
             <input type="hidden" name="remember" value="true" />
@@ -138,10 +142,10 @@ const LoginForm = () => {
         </div>
       </div>
       <div>
-        <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border 
-        border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 
-        hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-        focus:ring-indigo-500">
+        <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border-2 tracking-wider
+        border-transparent text-md font-bold rounded-md text-neutral-100  bg-[#335663]  uppercase
+        hover:bg-[#213a43] focus:outline-none focus:ring-2 focus:ring-offset-2 
+       ">
           Sign in
         </button>
        
