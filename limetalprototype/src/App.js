@@ -18,7 +18,9 @@ function App() {
 
   const initalToken = localStorage.getItem('token') ? localStorage.getItem('token') : null;
   const initialUserEmail = localStorage.getItem('email') ? localStorage.getItem('email') : null;
+  const initialUserName = localStorage.getItem('name') ? localStorage.getItem('name') : null;
   const [token,setToken] = useState(initalToken);
+  const [userName,setUserName]=useState(initialUserName)
   const [userId,setUserId] =useState(null);
   const [userEmail,setUserEmail] = useState(initialUserEmail);
   const [userType,setUserType]=useState();
@@ -27,18 +29,20 @@ function App() {
 
   let routes
 
-  const login = useCallback((uid,token,uType,email,expirationDate)=>{
+  const login = useCallback((uid,token,uType,email,userName,expirationDate)=>{
     localStorage.setItem('token',token);
     localStorage.setItem('uType',uType);
     localStorage.setItem('email',email)
+    localStorage.setItem('name',userName)
     setUserId(uid);
     setToken(token);
     setUserType(uType)
     setUserEmail(email);
+    setUserName(userName)
     setIsLoggedIn(true)
     const tokenExpirationDate = expirationDate || new Date(new Date().getTime()+ 1000 * 60 * 60);
     setTokenExpirationDate(tokenExpirationDate);
-    localStorage.setItem('userData',JSON.stringify({userId:uid,token:token,userType:uType,userEmail:email,expiration:tokenExpirationDate.toISOString()}));
+    localStorage.setItem('userData',JSON.stringify({userId:uid,token:token,userType:uType,userEmail:email,uname:userName,expiration:tokenExpirationDate.toISOString()}));
     
   },[]);
 
@@ -47,11 +51,13 @@ function App() {
     setUserId(null);
     setIsLoggedIn(false);
     setUserType(null);
+    setUserName(null)
     setUserEmail(null);
     setTokenExpirationDate(null);
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     localStorage.removeItem('uType');
+    localStorage.removeItem('name');
     localStorage.removeItem('userType');
   },[]);
 
@@ -116,6 +122,7 @@ routes=(
           isLoggedIn:!!token,
           userId: userId,
           token:token,
+          userName:userName,
           login: login,
           logout: logout,
           userEmail:userEmail

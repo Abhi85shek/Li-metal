@@ -23,7 +23,7 @@ const Navbar = () => {
     <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
       <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
         <li className='flex flex-row space-x-2 gap-2'>
-          <BiUser size={20}/>{auth.userEmail}
+          <BiUser size={20}/>{auth.userName}
         </li>
         <li>
           <Link to="/">Home</Link>

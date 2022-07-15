@@ -9,9 +9,12 @@ import ProductArchiveModal from '../component/ProductArchiveModal';
 import archiveProductModalAtom from '../atoms/archiveProductModalAtom';
 import { BsSearch } from "react-icons/bs";
 import {AiFillFilter} from "react-icons/ai"
+import editProductModalVisible from '../atoms/editProductModalVisible';
+import EditProductModal from '../component/EditProductModal';
 const AllProducts = () => {
 
     const [showModal,setShowModal] = useRecoilState(addProductModalAtom);
+    const [showEditModal,setShowEditModal]=useRecoilState(editProductModalVisible)
     const [archiveShowModal,setArchiveShowModal] = useRecoilState(archiveProductModalAtom);
     const [allProducts,setAllProducts] = useState([]);
     const [selectedArchivedProduct,setSelectedArchivedProduct] = useState(null);
@@ -20,6 +23,7 @@ const AllProducts = () => {
     let [searchProduct, setsearchProduct]=useState("")
     let [isTypeFilterVisible,setTypeFilterVisible]=useState(false)
     let [filtersArray,setFiltersArray]=useState([])
+    let [selectedProduct,setSelectedProduct]=useState([])
     const filterRef=useRef([])
     let types=['Service','Non-Inventory']
     const currentCount =10;
@@ -189,6 +193,7 @@ const AllProducts = () => {
   return (
     <>
   { showModal ? <AddProductModal /> : " "}
+  { showEditModal ? <EditProductModal selectedProduct={selectedProduct}  /> : " "}
    {archiveShowModal ? <ProductArchiveModal  product={selectedArchivedProduct} /> : " "}
     {/* <div>Products Page</div> */}
     <CreateProduct />
@@ -236,7 +241,7 @@ const AllProducts = () => {
                     </div>:null
 }
                 </th> 
-                <th scope="col" className="px-6 py-3">
+                <th   scope="col" className="px-6 py-3">
                     Edit
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -257,7 +262,7 @@ const AllProducts = () => {
                     <td className="px-6 py-4">
                         {product.type}
                     </td>
-                    <td className="px-6 py-4">
+                    <td onClick={()=>{setShowEditModal(true);setSelectedProduct(product)}} className="px-6 py-4">
                         <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Edit</p>
                     </td>
                     <td className="px-6 py-4">

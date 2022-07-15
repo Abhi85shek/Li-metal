@@ -79,7 +79,7 @@ const LoginForm = () => {
     
     if(response.data.userValid)
     {
-      auth.login(response.data.userId,response.data.token,response.data.userType,response.data.userEmail);
+      auth.login(response.data.userId,response.data.token,response.data.userType,response.data.userEmail,response.data.userName);
       // Recoil State Set
      
 
