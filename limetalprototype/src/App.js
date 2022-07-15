@@ -10,6 +10,8 @@ import AllProducts from './Pages/AllProducts';
 import AddService from './Pages/AddService';
 import Suppliers from './Pages/Suppliers';
 import PageNotFound from "./Pages/PageNotFound";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 let logoutTimer;
@@ -86,6 +88,7 @@ function App() {
       routes=(
        <BrowserRouter>
        <Navbar/>
+       <ToastContainer />
         <Routes>    
         
             <Route path="/" exact element={<CreateOrder />} />
