@@ -93,7 +93,7 @@ function App() {
         
             <Route path="/" exact element={<CreateOrder />} />
                 <Route exact path="/createOrder" element={<CreateOrder />} />  
-                <Route exact path="/login" element={<SignIn />} />  
+                <Route exact path="/login" element={<CreateOrder />} />  
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
                 <Route exact path="/addService" element={<AddService />} /> 
                 <Route exact path="/allSuppliers" element={<Suppliers />} /> 
