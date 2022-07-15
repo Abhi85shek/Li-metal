@@ -70,23 +70,6 @@ router.post("/archiveProductById",(req,res)=>{
     });
 });
 
-// Update Product API
-
-router.post("/updateProduct",(req,res)=>{
-
-    const {id} = req.body;
-    const {productName} = req.body;
-    const {description} = req.body;
-    const {type} =req.body;
-
-    db.query("UPDATE allservices SET serviceName=?,description=?,type=? WHERE id=?",[productName,description,type,id],(err,result)=>{
-        if(err)
-        {
-            throw err;
-        }
-        res.status(201).send({message:"Product Upated Successfully"});
-    });
-});
 
  // API for searching a Product
 
@@ -146,6 +129,25 @@ catch(err)
         res.status(404).send(err);
     }
 });
+
+// Update Product API
+
+router.post("/editProduct",(req,res)=>{
+
+    const {id} = req.body;
+    const {productName} = req.body;
+    const {description} = req.body;
+    const {type} =req.body;
+
+    db.query("UPDATE allservices SET serviceName=?,description=?,type=? WHERE id=?",[productName,description,type,id],(err,result)=>{
+        if(err)
+        {
+            throw err;
+        }
+        res.status(201).send({message:"Product Upated Successfully"});
+    });
+});
+
 
 
 module.exports = router;

@@ -21,7 +21,6 @@ router.post("/login",async (req,res)=>{
               console.log(result);
               if(Passwordmatch)
               {
-
                   // creating a JWT Token and Send Email as a Payload
 
                   const token = jwt.sign({
