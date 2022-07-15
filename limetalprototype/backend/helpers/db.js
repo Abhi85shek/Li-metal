@@ -31,7 +31,6 @@ connection.runQuery = async (q) => {
         return reject(err.message);
 
       }
-
       resolve(results);
 
     });

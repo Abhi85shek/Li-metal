@@ -109,8 +109,6 @@ router.post("/filterServices/:curr_page/:curr_count",async (req,res)=>{
 // SEARCH BY PRODUCT AND TYPE
 
 router.post("/advanceSearch/:curr_page/:curr_count",async (req,res)=>{
-
-   
     const {searchWord} = req.body;
 try{
     const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM allServices WHERE serviceName LIKE '%${searchWord}%' OR type IN ('${searchWord}')`);
@@ -130,16 +128,16 @@ catch(err)
     }
 });
 
-// Update Product API
+    //Edit Product API
 
-router.post("/editProduct",(req,res)=>{
+router.post("/editProduct/:id",(req,res)=>{
 
-    const {id} = req.body;
+    // const {id} = req.body;
     const {productName} = req.body;
     const {description} = req.body;
     const {type} =req.body;
 
-    db.query("UPDATE allservices SET serviceName=?,description=?,type=? WHERE id=?",[productName,description,type,id],(err,result)=>{
+    db.query("UPDATE allservices SET serviceName=?,description=?,type=? WHERE id=?",[productName,description,type,req.params.id],(err,result)=>{
         if(err)
         {
             throw err;
