@@ -78,8 +78,6 @@ function App() {
  if(token) {
   console.log(token)
       routes=(
-   
-      
        <BrowserRouter>
        <Navbar/>
         <Routes>    
@@ -120,12 +118,8 @@ routes=(
           logout: logout,
           userEmail:userEmail
         }}>
-         
-            {routes}
-          
+            {routes} 
         </AuthContext.Provider>
-      
-
     </>
 
   );
