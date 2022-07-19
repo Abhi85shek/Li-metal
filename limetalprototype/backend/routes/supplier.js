@@ -43,8 +43,6 @@ catch(err)
         message:"Success"
   };
   res.status(201).send({message:"Successfull",data:result});
-
-
     });
 
 
