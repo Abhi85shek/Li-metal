@@ -18,7 +18,7 @@ router.post("/login",async (req,res)=>{
       if(result.length!=0)
       {
               const Passwordmatch = await bcrypt.compare(password,result[0].password);
-              console.log(result);
+           
               if(Passwordmatch)
               {
                   // creating a JWT Token and Send Email as a Payload

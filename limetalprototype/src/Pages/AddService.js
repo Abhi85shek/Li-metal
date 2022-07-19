@@ -17,7 +17,6 @@ const AddService = () => {
         <h1>AddService</h1>
         <AddServicesForm />
      { serviceList.length > 0 && serviceModalState && <AddServiceTable /> }
-
     </div>
     </>
   )

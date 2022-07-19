@@ -146,6 +146,4 @@ router.post("/editProduct/:id",(req,res)=>{
     });
 });
 
-
-
 module.exports = router;
