@@ -11,6 +11,7 @@ import { BsSearch } from "react-icons/bs";
 import {AiFillFilter} from "react-icons/ai"
 import editProductModalVisible from '../atoms/editProductModalVisible';
 import EditProductModal from '../component/EditProductModal';
+
 const AllProducts = () => {
 
     const [showModal,setShowModal] = useRecoilState(addProductModalAtom);
