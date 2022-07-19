@@ -10,6 +10,7 @@ const AllSuppliers = () => {
     const [totalRecords,setTotalRecords] = useState(0);
     let [currentPage,setCurrentPage] = useState(0);
     let [searchSupplier, setsearchSupplier]=useState("")
+    let [selctedSupplerNumber,setSelectedSupplierNumber]=useState()
     let [selectedSupplier,setselectedSupplier]=useState([])
     const filterRef=useRef([])
     const currentCount =10;
@@ -99,7 +100,7 @@ const AllSuppliers = () => {
     </div>
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-6 mt-4">
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
+        <thead className="text-xs text-gray-700 uppercase bg-[#7DAFC1] dark:bg-gray-700 dark:text-gray-400 shadow-md ">
             <tr>
                 <th scope="col" className="px-6 py-3">
                     Name
@@ -116,12 +117,15 @@ const AllSuppliers = () => {
                 <th scope="col" className="px-6 py-3">
                     Currency
                 </th>
+                <th scope="col" className="px-6 py-3">
+                    Order
+                </th>
             </tr>
         </thead>
         <tbody>
-           { allSuppliers.map((supplier)=>
+           { allSuppliers.map((supplier,index)=>
                 (
-                    <tr className={supplier.active === 0 ? "bg-white border-b  dark:bg-gray-800 dark:border-gray-700 ": "bg-white border-b dark:bg-gray-800 dark:border-gray-700"} key={supplier.id} >
+                    <tr className={index %2 == 0 ? "bg-neutral-100 border-b text-neutral-800 ": "bg-[#7DAFC1] border-b text-neutral-800"} key={supplier.id} >
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                         {supplier.supplier}
                     </th>
@@ -136,6 +140,9 @@ const AllSuppliers = () => {
                     </td>
                     <td className="px-6 py-4">
                        {supplier.currency}
+                    </td>
+                    <td onClick={()=>{setSelectedSupplierNumber(supplier.supplierNumber)}} className="px-6 py-4">
+                        <button className={index%2==0?"  text-[#3C86A1] p-2 text-[1.1vw] rounded font-md hover:underline cursor-pointer border-2 border-[#3C86A1]" :"text-neutral-100 text-[1.1vw] rounded border-[#3C86A1] border-2 p-2 font-md hover:underline cursor-pointer "}>Create</button>
                     </td>
                 </tr>
                 )
