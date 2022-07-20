@@ -3,6 +3,32 @@ var router = express.Router();
 const db = require('../helpers/db');
 
 
+
+// Create a Supplier
+
+    router.post('/createSupplier',(req,res)=>{
+        const {supplierName} = req.body.supplierDetails;
+        const {company} = req.body.supplierDetails;
+        const {streetAddress} = req.body.supplierDetails;
+        const {city} = req.body.supplierDetails;
+        const {proviance} = req.body.supplierDetails;
+        const {country} = req.body.supplierDetails;
+        const {postalCode} = req.body.supplierDetails;
+        const {taxSlip} = req.body.supplierDetails;
+        const {phone} = req.body.supplierDetails;
+        const {email} = req.body.supplierDetails;
+        const {openBalance}= req.body.supplierDetails;
+        const {supplierNumber} = req.body.supplierDetails;
+        const {currency} = req.body.supplierDetails;
+        db.query("INSERT INTO suppliertable (supplier,company,streetAddress,city,Province,Country,postalCode,taxSlip,phone,email,openBalance,supplierNumber,currency) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[supplierName,company,streetAddress,city,proviance,country,postalCode,taxSlip,phone,email,openBalance,supplierNumber,currency],(err,result)=>{
+            if(err)
+                {
+                    throw err;
+                }
+            res.status(201).send({message:'Supplier Successfull Created'});
+        })
+    });
+
 // Get all Suppliers
 
 router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
@@ -16,27 +42,21 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
         cur_records:cur_records,
         message:"Success"
   };
-  res.status(201).send({message:"Successfull",data:result});
-}
-catch(err)
-{
-    res.status(404).send(err);
-}
+    res.status(201).send({message:"Successfull",data:result});
+    }
+    catch(err)
+    {
+        res.status(404).send(err);
+    }
 
 });
 
 // Search a Supplier
-
-
     router.post('/searchSupplier/:curr_page/:curr_count',async(req,res)=>
     {
-
-    const {supplierName} = req.body;
-        
+    const {supplierName} = req.body;   
     const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM suppliertable WHERE supplier LIKE '%${supplierName}%'`);
-
     let cur_records = await db.runQuery(`SELECT * FROM suppliertable WHERE supplier LIKE '%${supplierName}%' LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
-
     let result ={
         total_count:total_count_array[0].total_records,
         cur_records:cur_records,
@@ -44,6 +64,4 @@ catch(err)
   };
   res.status(201).send({message:"Successfull",data:result});
     });
-
-
 module.exports = router;
