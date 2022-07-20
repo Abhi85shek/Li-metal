@@ -58,7 +58,7 @@ const AddSupplier = () => {
     <div className=" inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-7xl sm:w-full">
     <div className='flex bg-[#426b79] p-4 '>
                 <div className='basis-2/3 justify-start'>
-                <h3 className="text-xl leading -6 font-medium text-neutral-50 justify-center items-center"  id="modal-title">Add Product Details</h3>
+                <h3 className="text-xl leading -6 font-medium text-neutral-50 justify-center items-center"  id="modal-title">Add Supplier Details</h3>
                 </div>
                 
                 <div className='basis-1/3'>
