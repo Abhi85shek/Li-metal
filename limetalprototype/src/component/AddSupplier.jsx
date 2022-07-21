@@ -4,14 +4,76 @@ import { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
 import addNewSupplierModalAtom from '../atoms/addNewSupplierModalAtom';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field ,useFormikContext} from 'formik';
+import CurrencyList from 'currency-list'
+import { useEffect } from 'react';
+import { Country, State, City }  from 'country-state-city';
 
-
+const AutoSubmitToken = () => {
+  // Grab values and submitForm from context
+  const { values, submitForm } = useFormikContext();
+  React.useEffect(() => {
+    // Submit the form imperatively as an effect as soon as form values.token are 6 digits long
+  //  console.log(values)
+  }, [values]);
+  return null;
+};
 
 const AddSupplier = () => {
   
   const [showModal,setShowModal]=useRecoilState(addNewSupplierModalAtom)
+  const [allCurrencies,setAllCurrencies]=useState([])
+  const [countries,setAllCountries]=useState([])
+  const [states,setAllStates]=useState([])
+  const [cities,setAllCities]=useState([])
+  const [selectedCountry,setSelectedCountry]=useState("")
+  const [city,setSelectedCity]=useState("")
+  const [selectedState,setSelectedState]=useState("")
+ 
 
+
+  useEffect(()=>{
+    let curl=CurrencyList.getAll('en_US')
+    let countryList=Country.getAllCountries()
+    setAllCountries(countryList)
+    console.log(countryList)
+    let templist=Object.values(curl)
+    console.log(templist)
+    setAllCurrencies(templist)
+    console.log(allCurrencies)
+},[])
+
+const handleOnChange = (event) => {
+ if(event.target.id=="country")
+ {
+  console.log(event.target.value)
+  let countryName=event.target.value.split('-')[1]
+  console.log(countryName)
+  setSelectedCountry(countryName)
+ }
+ if(event.target.id=="province")
+ {
+  console.log(event.target.value)
+  let stateName=event.target.value.split('-')[1]
+  console.log(stateName)
+  setSelectedState(stateName)
+};
+}
+useEffect(()=>{
+  if(selectedCountry.length>0){
+  let statesList=State.getStatesOfCountry(selectedCountry)
+  console.log(statesList)
+  setAllStates(statesList)
+  }
+},[selectedCountry])
+
+useEffect(()=>{
+  if(selectedState.length>0){
+  let cityList=City.getCitiesOfState(selectedCountry,selectedState)
+  console.log(cityList)
+  setAllCities(cityList)
+  }
+},[selectedState])
 
    const addSupplierHandler= async (values)=>{
 
@@ -22,8 +84,8 @@ const AddSupplier = () => {
             company:values.company,
             streetAddress:values.streetAddress,
             city:values.city,
-            province:values.province,
-            country:values.country,
+            province:values.province.split('-')[0],
+            country:values.country.split('-')[0],
             postalCode:values.postalCode,
             taxSlip:values.taxSlip,
             phone:values.phone,
@@ -91,7 +153,7 @@ const AddSupplier = () => {
       onSubmit={addSupplierHandler}
        >
          {({ errors, touched, isValidating }) => (
-                <Form className="w-[100%]">
+                <Form onChange={handleOnChange} className="w-[100%]">
                     <div className='flex space-x-2 mt-8  '>
                         <div className='basis-1/2'>
                         <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Name</label>
@@ -111,20 +173,80 @@ const AddSupplier = () => {
                     </div>
                     <div className='flex space-x-2 mt-4'>
                     <div className='basis-1/3'>
-                        <label htmlFor='city' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>City</label>
-                        <Field type="text" id="city" validate={validateField} name="city" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-                        {errors.city && touched.city && <div className='text-red-700'>{errors.city}</div>}
-                        </div>
-                        <div className='basis-1/3'>
-                        <label htmlFor='province' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Province</label>
-                        <Field type="text" id="province" validate={validateField} name="province" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-                        {errors.province && touched.province && <div className='text-red-700'>{errors.province}</div>}
-                        </div>
-                        <div className='basis-1/3'>
                         <label htmlFor='country' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country</label>
-                        <Field type="text" id="country" validate={validateField} name="country" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
+                        <Field as="select" id="country" validate={validateField} name="country" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option value={1}>Select</option>
+                        {countries.length>0?
+                        countries.map((country)=>
+                        (                          
+                                     <option value={country.name+'-'+country.isoCode}> {country.name} </option>
+                        )
+                        )
+                        
+                        
+            :
+                     <>  
+                       
+                       </>
+
+                      }
+                      </Field>
+                      </div>
                         {errors.country && touched.country && <div className='text-red-700'>{errors.country}</div>}
                         </div>
+
+                        <div className='basis-1/3'>
+                        <label htmlFor='province' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>State/Province</label>
+                        <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
+                        <Field as="select" id="province" validate={validateField} name="province" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option value={1}>Select</option>
+                        {states.length>0?
+                        states.map((mystate)=>
+                        (                          
+                                     <option value={mystate.name+'-'+mystate.isoCode}> {mystate.name} </option>
+                        )
+                        )
+                        
+                        
+            :
+                     <>  
+                       
+                       </>
+
+                      }
+                      </Field>
+                      </div>
+                        
+                        
+                        {errors.province && touched.province && <div className='text-red-700'>{errors.province}</div>}
+                        </div>
+
+                    <div className='basis-1/3'>
+                        <label htmlFor='city' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>City</label>
+                        <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
+                        <Field as="select" id="city" validate={validateField} name="city" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option value={1}>Select</option>
+                        {cities.length>0?
+                        cities.map((city)=>
+                        (                          
+                                     <option value={city.name}> {city.name} </option>
+                        )
+                        )
+                        
+                        
+            :
+                     <>  
+                       
+                       </>
+
+                      }
+                      </Field>
+                      </div>
+                        {errors.city && touched.city && <div className='text-red-700'>{errors.city}</div>}
+                        </div>
+                       
+                        
                     </div>
                     <div className='flex space-x-2 mt-4  '>
                         <div className='basis-1/2'>
@@ -166,12 +288,21 @@ const AddSupplier = () => {
                         <div className='basis-1/3'>
                         <label htmlFor='currency' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Currency</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field as="select" id="currency" validate={validateField} name="currency" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
-                        <option>USD $</option>
-                        <option>CAD $</option>
-                        <option>EUR €</option>
-                        <option>RUP ₹</option>
-                       <option>YEN ¥</option>
+                        <Field defaultValue={1} placeholder="Select Currency" as="select" id="currency" validate={validateField} name="currency" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option value={1}>Select</option>
+                        {allCurrencies.length>0?
+                        allCurrencies.map((current)=>
+                        (                          
+                                     <option value={current.code}>{current.code}-{current.symbol} -({current.name} )</option>
+                        )
+                        )
+                        
+                        
+            :
+                     <>  
+                       
+                       </>
+                      }
                         </Field>
                        
                         </div>
@@ -186,14 +317,16 @@ const AddSupplier = () => {
                     <div className='flex m-4 mt-8 justify-center items-center'>
                         <button disabled={isValidating} type="submit" class="text-white w-full bg-[#426b79] hover:bg-[#305460] focus:bg-[#2c4b58] font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2  focus:outline-none ">Create Supplier</button>
                     </div>
+                    <AutoSubmitToken/>
                 </Form> 
          )} 
-                </Formik>                
+                </Formik>  
+                            
             </div>
           </div>
         </div>
       </div>
-     
+      
     </div>
   </div>
 </div>
