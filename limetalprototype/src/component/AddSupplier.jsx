@@ -4,43 +4,33 @@ import { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
 import addNewSupplierModalAtom from '../atoms/addNewSupplierModalAtom';
+import { Formik, Form, Field } from 'formik';
+
+
 
 const AddSupplier = () => {
   
-    const [showModal,setShowModal] = useRecoilState(addNewSupplierModalAtom);
-    const [supplierName,setSupplierName] = useState("");
-    const [company,setCompany] = useState("");
-    const [streetAddress,setStreetAddress]=useState("");
-    const [city,setCity]=useState("");
-    const [province,setProvince]=useState("");
-    const [country,setCountry] = useState("");
-    const [postalCode,setPostalCode]=useState("")
-    const [taxSlip,setTaxSlip]=useState("")
-    const [phone,setPhone]=useState("")
-    const [email,setEmail]=useState("")
-    const [attachments,setAttachments]=useState("")
-    const [openBalance, setOpenBalance]=useState("")
-    const [supplierNumber,setSupplierNumber]=useState("")
-    const [currency,setCurrency]=useState("")
+  const [showModal,setShowModal]=useRecoilState(addNewSupplierModalAtom)
 
 
-   const addSupplierHandler= async (e)=>{
-        e.preventDefault();
+   const addSupplierHandler= async (values)=>{
+
+        // e.preventDefault();
 
         let supplierDetails={
-            supplierName:supplierName,
-            company:company,
-            streetAddress:streetAddress,
-            city:city,
-            province:province,
-            country:country,
-            postalCode:postalCode,
-            taxSlip:taxSlip,
-            phone:phone,
-            email:email,
-            openBalance:openBalance,
-            supplierNumber:supplierNumber,
-            currency:currency
+            supplierName:values.supplierName,
+            company:values.company,
+            streetAddress:values.streetAddress,
+            city:values.city,
+            province:values.province,
+            country:values.country,
+            postalCode:values.postalCode,
+            taxSlip:values.taxSlip,
+            phone:values.phone,
+            email:values.email,
+            openBalance:values.openBalance,
+            supplierNumber:values.supplierNumber,
+            currency:values.currency
         }
 
 
@@ -48,6 +38,14 @@ const AddSupplier = () => {
         setShowModal(false);
         alert(result.data.message);
    };
+
+   const validateField=value=> {
+    let error;
+    if (!value) {
+      error = 'This is a required field';
+    }
+    return error;
+  }
 
 
   return (
@@ -73,69 +71,111 @@ const AddSupplier = () => {
                
              
             <div className="mt-3 w-[100%]">
-                <form onSubmit={addSupplierHandler} className="w-[100%]">
+            <Formik
+       initialValues={{
+        supplierName:'',
+        company:'',
+        streetAddress:'',
+        city:'',
+        province:'',
+        country:'',
+        postalCode:'',
+        taxSlip:'',
+        phone:'',
+        email:'',
+        openBalance:'',
+        supplierNumber:'',
+        currency:''
+
+       }}
+      onSubmit={addSupplierHandler}
+       >
+         {({ errors, touched, isValidating }) => (
+                <Form className="w-[100%]">
                     <div className='flex space-x-2 mt-8  '>
                         <div className='basis-1/2'>
                         <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Name</label>
-                        <input type="text" id="supplier" value={supplierName} onChange={(e)=>{setSupplierName(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field type="text" id="supplierName" validate={validateField} name="supplierName" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.supplierName && touched.supplierName && <div className='text-red-700'>{errors.supplierName}</div>}
                         </div>
                         <div className='basis-1/2'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Company Name</label>
-                        <input type="text" id="supplier" value={company} onChange={(e)=>{setCompany(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='company' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Company Name</label>
+                        <Field type="text" id="company" validate={validateField} name="company" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.company && touched.company && <div className='text-red-700'>{errors.company}</div>}
                         </div>
                     </div>
                     <div className='flex-col mt-4'>
-                    <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Street Address</label>
-                        <input type="text" id="supplier" value={streetAddress} onChange={(e)=>{setStreetAddress(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                    <label htmlFor='streetAddress' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Street Address</label>
+                        <Field type="text" id="streetAddress" validate={validateField} name="streetAddress"className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.streetAddress && touched.streetAddress && <div className='text-red-700'>{errors.streetAddress}</div>}
                     </div>
                     <div className='flex space-x-2 mt-4'>
                     <div className='basis-1/3'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>City</label>
-                        <input type="text" id="supplier" value={city} onChange={(e)=>{setCity(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='city' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>City</label>
+                        <Field type="text" id="city" validate={validateField} name="city" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.city && touched.city && <div className='text-red-700'>{errors.city}</div>}
                         </div>
                         <div className='basis-1/3'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Province</label>
-                        <input type="text" id="supplier" value={province} onChange={(e)=>{setProvince(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='province' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Province</label>
+                        <Field type="text" id="province" validate={validateField} name="province" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.province && touched.province && <div className='text-red-700'>{errors.province}</div>}
                         </div>
                         <div className='basis-1/3'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country</label>
-                        <input type="text" id="supplier" value={country} onChange={(e)=>{setCountry(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='country' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country</label>
+                        <Field type="text" id="country" validate={validateField} name="country" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.country && touched.country && <div className='text-red-700'>{errors.country}</div>}
                         </div>
                     </div>
                     <div className='flex space-x-2 mt-4  '>
                         <div className='basis-1/2'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code</label>
-                        <input type="text" id="supplier" value={postalCode} onChange={(e)=>{setPostalCode(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='postalCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code</label>
+                        <Field type="text" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.postalCode && touched.postalCode && <div className='text-red-700'>{errors.postalCode}</div>}
                         </div>
                         <div className='basis-1/2'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Tax Slip</label>
-                        <input type="text" id="supplier" value={taxSlip} onChange={(e)=>{setTaxSlip(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-                        </div>
-                    </div>
-
-                    <div className='flex space-x-2 mt-4  '>
-                        <div className='basis-1/2'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Phone</label>
-                        <input type="text" id="supplier" value={phone} onChange={(e)=>{setPhone(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-                        </div>
-                        <div className='basis-1/2'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Email</label>
-                        <input type="text" id="supplier" value={email} onChange={(e)=>{setEmail(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='taxSlip' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Tax Slip</label>
+                        <Field type="text" id="taxSlip" validate={validateField} name="taxSlip" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.taxSlip && touched.taxSlip && <div className='text-red-700'>{errors.taxSlip}</div>}
                         </div>
                     </div>
 
                     <div className='flex space-x-2 mt-4  '>
+                        <div className='basis-1/2'>
+                        <label htmlFor='phone' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Phone</label>
+                        <Field type="text" id="phone" validate={validateField} name="phone" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.phone && touched.phone && <div className='text-red-700'>{errors.phone}</div>}
+                        </div>
+                        <div className='basis-1/2'>
+                        <label htmlFor='email' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Email</label>
+                        <Field type="email" id="email" validate={validateField} name="email" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.email && touched.email && <div className='text-red-700'>{errors.email}</div>}
+                        </div>
+                    </div>
+
+                    <div className='flex space-x-2 mt-4  '>
                         <div className='basis-1/3'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Number</label>
-                        <input type="text" id="supplier" value={supplierNumber} onChange={(e)=>{setSupplierNumber(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='openBalance' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Open Balance</label>
+                        <Field type="text" id="openBalance" validate={validateField} name="openBalance" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.openBalance && touched.openBalance && <div className='text-red-700'>{errors.openBalance}</div>}
                         </div>
                         <div className='basis-1/3'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Open Balance</label>
-                        <input type="text" id="supplier" value={openBalance} onChange={(e)=>{setOpenBalance(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='supplierNumber' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Number</label>
+                        <Field type="text" id="supplierNumber" validate={validateField} name="supplierNumber" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.supplierNumber && touched.supplierNumber && <div className='text-red-700'>{errors.supplierNumber}</div>}
                         </div>
                         <div className='basis-1/3'>
-                        <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Currency</label>
-                        <input type="text" id="supplier" value={currency} onChange={(e)=>{setCurrency(e.target.value)}} className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <label htmlFor='currency' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Currency</label>
+                        <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
+                        <Field as="select" id="currency" validate={validateField} name="currency" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option>USD $</option>
+                        <option>CAD $</option>
+                        <option>EUR €</option>
+                        <option>RUP ₹</option>
+                       <option>YEN ¥</option>
+                        </Field>
+                       
+                        </div>
+                        {errors.currency && touched.currency && <div className='text-red-700'>{errors.currency}</div>}
                         </div>
                        
 
@@ -144,9 +184,11 @@ const AddSupplier = () => {
 
                     
                     <div className='flex m-4 mt-8 justify-center items-center'>
-                        <button type="submit" class="text-white w-full bg-[#426b79] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2  focus:outline-none ">Create</button>
+                        <button disabled={isValidating} type="submit" class="text-white w-full bg-[#426b79] hover:bg-[#305460] focus:bg-[#2c4b58] font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2  focus:outline-none ">Create Supplier</button>
                     </div>
-                </form>                  
+                </Form> 
+         )} 
+                </Formik>                
             </div>
           </div>
         </div>
