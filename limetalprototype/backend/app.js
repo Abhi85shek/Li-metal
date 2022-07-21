@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 const poRoutes =require("./routes/poGenerate");
 const products = require("./routes/products");
 const suppliers = require("./routes/supplier"); 
+const quickBooks = require('./routes/quickBooks');
 global.db = db;
 var app = express();
 
@@ -28,6 +29,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/',products);
 app.use("/",suppliers);
+app.use("/",quickBooks);
 app.use(poRoutes);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
