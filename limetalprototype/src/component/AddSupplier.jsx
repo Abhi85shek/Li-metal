@@ -8,6 +8,8 @@ import { Formik, Form, Field ,useFormikContext} from 'formik';
 import CurrencyList from 'currency-list'
 import { useEffect } from 'react';
 import { Country, State, City }  from 'country-state-city';
+import {toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AutoSubmitToken = () => {
   // Grab values and submitForm from context
@@ -97,8 +99,36 @@ useEffect(()=>{
 
 
         const result = await axios.post('http://localhost:4000/createSupplier',{supplierDetails:supplierDetails});
+        if(result.status==201)
+       {
+        console.log("toasting")
+        
+            toast.success('Supplier added successfully', {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+   
+else{
+    setTimeout(()=>{
+        toast.error('Error Occoured', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },0);
+}
         setShowModal(false);
-        alert(result.data.message);
+        
    };
 
    const validateField=value=> {
@@ -108,6 +138,28 @@ useEffect(()=>{
     }
     return error;
   }
+
+  const validateDropdownField=value=> {
+    let error;
+    if (!value || value==1) {
+      error = 'Please select an option';
+    }
+    return error;
+  }
+
+  const validatePhoneNumber=value=> {
+    let error;
+    if (!value) {
+      error = 'This is a required field';
+    }
+    else if(!/^[0-9]*$/.test(value)){
+      error = 'Invalid phone Number';
+    }
+    return error;
+    }
+   
+
+
 
 
   return (
@@ -157,26 +209,26 @@ useEffect(()=>{
                     <div className='flex space-x-2 mt-8  '>
                         <div className='basis-1/2'>
                         <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Name</label>
-                        <Field type="text" id="supplierName" validate={validateField} name="supplierName" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Name" type="text" id="supplierName" validate={validateField} name="supplierName" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.supplierName && touched.supplierName && <div className='text-red-700'>{errors.supplierName}</div>}
                         </div>
                         <div className='basis-1/2'>
                         <label htmlFor='company' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Company Name</label>
-                        <Field type="text" id="company" validate={validateField} name="company" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Company" type="text" id="company" validate={validateField} name="company" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.company && touched.company && <div className='text-red-700'>{errors.company}</div>}
                         </div>
                     </div>
                     <div className='flex-col mt-4'>
                     <label htmlFor='streetAddress' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Street Address</label>
-                        <Field type="text" id="streetAddress" validate={validateField} name="streetAddress"className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Address" type="text" id="streetAddress" validate={validateField} name="streetAddress"className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.streetAddress && touched.streetAddress && <div className='text-red-700'>{errors.streetAddress}</div>}
                     </div>
                     <div className='flex space-x-2 mt-4'>
                     <div className='basis-1/3'>
                         <label htmlFor='country' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field as="select" id="country" validate={validateField} name="country" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
-                        <option value={1}>Select</option>
+                        <Field  as="select" id="country" validate={validateDropdownField} name="country" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option className='text-neutral-400 hover:bg-none' value={1}>Select Country</option>
                         {countries.length>0?
                         countries.map((country)=>
                         (                          
@@ -199,8 +251,8 @@ useEffect(()=>{
                         <div className='basis-1/3'>
                         <label htmlFor='province' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>State/Province</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field as="select" id="province" validate={validateField} name="province" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
-                        <option value={1}>Select</option>
+                        <Field as="select" id="province" validate={validateDropdownField} name="province" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option className='text-neutral-400 hover:bg-none' value={1}>Select State</option>
                         {states.length>0?
                         states.map((mystate)=>
                         (                          
@@ -225,8 +277,8 @@ useEffect(()=>{
                     <div className='basis-1/3'>
                         <label htmlFor='city' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>City</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field as="select" id="city" validate={validateField} name="city" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
-                        <option value={1}>Select</option>
+                        <Field  as="select" id="city" validate={validateDropdownField} name="city" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option  className='text-neutral-400 hover:bg-none' value={1}>Select City</option>
                         {cities.length>0?
                         cities.map((city)=>
                         (                          
@@ -251,12 +303,12 @@ useEffect(()=>{
                     <div className='flex space-x-2 mt-4  '>
                         <div className='basis-1/2'>
                         <label htmlFor='postalCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code</label>
-                        <Field type="text" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Postal Code" type="text" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.postalCode && touched.postalCode && <div className='text-red-700'>{errors.postalCode}</div>}
                         </div>
                         <div className='basis-1/2'>
                         <label htmlFor='taxSlip' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Tax Slip</label>
-                        <Field type="text" id="taxSlip" validate={validateField} name="taxSlip" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field  placeholder="Enter Supplier Tax  Slip" type="text" id="taxSlip" validate={validateField} name="taxSlip" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.taxSlip && touched.taxSlip && <div className='text-red-700'>{errors.taxSlip}</div>}
                         </div>
                     </div>
@@ -264,12 +316,12 @@ useEffect(()=>{
                     <div className='flex space-x-2 mt-4  '>
                         <div className='basis-1/2'>
                         <label htmlFor='phone' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Phone</label>
-                        <Field type="text" id="phone" validate={validateField} name="phone" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Phone Number" type="text" id="phone" validate={validatePhoneNumber} name="phone" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.phone && touched.phone && <div className='text-red-700'>{errors.phone}</div>}
                         </div>
                         <div className='basis-1/2'>
                         <label htmlFor='email' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Email</label>
-                        <Field type="email" id="email" validate={validateField} name="email" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Email" type="email" id="email" validate={validateField} name="email" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.email && touched.email && <div className='text-red-700'>{errors.email}</div>}
                         </div>
                     </div>
@@ -277,19 +329,19 @@ useEffect(()=>{
                     <div className='flex space-x-2 mt-4  '>
                         <div className='basis-1/3'>
                         <label htmlFor='openBalance' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Open Balance</label>
-                        <Field type="text" id="openBalance" validate={validateField} name="openBalance" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Open Balance" type="text" id="openBalance" validate={validateField} name="openBalance" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.openBalance && touched.openBalance && <div className='text-red-700'>{errors.openBalance}</div>}
                         </div>
                         <div className='basis-1/3'>
                         <label htmlFor='supplierNumber' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Number</label>
-                        <Field type="text" id="supplierNumber" validate={validateField} name="supplierNumber" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <Field placeholder="Enter Supplier Number" type="text" id="supplierNumber" validate={validateField} name="supplierNumber" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.supplierNumber && touched.supplierNumber && <div className='text-red-700'>{errors.supplierNumber}</div>}
                         </div>
                         <div className='basis-1/3'>
                         <label htmlFor='currency' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Currency</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field defaultValue={1} placeholder="Select Currency" as="select" id="currency" validate={validateField} name="currency" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
-                        <option value={1}>Select</option>
+                        <Field defaultValue={1} placeholder="Select Currency" as="select" id="currency" validate={validateDropdownField} name="currency" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option className='text-neutral-400 hover:bg-none' value={1}>Select Currency</option>
                         {allCurrencies.length>0?
                         allCurrencies.map((current)=>
                         (                          
@@ -300,7 +352,7 @@ useEffect(()=>{
                         
             :
                      <>  
-                       
+                     
                        </>
                       }
                         </Field>
