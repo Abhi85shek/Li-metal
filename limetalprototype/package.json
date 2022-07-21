@@ -9,7 +9,13 @@
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "intuit-oauth": "^4.0.0",
+=======
+    "country-state-city": "^3.0.1",
+    "currency-list": "^1.0.8",
+    "formik": "^2.2.9",
+>>>>>>> 36c2c96ac98803c51d86482861eab3e56d5c7d1a
     "jsonwebtoken": "^8.5.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
