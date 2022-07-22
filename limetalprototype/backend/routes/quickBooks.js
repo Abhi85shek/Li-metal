@@ -32,5 +32,35 @@ router.get('/quickBookAuthorizationUrl',async (req, res) => {
     }
 });
 
+// Generation of Token using Code,State and realmId 
 
+router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
+    // console.log(req.params.code)
+    try{
+            var parseRedirect = quickBookUrl +"?code=" +req.params.code + "&"+ "state=" +req.params.state + "&"+ "realmId=" + req.params.realmId;    
+            // Exchange the auth code retrieved from the **req.url** on the redirectUri
+           oauthClient.createToken(parseRedirect)
+            .then(async function(authResponse) {
+                oauth2_token_json = authResponse.getJson().access_token;
+                // await credentialsModel.updateTokenById(quickBookLocalID, oauth2_token_json, authResponse.getJson().id_token)
+                console.log(authResponse.getJson())
+                res.status(200).send({
+                    data:oauth2_token_json,
+                    oauthTokenSecret: authResponse.getJson().id_token
+                })
+            })
+            .catch(function(e) {
+                res.status(404).send({
+                  e
+                })
+            });
+        
+ 
+    }catch (e) {
+        res.status(404).send({
+            message:"e.message",
+            data:{}
+        });
+    }
+});
 module.exports = router;
