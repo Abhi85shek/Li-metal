@@ -63,6 +63,7 @@ const handleOnChange = (event) => {
 }
 useEffect(()=>{
   if(selectedCountry.length>0){
+  setAllCities([])
   let statesList=State.getStatesOfCountry(selectedCountry)
   console.log(statesList)
   setAllStates(statesList)
@@ -70,8 +71,15 @@ useEffect(()=>{
 },[selectedCountry])
 
 useEffect(()=>{
+  let cityList
   if(selectedState.length>0){
-  let cityList=City.getCitiesOfState(selectedCountry,selectedState)
+  if(selectedCountry=='GB')
+  {
+    cityList=states    
+  }
+  else{
+  cityList=City.getCitiesOfState(selectedCountry,selectedState)
+  }
   console.log(cityList)
   setAllCities(cityList)
   }
