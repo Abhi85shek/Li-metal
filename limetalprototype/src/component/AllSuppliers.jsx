@@ -2,6 +2,9 @@ import React,{useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import { useRecoilState,useRecoilValue} from 'recoil';
 import { BsSearch } from "react-icons/bs";
+import editSupplierModalAtom from '../atoms/EditSupplierModalAtom';
+import EditSupplierModal from './EditSupplierModal';
+import AddSupplier from './AddSupplier';
 
 const AllSuppliers = () => {
 
@@ -12,6 +15,7 @@ const AllSuppliers = () => {
     let [searchSupplier, setsearchSupplier]=useState("")
     let [selctedSupplerNumber,setSelectedSupplierNumber]=useState()
     let [selectedSupplier,setselectedSupplier]=useState([])
+    const [showEditModal,setShowEditModal]=useRecoilState(editSupplierModalAtom)
     const filterRef=useRef([])
     const currentCount =10;
     let totalNumberOfPages;
@@ -91,7 +95,7 @@ const AllSuppliers = () => {
     totalNumberOfPages = Math.ceil(totalRecords/10);
   return (
     <>
- 
+  { showEditModal ? <EditSupplierModal selectedSupplier={selectedSupplier} /> : null}
     <div className='w-full px-40 py-2 '>
         <div className='w-full flex border-[#6BA4B8] border-2 border- h-14 rounded-md pl-4 '>
         <BsSearch size={28} className='mt-3 text-slate-400 text-xl'/>
@@ -118,6 +122,9 @@ const AllSuppliers = () => {
                     Currency
                 </th>
                 <th scope="col" className="px-6 py-3">
+                    Edit
+                </th>
+                <th scope="col" className="px-6 py-3">
                     Order
                 </th>
             </tr>
@@ -136,10 +143,13 @@ const AllSuppliers = () => {
                         {supplier.streetAddress}
                     </td>
                     <td className="px-6 py-4">
-                      {supplier.Country}
+                      {supplier.Country.split('-')[0]}
                     </td>
                     <td className="px-6 py-4">
                        {supplier.currency}
+                    </td>
+                    <td onClick={()=>{setShowEditModal(true);setselectedSupplier(supplier)}} className="px-6 py-4">
+                        <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Edit</p>
                     </td>
                     <td onClick={()=>{setSelectedSupplierNumber(supplier.supplierNumber)}} className="px-6 py-4">
                         <button className={index%2==0?"  text-[#3C86A1] p-2 text-[1.1vw] rounded font-md hover:underline cursor-pointer border-2 border-[#3C86A1]" :"text-neutral-100 text-[1.1vw] rounded border-[#3C86A1] border-2 p-2 font-md hover:underline cursor-pointer "}>Create</button>
@@ -173,6 +183,7 @@ const AllSuppliers = () => {
 
     </div>
 </div>
+
 </div>
     </>
   )

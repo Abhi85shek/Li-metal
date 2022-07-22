@@ -3,27 +3,19 @@ import React from 'react';
 import { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
-import addNewSupplierModalAtom from '../atoms/addNewSupplierModalAtom';
 import { Formik, Form, Field ,useFormikContext} from 'formik';
 import CurrencyList from 'currency-list'
 import { useEffect } from 'react';
 import { Country, State, City }  from 'country-state-city';
 import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import editSupplierModalAtom from '../atoms/EditSupplierModalAtom';
 
-const AutoSubmitToken = () => {
-  // Grab values and submitForm from context
-  const { values, submitForm } = useFormikContext();
-  React.useEffect(() => {
-    // Submit the form imperatively as an effect as soon as form values.token are 6 digits long
-  //  console.log(values)
-  }, [values]);
-  return null;
-};
 
-const AddSupplier = () => {
+
+const EditSupplierModal = (props) => {
   
-  const [showModal,setShowModal]=useRecoilState(addNewSupplierModalAtom)
+  const [showModal,setShowModal]=useRecoilState(editSupplierModalAtom)
   const [allCurrencies,setAllCurrencies]=useState([])
   const [countries,setAllCountries]=useState([])
   const [states,setAllStates]=useState([])
@@ -31,18 +23,49 @@ const AddSupplier = () => {
   const [selectedCountry,setSelectedCountry]=useState("")
   const [city,setSelectedCity]=useState("")
   const [selectedState,setSelectedState]=useState("")
+  const [currentCountryCode,setCurrentCountryCode]=useState('')
  
 
 
   useEffect(()=>{
+    console.log(props.selectedSupplier)
+    let cityList
+    let stateList
     let curl=CurrencyList.getAll('en_US')
     let countryList=Country.getAllCountries()
+    if(props.selectedSupplier.Country!='xyzn' && props.selectedSupplier.Country!=null){
+    setSelectedCountry(props.selectedSupplier.Country.split('-')[1])
+    }
+    if(props.selectedSupplier.Province!=null && props.selectedSupplier.Province!='xyzn'){
+    setSelectedState(props.selectedSupplier.Province.split('-')[1])
+    }
+    if(props.selectedSupplier.Country!='xyzn' && props.selectedSupplier.Country!=null){
+    stateList=State.getStatesOfCountry(props.selectedSupplier.Country.split('-')[1])
+    }
+    else{
+        stateList=[]
+    }
+   if(props.selectedSupplier.Country!=null && props.selectedSupplier.Country!='xyzn'  && props.selectedSupplier.Country.split('-')[1]=='GB'){
+        cityList=stateList
+   }
+   else{
+    if(props.selectedSupplier.Province!=null && props.selectedSupplier.Province!='xyzn'){
+   cityList=City.getCitiesOfState(props.selectedSupplier.Country.split('-')[1],props.selectedSupplier.Province.split('-')[1])
+    }
+    else{
+        cityList=[]
+    }
+   }
+   console.log(cityList)
+   setAllCities(cityList)
+   setAllStates(stateList)
     setAllCountries(countryList)
     console.log(countryList)
     let templist=Object.values(curl)
     console.log(templist)
     setAllCurrencies(templist)
     console.log(allCurrencies)
+    
 },[])
 
 const handleOnChange = (event) => {
@@ -79,13 +102,14 @@ useEffect(()=>{
   }
   else{
   cityList=City.getCitiesOfState(selectedCountry,selectedState)
+   
   }
   console.log(cityList)
   setAllCities(cityList)
   }
 },[selectedState])
 
-   const addSupplierHandler= async (values)=>{
+   const editSupplierHandler= async (values)=>{
 
         // e.preventDefault();
 
@@ -106,12 +130,12 @@ useEffect(()=>{
         }
 
 
-        const result = await axios.post('http://localhost:4000/createSupplier',{supplierDetails:supplierDetails});
+        const result = await axios.post(`http://localhost:4000/editSupplier/${props.selectedSupplier.id}`,{supplierDetails:supplierDetails});
         if(result.status==201)
        {
         console.log("toasting")
         
-            toast.success('Supplier added successfully', {
+            toast.success('Supplier edited successfully', {
               position: "top-center",
               autoClose: 2000,
               hideProgressBar: true,
@@ -178,7 +202,7 @@ else{
     <div className=" inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-7xl sm:w-full">
     <div className='flex bg-[#426b79] p-4 '>
                 <div className='basis-2/3 justify-start'>
-                <h3 className="text-xl leading -6 font-medium text-neutral-50 justify-center items-center"  id="modal-title">Add Supplier Details</h3>
+                <h3 className="text-xl leading -6 font-medium text-neutral-50 justify-center items-center"  id="modal-title">Edit Supplier Details</h3>
                 </div>
                 
                 <div className='basis-1/3'>
@@ -195,22 +219,22 @@ else{
             <div className="mt-3 w-[100%]">
             <Formik
        initialValues={{
-        supplierName:'',
-        company:'',
-        streetAddress:'',
-        city:'',
-        province:'',
-        country:'',
-        postalCode:'',
-        taxSlip:'',
-        phone:'',
-        email:'',
-        openBalance:'',
-        supplierNumber:'',
-        currency:''
+        supplierName:props.selectedSupplier.supplier,
+        company:props.selectedSupplier.company,
+        streetAddress:props.selectedSupplier.streetAddress,
+        city:props.selectedSupplier.city,
+        province:props.selectedSupplier.Province,
+        country:props.selectedSupplier.Country,
+        postalCode:props.selectedSupplier.postalCode,
+        taxSlip:props.selectedSupplier.taxSlip,
+        phone:props.selectedSupplier.phone,
+        email:props.selectedSupplier.email,
+        openBalance:props.selectedSupplier.openBalance,
+        supplierNumber:props.selectedSupplier.supplierNumber,
+        currency:props.selectedSupplier.currency
 
        }}
-      onSubmit={addSupplierHandler}
+      onSubmit={editSupplierHandler}
        >
          {({ errors, touched, isValidating }) => (
                 <Form onChange={handleOnChange} className="w-[100%]">
@@ -235,8 +259,8 @@ else{
                     <div className='basis-1/3'>
                         <label htmlFor='country' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field  as="select" id="country" validate={validateDropdownField} name="country" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
-                        <option className='text-neutral-400 hover:bg-none' value={1}>Select Country</option>
+                        <Field placeholder={props.selectedSupplier.Country} as="select" id="country" validate={validateDropdownField} name="country" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option  className='text-neutral-400 hover:bg-none' value={1}>Select Country</option>
                         {countries.length>0?
                         countries.map((country)=>
                         (                          
@@ -285,12 +309,12 @@ else{
                     <div className='basis-1/3'>
                         <label htmlFor='city' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>City</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field  as="select" id="city" validate={validateDropdownField} name="city" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
-                        <option  className='text-neutral-400 hover:bg-none' value={1}>Select City</option>
+                        <Field placeholder={props.selectedSupplier.city}  as="select" id="city" validate={validateDropdownField} name="city" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <option   className='text-neutral-400 hover:bg-none' value={1}>Select City</option>
                         {cities.length>0?
                         cities.map((city)=>
                         (                          
-                                     <option value={city.name}> {city.name} </option>
+                                     <option value={city.name}>{city.name} </option>
                         )
                         )
                         
@@ -375,9 +399,9 @@ else{
 
                     
                     <div className='flex m-4 mt-8 justify-center items-center'>
-                        <button disabled={isValidating} type="submit" class="text-white w-full bg-[#426b79] hover:bg-[#305460] focus:bg-[#2c4b58] font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2  focus:outline-none ">Create Supplier</button>
+                        <button disabled={isValidating} type="submit" class="text-white w-full bg-[#426b79] hover:bg-[#305460] focus:bg-[#2c4b58] font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2  focus:outline-none ">Submit Supplier</button>
                     </div>
-                    <AutoSubmitToken/>
+                   
                 </Form> 
          )} 
                 </Formik>  
@@ -393,4 +417,4 @@ else{
   )
 }
 
-export default AddSupplier;
+export default EditSupplierModal;
