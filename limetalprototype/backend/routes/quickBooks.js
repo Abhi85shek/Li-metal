@@ -4,7 +4,7 @@ const config = require('../config/config');
 const OAuthClient =  require('intuit-oauth');
 
 const quickBookLocalID = config.qb.quickBookLocalID
-const quickBookUrl = 'http://localhost:4000';
+const quickBookUrl = 'http://localhost:3001/createOrder';
 const QUICK_BOOK_BASE_URL = config.qb.BASE_URL;
 const QUICK_BOOK_COMPANY_NUMBER = config.qb.COMPANY_NUMBER;
 
