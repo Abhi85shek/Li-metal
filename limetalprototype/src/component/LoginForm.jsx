@@ -9,6 +9,8 @@ import loggedInUserAtom from "../atoms/loggedInUser";
 import { useRecoilState } from "recoil";
 import firstTimeRegisterAtom from '../atoms/firstTimeRegister';
 import logo from '../../src/logo.png'
+import { TEST_HOME_PAGE } from "../config/basic";
+
 // Toastify
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -79,6 +81,19 @@ const LoginForm = () => {
     
     if(response.data.userValid)
     {
+
+            
+      console.log("quickbooks auth")
+        
+
+      const response = await axios.get(`http://localhost:4000/quickBookAuthorizationUrl`);
+      if(response.status === 200){
+          const quickBookAuthUrl = response.data.data;
+          //check logined status in quick book
+          window.location.replace(quickBookAuthUrl) 
+             
+      }
+      
       auth.login(response.data.userId,response.data.token,response.data.userType,response.data.userEmail,response.data.userName);
       // Recoil State Set
      
@@ -87,11 +102,8 @@ const LoginForm = () => {
       setUserRole(JSON.parse(localStorage.getItem('userType')).userRole);
       setLoggedUser(response.data.userName);
 
-        // Get 
-        if(JSON.parse(localStorage.getItem('userType')).userRole === "pending")
-        { 
-          await getDataByEmail(email);
-        }
+     
+     
       
         setTimeout(()=>{
           toast.success('Login Successfull', {
@@ -105,11 +117,19 @@ const LoginForm = () => {
           });
         },0);
       
+
+
+          
+          // }
+
       
 
       auth.isLoggedIn=true
       navigate("/createOrder");
+      
+     
     }
+
     else 
     {
           auth.logout();

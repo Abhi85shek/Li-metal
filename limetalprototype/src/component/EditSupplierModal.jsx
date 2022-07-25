@@ -334,7 +334,7 @@ else{
                     </div>
                     <div className='flex space-x-2 mt-4  '>
                         <div className='basis-1/2'>
-                        <label htmlFor='postalCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code</label>
+                        <label htmlFor='postalCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code/Zip Code</label>
                         <Field placeholder="Enter Supplier Postal Code" type="text" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.postalCode && touched.postalCode && <div className='text-red-700'>{errors.postalCode}</div>}
                         </div>

@@ -1,16 +1,47 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Link,useNavigate,useLocation } from 'react-router-dom';
 import logo from "../logo.png";
 import { useContext } from 'react';
 import { AuthContext } from '../shared/context/auth-context';
 import {BiUser} from 'react-icons/bi'
+import axios from 'axios';
+import { useState } from 'react';
+
 const Navbar = () => {
   const auth=useContext(AuthContext)
+  const [quickBookURLcode,setquickbooksAuthCode]=useState()
   const navigate=useNavigate()
   const signOutHandler = ()=>{
     auth.logout();
     navigate("/", { replace: true });
   };
+
+useEffect(()=>{
+  const aurthorizedURLcode = window.location.href
+      console.log(aurthorizedURLcode)  
+      localStorage.setItem('quickbooksAuthCode',aurthorizedURLcode)
+      setquickbooksAuthCode(aurthorizedURLcode)
+      // setquickbooksAutCode(aurthorizedURLcode)
+     quickbooksSignIn()
+},[])
+
+
+const quickbooksSignIn=async()=>{
+  console.log("inside")
+  let splitedList1 = localStorage.getItem('quickbooksAuthCode').split("&");
+  let code = splitedList1[0].split("=")[1];
+  let state = splitedList1[1].split("=")[1];
+  let realmId = splitedList1[2].split("=")[1];
+  console.log(code+" "+state +" " + realmId)
+ const res= await axios.get(`http://localhost:4000/quickBookToken/${code}/${state}/${realmId}`)
+ console.log(res.data)
+ if(res.status==200)
+ {
+  localStorage.setItem('quickbooksCredentials',res.data)
+ }
+ console.log(localStorage.getItem('quickbooksCredentials'))
+
+}
 
   return (
     <div>
