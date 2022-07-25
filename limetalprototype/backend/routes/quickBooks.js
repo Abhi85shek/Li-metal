@@ -21,7 +21,7 @@ router.get('/quickBookAuthorizationUrl',async (req, res) => {
     try{
             var authUri = oauthClient.authorizeUri({scope:[OAuthClient.scopes.Accounting,OAuthClient.scopes.OpenId],state:'testState'});  
             // console.log(authUri);
-            res.redirect(authUri);
+            res.status(200).redirect(authUri);
             // res.status(200).send({
             //     data:authUri
             // })
