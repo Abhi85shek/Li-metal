@@ -8,7 +8,6 @@ const quickBookUrl = 'http://localhost:4000';
 const QUICK_BOOK_BASE_URL = config.qb.BASE_URL;
 const QUICK_BOOK_COMPANY_NUMBER = config.qb.COMPANY_NUMBER;
 
-
 var oauthClient = new OAuthClient({
     clientId: 'ABuhc0GyN2M5zgQMceAgco4DihVQsbPWxMgxs8qlwsRksWjhcf',            // enter the apps `clientId`
     clientSecret: 'DeJTAtT8Hy26rR9krlUiBvH8qT4kXPFc1sbioG6B',  // enter the apps `clientSecret`
@@ -16,14 +15,16 @@ var oauthClient = new OAuthClient({
     redirectUri: quickBookUrl,      // enter the redirectUri
 });
 
+// Get of Code,RealmId and testState
 
 router.get('/quickBookAuthorizationUrl',async (req, res) => {
     try{
             var authUri = oauthClient.authorizeUri({scope:[OAuthClient.scopes.Accounting,OAuthClient.scopes.OpenId],state:'testState'});  
             // console.log(authUri);
-            res.status(200).send({
-                data:authUri
-            })
+            res.redirect(authUri);
+            // res.status(200).send({
+            //     data:authUri
+            // })
     }catch (e) {
         res.status(404).send({
             message:e.message,
@@ -54,8 +55,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                   e
                 })
             });
-        
- 
+
     }catch (e) {
         res.status(404).send({
             message:"e.message",
