@@ -4,6 +4,7 @@ import logo from "../logo.png";
 import { useContext } from 'react';
 import { AuthContext } from '../shared/context/auth-context';
 import {BiUser} from 'react-icons/bi'
+import {SiQuickbooks} from 'react-icons/si'
 import axios from 'axios';
 import { useState } from 'react';
 import qbConnectModalVisible from '../atoms/qbConnectModalVisible';
@@ -66,7 +67,7 @@ const quickbooksSignIn=async()=>{
   let code = splitedList1[0].split("=")[1];
   let state = splitedList1[1].split("=")[1];
   let realmId = splitedList1[2].split("=")[1];
-  console.log(code+" "+state +" " + realmId)
+  console.log(code+" "+state +" "+realmId)
  const res= await axios.get(`http://localhost:4000/quickBookToken/${code}/${state}/${realmId}`)
  console.log(res.data)
  if(res.status==200)
@@ -91,25 +92,37 @@ const quickbooksSignIn=async()=>{
             <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white"></span>
         </a> 
     <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
-      <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-        <li className='flex flex-row space-x-2 gap-2'>
-          <BiUser size={20}/>{auth.userName}
-        </li>
-        <li>
+      <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium items-center">
+      <li>
           {localStorage.getItem('qbConnectVisible')==null?
-          <button onClick={()=>{connectwithquickbooks()}}>Quickbooks Connect</button>:null
+          <div className='flex justufy-center items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
+            <SiQuickbooks size={24}/>
+          <button  onClick={()=>{connectwithquickbooks()}}>Quickbooks Connect</button>
+          </div>:null
           }
         </li>
         <li>
           {localStorage.getItem('qbConnectVisible')=='1'?
-          <button onClick={()=>{quickbooksSignIn()}}>Authorize QB</button>:null
+          <div className='flex justufy-center items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
+            <SiQuickbooks size={24}/>
+           <button  onClick={()=>{quickbooksSignIn()}}>Authorize QB</button>
+          </div>:null
           }
         </li>
         <li>
-          {localStorage.getItem('qbConnectVisible')==='2'?
-            <button disabled>Connected</button>:null
-          }
+          {
+             localStorage.getItem('qbConnectVisible')==='2'?
+           <div className='flex justufy-center items-center space-x-2 p-2 rounded-md bg-green-500 text-neutral-100 font-bold'>
+            <SiQuickbooks size={24}/>
+            <button disabled>Connected</button>
+            </div>:null
+            }
+          
         </li>
+        <li className='flex flex-row space-x-2 gap-2'>
+          <BiUser size={20}/>{auth.userName}
+        </li>
+       
         <li>
           <Link to="/">Home</Link>
         </li>

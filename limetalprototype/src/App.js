@@ -61,6 +61,9 @@ function App() {
     localStorage.removeItem('uType');
     localStorage.removeItem('name');
     localStorage.removeItem('userType');
+    localStorage.removeItem('quickbooksCredentials')
+    localStorage.removeItem('quickbooksAuthCode')
+    localStorage.removeItem('qbConnectVisible')
   },[]);
 
   useEffect(()=>{
