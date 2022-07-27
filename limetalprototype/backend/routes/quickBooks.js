@@ -65,8 +65,46 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     }
 });
 
+// Get all PurchaseOrder from QuickBooks
+router.post('/getAllPurchaseOrder',async(req,res)=>{
 
+    try{
+    const {refreshToken} = req.body;
+    const headers = {
+        'Content-Type': 'application/json',
+        'Accept' : 'application/json',
+        'Authorization': "Bearer " + refreshToken
+    };
 
+    const getAllPurchaseOrderURL = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/query?query=select * from PurchaseOrder&minorversion=65`
+
+    const response = await axios.get(getAllPurchaseOrderURL,{headers});
+    if(response.status === 200)
+        {
+            res.status(200).send({
+                message:"succesfully",
+                data:response.data
+            });
+        }
+        else
+        {
+            res.status(401).send({
+                message:"Don't have privilege",
+                data: {}
+            });
+        }
+    }
+    catch(e)
+    {
+        
+        res.status(404).send({
+            message:e.message,
+            data:{e}
+        });
+    }
+});
+
+    // Get PurchaseOrder Deatials By ID
 
 router.post('/getPurchaseOrderById',async(req,res)=>{
 
@@ -74,13 +112,13 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
     const {POId} = req.body;
     const {refreshToken} = req.body;
 
-    console.log(refreshToken);
+    
     const headers = {
         'Content-Type': 'application/json',
         'Accept' : 'application/json',
         'Authorization': "Bearer " + refreshToken
     };
-    console.log({headers});
+    
     const getPurchaseOrderByIdURL = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${POId}?minorversion=65`;
     const response = await axios.get(getPurchaseOrderByIdURL,{headers});
     if(response.status === 200)
