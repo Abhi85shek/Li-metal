@@ -44,10 +44,12 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
            oauthClient.createToken(parseRedirect)
             .then(async function(authResponse) {
                 oauth2_token_json = authResponse.getJson().access_token;
+                auth2_refresh_token = authResponse.getJson().refresh_token;
                 // await credentialsModel.updateTokenById(quickBookLocalID, oauth2_token_json, authResponse.getJson().id_token)
                 console.log(authResponse.getJson())
                 res.status(200).send({
                     data:oauth2_token_json,
+                    refresh_token:auth2_refresh_token,
                     oauthTokenSecret: authResponse.getJson().id_token
                 })
             })
@@ -65,8 +67,44 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     }
 });
 
+
+
+
+// Get the refresh Token
+
+    router.get("/refreshToken",async (req,res)=>{
+
+        try{
+            oauthClient.refresh()
+        .then(function(authResponse) {
+            console.log('Tokens refreshed : ' + JSON.stringify(authResponse.json()));
+            res.status(201).send( JSON.stringify(authResponse.json()));
+
+        })
+        .catch(function(e) {
+            console.error("The error message is :"+e);
+            console.error(e.intuit_tid);
+        });
+        }
+        catch(err)
+        {
+            res.status(404).send({
+                message:"Error",
+                // data:{e}
+            });
+        }
+        
+
+    });
+
+
+    // router.get('/refreshtoken',async(req,res)=>{
+
+    //     const response = await axios.post('https://developer.api.intuit.com/oauth2/v1/tokens/bearer',)
+    // });
+
 // Get all PurchaseOrder from QuickBooks
-router.post('/getAllPurchaseOrder',async(req,res)=>{
+router.post('/getAllPurchaseOrder',async (req,res)=>{
 
     try{
     const {refreshToken} = req.body;
@@ -95,8 +133,7 @@ router.post('/getAllPurchaseOrder',async(req,res)=>{
         }
     }
     catch(e)
-    {
-        
+    { 
         res.status(404).send({
             message:e.message,
             data:{e}
