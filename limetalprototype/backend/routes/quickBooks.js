@@ -117,7 +117,6 @@ router.post('/getAllPurchaseOrder',async (req,res)=>{
     if(response.status === 200)
         {
             let result = response.data.QueryResponse.PurchaseOrder;
-            console.log(result);
             let purchaseOrderDetails=[];
             for(let item of result)
             {
@@ -174,10 +173,11 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                     POId:response.data.PurchaseOrder.Id,
                     PONumber:response.data.PurchaseOrder.DocNumber,
                     creationDate:response.data.PurchaseOrder.TxnDate,
-                    // ShipmentAddress: response.data.ShipAddr.Line1 + response.data.ShipAddr.Line2 + response.data.ShipAddr.Line3,
+                    currency: response.data.PurchaseOrder.CurrencyRef.value,
+                    ShipmentAddress: response.data.PurchaseOrder.ShipAddr.Line1 + ' ' + response.data.PurchaseOrder.ShipAddr.Line2 + ' ' + response.data.PurchaseOrder.ShipAddr.Line3,
                     Vendor:response.data.PurchaseOrder.VendorRef,
                     POProducts:response.data.PurchaseOrder.Line,
-                    TotalAmount:response.data.PurchaseOrder.TotalAmount
+                    TotalAmount:response.data.PurchaseOrder.TotalAmt
             };
             res.status(200).send({
                 message:"succesfully",
