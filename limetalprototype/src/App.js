@@ -12,6 +12,7 @@ import Suppliers from './Pages/Suppliers';
 import PageNotFound from "./Pages/PageNotFound";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ViewAllPos from "./Pages/ViewAllPos";
 
 
 let logoutTimer;
@@ -100,6 +101,7 @@ function App() {
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
                 <Route exact path="/addService" element={<AddService />} /> 
                 <Route exact path="/allSuppliers" element={<Suppliers />} /> 
+                <Route exact path="/viewallqbpo" element={<ViewAllPos/>}/>
                 <Route path="*" element={<PageNotFound />} exact/>
 
         </Routes>  

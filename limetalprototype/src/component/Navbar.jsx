@@ -15,6 +15,8 @@ const Navbar = () => {
   const auth=useContext(AuthContext)
   const [quickBookURLcode,setquickbooksAuthCode]=useState()
   const [qbConnectvisible,setqbConnectModalVisible]=useState(false)
+const [viewQbMenu,setViewQbMenu ]=useState(false)
+
   const navigate=useNavigate()
   const signOutHandler = ()=>{
     auth.logout();
@@ -30,22 +32,17 @@ const Navbar = () => {
       localStorage.setItem('qbConnectVisible','1')  
       
   }
-      
-    //   let splitedList1 = localStorage.getItem('quickbooksAuthCode').split("&");
-    //   let code = splitedList1[0].split("=")[1];
-    //   let state = splitedList1[1].split("=")[1];
-    //   let realmId = splitedList1[2].split("=")[1];
-    //   console.log(code+" "+state +" " + realmId)
-    //  const res= await axios.get(`http://localhost:4000/quickBookToken/${code}/${state}/${realmId}`)
-    //  console.log(res.data)
-    //  if(res.status==200)
-    //  {
-    //   localStorage.setItem('quickbooksCredentials',res.data)
-    //  }
-
-      
+        
   }
 
+
+  useEffect(()=>{
+   if(localStorage.getItem('quickbooksCredentials')===null && localStorage.getItem('qbConnectVisible')==='2')
+    {
+      localStorage.removeItem('qbConnectVisible')
+      window.location.reload()
+    }
+  },[localStorage.getItem('quickbooksCredentials')])
 
 const quicksConnect=async()=>{
   console.log("quickbooks auth")
@@ -72,7 +69,7 @@ const quickbooksSignIn=async()=>{
  console.log(res.data)
  if(res.status==200)
  {
-  localStorage.setItem('quickbooksCredentials',res.data)
+  localStorage.setItem('quickbooksCredentials',res.data.data)
   localStorage.setItem('qbConnectVisible','2')
   window.location.reload()
  }
@@ -138,6 +135,20 @@ const quickbooksSignIn=async()=>{
         <li>
           <Link to="/addService">Service</Link>
         </li>
+        {
+             localStorage.getItem('qbConnectVisible')==='2'?
+           <div onClick={()=>{setViewQbMenu(!viewQbMenu)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+            Quickbooks
+           
+            {viewQbMenu?
+            <div className='flex-col absolute bg-[#6BA4B8] text-neutral-200  h-20 space-y-2 px-2'>
+             <Link to="/viewallqbpo"> <div className='mt-4' >View all POs</div></Link>
+              <hr/>
+              <div >Create PO</div>
+            </div>:null}
+            </div>:null
+            }
+        
         <li>
           <Link to="/login" onClick={signOutHandler}>Sign Out</Link>
         </li>
