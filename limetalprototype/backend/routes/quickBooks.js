@@ -210,19 +210,16 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                 const {POId} = req.body;
                 const {refreshToken} = req.body;
                 const headers = {
-                    'Content-Type': 'application/json',
-                    'Accept' : 'application/json',
+                    'Content-Type': 'application/pdf',
+                    
                     'Authorization': "Bearer " + refreshToken
                 };
                 const getPurchaseOrderpdfByIdURL= `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${POId}/pdf?minorversion=65`;
                 const response = await axios.get(getPurchaseOrderpdfByIdURL,{headers});
-                console.log(response);
+                console.log(response.data);
                 if(response.status === 200)
                 {
-                    res.status(200).send({
-                        message:"succesfully",
-                        data:response.data
-                    });
+                    res.send(response.data);
                 }
             else
             {
