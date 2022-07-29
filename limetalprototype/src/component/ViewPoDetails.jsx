@@ -5,12 +5,14 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import viewQbPoDetailModalAtom from '../atoms/viewQbPoDetailsModalAtom';
+import { Link } from 'react-router-dom';
 
 
 const ViewPoDetails = (props) => {
   
   const [showModal,setShowModal]=useRecoilState(viewQbPoDetailModalAtom)
   const [poDetails,setPoDetails]=useState(null)
+  const [popdf,setpopdf]=useState(null)
  
 
 
@@ -27,7 +29,15 @@ const ViewPoDetails = (props) => {
      }
  }
 
-
+const downloadPdf=async()=>{
+    const quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
+    const res= await axios.post('http://localhost:4000/getPOpdf',  {POId:props.selectedPoId,refreshToken:quickbooksCredentials,
+        headers: {
+            'Content-Type': 'application/pdf',
+          }})
+    console.log(res.data) 
+    setpopdf(res.data)
+}
 
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -140,6 +150,14 @@ const ViewPoDetails = (props) => {
          
         </tbody>
     </table>
+   
+        </div>
+        <div className=' flex justify-center  items-center p-2 space-x-2'>
+     
+        {/* <button onClick={()=>{
+            downloadPdf()
+        }} className='font-semibold p-2 rounded-md bg-blue-600 text-neutral-100 '>Download</button> */}
+        
         </div>
      </div>
 :null}

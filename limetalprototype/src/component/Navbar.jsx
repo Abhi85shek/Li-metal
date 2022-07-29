@@ -23,6 +23,7 @@ const [viewQbMenu,setViewQbMenu ]=useState(false)
     navigate("/", { replace: true });
   };
 
+
   const connectwithquickbooks=async()=>{
     const response = await axios.get(`http://localhost:4000/quickBookAuthorizationUrl`);
     if(response.status === 200){
@@ -35,6 +36,11 @@ const [viewQbMenu,setViewQbMenu ]=useState(false)
         
   }
 
+
+  useEffect(()=>{
+    setInterval(()=> {localStorage.removeItem('quickbooksCredentials')
+  console.log('removed')}, 3600000);
+  },[])
 
   useEffect(()=>{
    if(localStorage.getItem('quickbooksCredentials')===null && localStorage.getItem('qbConnectVisible')==='2')
@@ -92,17 +98,17 @@ const quickbooksSignIn=async()=>{
       <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium items-center">
       <li>
           {localStorage.getItem('qbConnectVisible')==null?
-          <div className='flex justufy-center items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
+          <div  onClick={()=>{connectwithquickbooks()}}className='flex justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
             <SiQuickbooks size={24}/>
-          <button  onClick={()=>{connectwithquickbooks()}}>Quickbooks Connect</button>
+          <button  >Quickbooks Connect</button>
           </div>:null
           }
         </li>
         <li>
           {localStorage.getItem('qbConnectVisible')=='1'?
-          <div className='flex justufy-center items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
+          <div onClick={()=>{quickbooksSignIn()}} className='hover:cursor-pointer flex justufy-center items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
             <SiQuickbooks size={24}/>
-           <button  onClick={()=>{quickbooksSignIn()}}>Authorize QB</button>
+           <button  >Authorize QB</button>
           </div>:null
           }
         </li>
