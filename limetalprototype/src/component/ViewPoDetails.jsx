@@ -97,9 +97,11 @@ const downloadPdf=async()=>{
                 <th scope="col" className="px-6 py-3">
                  Num
                 </th>
+               
                 <th scope="col" className="px-6 py-3">
                 Name
                 </th>
+
                 <th scope="col" className=" px-6 py-3 ">
                    Status
                 </th> 
@@ -122,15 +124,40 @@ const downloadPdf=async()=>{
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                         {product.LineNum}
                     </th>
+                    {product.AccountBasedExpenseLineDetail?
                     <td className="px-6 py-4">
                         {product.AccountBasedExpenseLineDetail.AccountRef.name}
-                    </td>
+                    </td>:null
+}
+{product.ItemBasedExpenseLineDetail?
                     <td className="px-6 py-4">
+                        {product.ItemBasedExpenseLineDetail.ItemRef.name}
+                    </td>:null
+}
+
+{product.AccountBasedExpenseLineDetail?
+                    <td className="px-6 py-4">
+                        {product.AccountBasedExpenseLineDetail.BillableStatus}
+                    </td>:null
+}
+{product.ItemBasedExpenseLineDetail?
+                    <td className="px-6 py-4">
+                        {product.ItemBasedExpenseLineDetail.BillableStatus}
+                    </td>:null
+}
+                    {/* <td className="px-6 py-4">
                         {product.BillableStatus}
-                    </td>
+                    </td> */}
+                    {product.AccountBasedExpenseLineDetail?
                     <td className="px-6 py-4">
                       {product.AccountBasedExpenseLineDetail.TaxCodeRef.value}
-                    </td>
+                    </td>:null
+}
+{product.ItemBasedExpenseLineDetail?
+                    <td className="px-6 py-4">
+                      {product.ItemBasedExpenseLineDetail.TaxCodeRef.value}
+                    </td>:null
+}
                     <td className="px-6 py-4">
                        {product.Amount}
                     </td>
@@ -154,9 +181,9 @@ const downloadPdf=async()=>{
         </div>
         <div className=' flex justify-center  items-center p-2 space-x-2'>
      
-        {/* <button onClick={()=>{
+        <button onClick={()=>{
             downloadPdf()
-        }} className='font-semibold p-2 rounded-md bg-blue-600 text-neutral-100 '>Download</button> */}
+        }} className='font-semibold p-2 rounded-md bg-blue-600 text-neutral-100 '>Download</button>
         
         </div>
      </div>
