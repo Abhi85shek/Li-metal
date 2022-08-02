@@ -211,15 +211,16 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                 const {refreshToken} = req.body;
                 const headers = {
                     'Content-Type': 'application/pdf',
-                    
                     'Authorization': "Bearer " + refreshToken
                 };
                 const getPurchaseOrderpdfByIdURL= `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${POId}/pdf?minorversion=65`;
-                const response = await axios.get(getPurchaseOrderpdfByIdURL,{headers});
-                console.log(response.data);
+                const response = await axios.get(getPurchaseOrderpdfByIdURL,{headers},{responseType: 'arraybuffer'});
                 if(response.status === 200)
                 {
-                    res.send(response.data);
+                    console.log(response.data);
+                    let buff = new Buffer.from(response.data);
+                    let base64data = buff.toString('base64');
+                    res.status(200).send(base64data);
                 }
             else
             {
@@ -236,9 +237,29 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                     data:{e}
                 });
             }
-
-
     });
 
+
+    // Sent Purchase Order as an Email
+
+    router.post('/sendPO',async (req,res)=>{
+
+        try{
+
+            
+
+
+
+
+        }
+        catch(e)
+        {
+            res.status(404).send({
+                message:e.message,
+                data:{e}
+            });
+        }
+
+    });
 
 module.exports = router;
