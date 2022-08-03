@@ -59,13 +59,6 @@ const db = require('../helpers/db');
 
     });
 
-
-
-
-
-
-
-
 // Get all Suppliers
 
 router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
@@ -88,6 +81,29 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
 
 });
 
+// Get SupplierName and SupplierNumber
+    router.get('/getSuppliers',async (req,res)=>{
+        try {
+
+            db.query('SELECT supplier,supplierNumber FROM suppliertable',(err,result)=>{
+
+                if(err)
+                    {
+                        throw err;
+                    }
+                    else
+                    {
+                        res.status(201).send({message:"Successfull",data:result});
+                    }
+            });
+        }
+        catch(e)
+        {
+            res.status(404).send(err);
+        }
+    });
+
+
 // Search a Supplier
     router.post('/searchSupplier/:curr_page/:curr_count',async(req,res)=>
     {
@@ -100,5 +116,5 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
         message:"Success"
   };
   res.status(201).send({message:"Successfull",data:result});
-    });
+});
 module.exports = router;

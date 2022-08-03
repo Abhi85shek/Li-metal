@@ -214,7 +214,7 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                     'Authorization': "Bearer " + refreshToken
                 };
                 const getPurchaseOrderpdfByIdURL= `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${POId}/pdf?minorversion=65`;
-                const response = await axios.get(getPurchaseOrderpdfByIdURL,{headers},{responseType: 'arraybuffer'});
+                const response = await axios.get(getPurchaseOrderpdfByIdURL,{headers},{responseType: 'arraybuffer',responseEncoding: null});
                 if(response.status === 200)
                 {
                     console.log(response.data);
@@ -247,9 +247,25 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
         try{
 
             
+            const {refreshToken} = req.body;
+            const {pOId} = req.body;
+            const {email} = req.body;
 
-
-
+            const headers = {
+                "headers": {
+                'Accept' : 'application/json',
+                'Authorization': "Bearer " + refreshToken,
+                'Content-Type': 'application/octet-stream'
+                }
+            }
+            const sendPOUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${pOId}/send?sendTo=${email}&minorversion=65`
+            const response = await axios.post(sendPOUrl,{}, headers)
+            if (response.status === 200){
+                res.status(200).send({
+                    message:"Successfully",
+                    data: response.data
+                });
+            }
 
         }
         catch(e)
