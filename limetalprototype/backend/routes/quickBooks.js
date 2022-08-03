@@ -5,7 +5,7 @@ const axios = require('axios');
 const OAuthClient =  require('intuit-oauth');
 
 const quickBookLocalID = config.qb.quickBookLocalID
-const quickBookUrl = 'http://localhost:3001/createOrder';
+const quickBookUrl = 'http://localhost:3001/home';
 const QUICK_BOOK_BASE_URL = config.qb.BASE_URL;
 const QUICK_BOOK_COMPANY_NUMBER = config.qb.COMPANY_NUMBER;
 
@@ -220,7 +220,7 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                     console.log(response.data);
                     let buff = new Buffer.from(response.data);
                     let base64data = buff.toString('base64');
-                    res.status(200).send(base64data);
+                    res.status(200).send(response.data);
                 }
             else
             {
