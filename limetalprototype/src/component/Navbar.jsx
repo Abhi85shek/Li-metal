@@ -46,7 +46,7 @@ const [viewQbMenu,setViewQbMenu ]=useState(false)
   useEffect(()=>{
    if(localStorage.getItem('quickbooksCredentials')===null && localStorage.getItem('qbConnectVisible')==='2')
     {
-      localStorage.removeItem('qbConnectVisible')
+      // localStorage.removeItem('qbConnectVisible')
       window.location.reload()
     }
   },[localStorage.getItem('quickbooksCredentials')])
@@ -107,7 +107,7 @@ const disconnectQuickbooks=()=>{
     <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
       <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium items-center">
       <li>
-          {localStorage.getItem('qbConnectVisible')==null && window.location.href==TEST_HOME_PAGE?
+          {localStorage.getItem('qbConnectVisible')==null || (localStorage.getItem('qbConnectVisible')=='1' && window.location.href.split('?').length!=2 ) ?
           <div  onClick={()=>{connectwithquickbooks()}}className='flex justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
             <SiQuickbooks size={24}/>
           <button  >Quickbooks Connect</button>
@@ -145,16 +145,13 @@ const disconnectQuickbooks=()=>{
         <li>
           <Link to="/allProducts">All Products</Link>
         </li>
-        <li>
-          <Link to="/addService">Service</Link>
-        </li>
         {
              localStorage.getItem('qbConnectVisible')==='2'?
            <div onClick={()=>{setViewQbMenu(!viewQbMenu)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Quickbooks
            
             {viewQbMenu?
-            <div className='flex-col absolute bg-[#6BA4B8] text-neutral-200 space-y-2 p-2'>
+            <div className='flex-col z-40 absolute bg-[#6BA4B8] text-neutral-100 space-y-2 p-2'>
              <Link to="/viewallqbpo"> <div className='mt-4' >View all POs</div></Link>
               <hr/>
               <Link to="/addService"> <div className='mt-4' >CreatePO</div></Link>
