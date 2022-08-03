@@ -13,6 +13,7 @@ import PageNotFound from "./Pages/PageNotFound";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ViewAllPos from "./Pages/ViewAllPos";
+import Home from "./Pages/Home";
 
 
 let logoutTimer;
@@ -96,12 +97,19 @@ function App() {
         <Routes>    
         
             <Route path="/" exact element={<CreateOrder />} />
+            {localStorage.getItem('quickbooksCredentials')!=null?
                 <Route exact path="/createOrder" element={<CreateOrder />} />  
-                <Route exact path="/login" element={<CreateOrder />} />  
+            :null}
+                <Route exact path="/login" element={<Home />} />  
+                <Route exact path="/home" element={<Home />} />  
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
+                {localStorage.getItem('quickbooksCredentials')!=null?
                 <Route exact path="/addService" element={<AddService />} /> 
+ :null}
                 <Route exact path="/allSuppliers" element={<Suppliers />} /> 
+                {localStorage.getItem('quickbooksCredentials')!=null?
                 <Route exact path="/viewallqbpo" element={<ViewAllPos/>}/>
+                :null}
                 <Route path="*" element={<PageNotFound />} exact/>
 
         </Routes>  

@@ -4,23 +4,35 @@ import { useRecoilState } from 'recoil';
 import serviceDetailsAtom from '../atoms/ServiceState';
 import editModalAtom from '../atoms/editModelState';
 import { v4 as uuidv4 } from 'uuid';
+import selectedSupplierAtom from '../atoms/selectedSupplierAtom';
+
 const AddServicesForm = () => {
 
   const [serviceModalState,setServiceModalState] = useRecoilState(editModalAtom);
   const [serviceDetails,setServiceDetails] =useRecoilState(serviceDetailsAtom);
+  const [supplier,setSelectedSupplier]=useState(selectedSupplierAtom)
   const [allProducts,setAllProducts] = useState([]);
   const [service,setService] = useState("");
   const [description,setDescription] = useState("");
   const [quantity,setQuantity] = useState("");
   const [tax,setTax] = useState("");
   const [rate,setRate] =useState("");
+  const [suppliers,setAllSuppliers]=useState([])
   const [totalAmount,setTotalAmount] =useState(0);
 
   const getAllProducts = async()=>{
       const result = await axios.get("http://localhost:4000/allProductsActive");
-      setAllProducts(result.data);
+      setAllProducts(result.data); 
+
       
   }; 
+
+  const getAllSuppliers = async()=>{
+    const res = await axios.get("http://localhost:4000/getSuppliers");
+      console.log(res.data.data)
+    setAllSuppliers(res.data.data); 
+    
+}; 
   
   const descriptionHandler= (e)=>{ 
     setDescription(e.target.value);
@@ -66,11 +78,30 @@ const AddServicesForm = () => {
     setRate("");
   };
   useEffect(()=>{
-    getAllProducts();
+    getAllProducts();getAllSuppliers()
   },[]);
 
   return (
     <form className="w-full max-w-lg">
+        <div className='pt-5'>
+      {suppliers.length>0?
+      <>    
+          <label htmlFor="supplierNum" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Suppliers</label>
+            <select id="supplierNumber"  onChange={(e)=>{setAllSuppliers(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Select a Supplier</option>
+                    {
+                         suppliers.map((cuurentsuppliers,id)=>( 
+                            <option value={cuurentsuppliers.supplierNumber} key={id}>{cuurentsuppliers.supplier}</option>
+                        )
+                        )
+                    }
+            </select>
+            </>
+            :null}
+        </div>
+
+        <hr className='h-4  mt-8'/>
+
     <div className='pt-5'>
         <label htmlFor="costCenter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Service</label>
             <select id="costCenter"  onChange={(e)=>{setService(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -83,6 +114,7 @@ const AddServicesForm = () => {
                     }
             </select>
         </div>
+      
    <div className="w-full mt-4">
       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">
         Description

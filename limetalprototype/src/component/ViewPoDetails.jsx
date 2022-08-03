@@ -145,9 +145,7 @@ const downloadPdf=async()=>{
                         {product.ItemBasedExpenseLineDetail.BillableStatus}
                     </td>:null
 }
-                    {/* <td className="px-6 py-4">
-                        {product.BillableStatus}
-                    </td> */}
+
                     {product.AccountBasedExpenseLineDetail?
                     <td className="px-6 py-4">
                       {product.AccountBasedExpenseLineDetail.TaxCodeRef.value}
