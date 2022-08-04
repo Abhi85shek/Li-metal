@@ -7,6 +7,7 @@ import editModalAtom from '../atoms/editModelState';
 import serviceDetailsAtom from '../atoms/ServiceState';
 import axios from 'axios';
 import DeleteModal from '../component/DeleteModal';
+import CreateOrder from './CreateOrder';
 const AddService = () => {
 
   const serviceList = useRecoilValue(serviceDetailsAtom);
@@ -59,13 +60,13 @@ console.log(localStorage.getItem('quickbooksCredentials'))
 
   return (
     <>  
-    <div className='flex flex-col justify-center items-center pt-5 font-raleway '>
-        <h1>AddService</h1>
+    <div className='flex flex-col p-2 justify-center items-center pt-5 font-raleway mt-5 '>
+        <h1 className='font-bold text-2xl'>Create Purchase Order</h1>
         <AddServicesForm />
-        <div className='flex justify-center items-center mt-8'>
-        <button onClick={()=>{connectwithquickbooks()}} type="submit" class="text-white w-full bg-[#426b79] hover:bg-[#305460] focus:bg-[#2c4b58] font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2  focus:outline-none ">Quickbooks Connect</button>
-        </div>
      { serviceList.length > 0 && serviceModalState && <AddServiceTable /> }
+     <div className='flex w-[100%] h-auto  p-4 justify-center items-center mt-2'>
+      <CreateOrder/>
+     </div>
     </div>
     </>
   )

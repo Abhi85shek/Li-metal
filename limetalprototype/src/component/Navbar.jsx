@@ -7,6 +7,7 @@ import {BiUser} from 'react-icons/bi'
 import {SiQuickbooks} from 'react-icons/si'
 import axios from 'axios';
 import { useState } from 'react';
+import { TEST_HOME_PAGE } from '../config/basic';
 import qbConnectModalVisible from '../atoms/qbConnectModalVisible';
 import { useRecoilState } from 'recoil';
 import QuickbooksAuthModal from './QuickbooksAuthModal';
@@ -45,7 +46,7 @@ const [viewQbMenu,setViewQbMenu ]=useState(false)
   useEffect(()=>{
    if(localStorage.getItem('quickbooksCredentials')===null && localStorage.getItem('qbConnectVisible')==='2')
     {
-      localStorage.removeItem('qbConnectVisible')
+      // localStorage.removeItem('qbConnectVisible')
       window.location.reload()
     }
   },[localStorage.getItem('quickbooksCredentials')])
@@ -83,6 +84,15 @@ const quickbooksSignIn=async()=>{
 
 }
 
+const disconnectQuickbooks=()=>{
+  localStorage.removeItem('qbConnectVisible')
+  localStorage.removeItem('quickbooksAuthCode')
+  localStorage.removeItem('quickbooksCredentials')
+  window.location.reload()
+  window.location.href=TEST_HOME_PAGE
+
+}
+
 
 
   return (
@@ -97,7 +107,7 @@ const quickbooksSignIn=async()=>{
     <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
       <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium items-center">
       <li>
-          {localStorage.getItem('qbConnectVisible')==null?
+          {localStorage.getItem('qbConnectVisible')==null || (localStorage.getItem('qbConnectVisible')=='1' && window.location.href.split('?').length!=2 ) ?
           <div  onClick={()=>{connectwithquickbooks()}}className='flex justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
             <SiQuickbooks size={24}/>
           <button  >Quickbooks Connect</button>
@@ -105,7 +115,7 @@ const quickbooksSignIn=async()=>{
           }
         </li>
         <li>
-          {localStorage.getItem('qbConnectVisible')=='1'?
+          {localStorage.getItem('qbConnectVisible')=='1' && window.location.href.split('?').length==2?
           <div onClick={()=>{quickbooksSignIn()}} className='hover:cursor-pointer flex justufy-center items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
             <SiQuickbooks size={24}/>
            <button  >Authorize QB</button>
@@ -127,19 +137,13 @@ const quickbooksSignIn=async()=>{
         </li>
        
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/home">Home</Link>
         </li>
          <li>
           <Link to="/allSuppliers">Suppliers</Link>
         </li>
         <li>
-          <Link to="/createOrder">Create Order</Link>
-        </li> 
-        <li>
           <Link to="/allProducts">All Products</Link>
-        </li>
-        <li>
-          <Link to="/addService">Service</Link>
         </li>
         {
              localStorage.getItem('qbConnectVisible')==='2'?
@@ -147,10 +151,12 @@ const quickbooksSignIn=async()=>{
             Quickbooks
            
             {viewQbMenu?
-            <div className='flex-col absolute bg-[#6BA4B8] text-neutral-200  h-20 space-y-2 px-2'>
+            <div className='flex-col z-40 absolute bg-[#6BA4B8] text-neutral-100 space-y-2 p-2'>
              <Link to="/viewallqbpo"> <div className='mt-4' >View all POs</div></Link>
               <hr/>
-              <div >Create PO</div>
+              <Link to="/addService"> <div className='mt-4' >CreatePO</div></Link>
+              <hr/>
+              <div onClick={()=>{disconnectQuickbooks()}} className='mt-4' >Disconnect X</div>
             </div>:null}
             </div>:null
             }

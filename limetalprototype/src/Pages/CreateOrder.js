@@ -57,11 +57,15 @@ const CreateOrder = () => {
     },[]);
   return (
     <>
-    <div className='flex flex-row items-center justify-center'>
-    <div className='w-[25%]'>
-        <div className='pt-5'>
-        <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Location</label>
-            <select id="location" required  onChange={(e)=>{setLocationValue(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <div className=' w-full flex flex-row items-center justify-center  p-6'>
+    <div className='w-full'>
+        <div className='flex flex-row justify-center items center p-2 '>
+        <div className='flex basis-1/2  justify-center  items-center p-2 space-x-2'>
+            <div className='basis-1/6 '>
+        <label htmlFor="location" className="float-right text-sm font-medium text-gray-900 dark:text-gray-400">Location</label>
+          </div>
+          <div className='basis-5/6 '>
+            <select id="location" required  onChange={(e)=>{setLocationValue(e.target.value)}} className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
             <option >Choose a Location</option>
             {
                 locations.map((location)=>(
@@ -69,19 +73,31 @@ const CreateOrder = () => {
                 ))
             }
             </select>
+            </div>
         </div>
-        <div>
-            <label htmlFor="area" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Area</label>
-            <select id="area" onChange={(e)=>{setAreaValue(e.target.value)}} value={areaValue} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <div className='flex basis-1/2 justify-center  items-center p-2 space-x-2'>
+        <div className='basis-1/6 '>
+            <label htmlFor="area" className="float-right items-center text-sm font-medium text-gray-900 dark:text-gray-400">Area</label>
+           </div>
+           <div className='basis-5/6 '>
+            <select id="area" onChange={(e)=>{setAreaValue(e.target.value)}} value={areaValue} className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
     {   areas.map((area)=>(
                 <option value={area.id} key={area.id}>{area.areaName}</option>
          ))
      }
             </select>
+            </div>
         </div>
-        <div className='pt-5'>
-        <label htmlFor="costCenter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Cost Center</label>
-            <select id="costCenter" onChange={(e)=>{setCostCenterValue(e.target.value)}}className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        </div>
+
+        <div className='flex flex-row justify-center items center p-2'>
+        <div className='flex basis-1/2 justify-center  items-center p-2 space-x-2'>  
+        <div className='basis-1/6 '> 
+        <label htmlFor="costCenter" className="float-right items-center text-sm font-medium text-gray-900 dark:text-gray-400">Cost Center</label>
+          </div>
+          <div className='basis-5/6 '>
+            <select id="costCenter" onChange={(e)=>{setCostCenterValue(e.target.value)}}className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
+          
             <option>Choose a Cost Center</option>
                     {
                          costCenters.map((cost)=>( 
@@ -90,10 +106,16 @@ const CreateOrder = () => {
                         )
                     }
             </select>
+            </div>
         </div>
-        <div className='pt-5'>
-        <label htmlFor="areaOfWork" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Area of Work</label>
-            <select id="areaOfWork" onChange={(e)=>{setAreaOfWorkValue(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        
+        <div className='flex basis-1/2 justify-center  items-center p-2 space-x-2'>
+        <div className='basis-1/6 '>  
+        <label htmlFor="areaOfWork" className="float-right items-center text-sm font-medium text-gray-900 dark:text-gray-400">Area of Work</label>
+         </div>
+         <div className='basis-5/6 '>
+            <select id="areaOfWork" onChange={(e)=>{setAreaOfWorkValue(e.target.value)}} className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
+           
             <option>Choose an Area Of Work</option>
             {
                 areaOfWorks.map((work)=>(
@@ -101,8 +123,9 @@ const CreateOrder = () => {
                 ))
             }
             </select>
+            </div>
         </div>
-        
+        </div>
         <div className='text-center mt-4'>
             <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={generatePoNumber}>Generate PO Number</button>
         </div>

@@ -114,7 +114,7 @@ const LoginForm = () => {
       
 
       auth.isLoggedIn=true
-      navigate("/createOrder");
+      navigate("/home");
       
      
     }
