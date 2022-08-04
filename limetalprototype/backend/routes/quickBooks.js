@@ -214,13 +214,14 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                     'Authorization': "Bearer " + refreshToken
                 };
                 const getPurchaseOrderpdfByIdURL= `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${POId}/pdf?minorversion=65`;
-                const response = await axios.get(getPurchaseOrderpdfByIdURL,{headers},{responseType: 'arraybuffer',responseEncoding: null});
+                const response = await axios.get(getPurchaseOrderpdfByIdURL,{responseType: 'arraybuffer',responseEncoding:"binary"},{headers});
+                console.log(response)
                 if(response.status === 200)
                 {
-                    console.log(response.data);
+                    
                     let buff = new Buffer.from(response.data);
                     let base64data = buff.toString('base64');
-                    res.status(200).send(response.data);
+                    res.status(200).send(base64data);
                 }
             else
             {
@@ -244,9 +245,7 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
 
     router.post('/sendPO',async (req,res)=>{
 
-        try{
-
-            
+        try{            
             const {refreshToken} = req.body;
             const {pOId} = req.body;
             const {email} = req.body;
