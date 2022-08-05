@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import viewQbPoDetailModalAtom from '../atoms/viewQbPoDetailsModalAtom';
-import { Link } from 'react-router-dom';
+import {toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const ViewPoDetails = (props) => {
@@ -13,6 +15,7 @@ const ViewPoDetails = (props) => {
   const [showModal,setShowModal]=useRecoilState(viewQbPoDetailModalAtom)
   const [poDetails,setPoDetails]=useState(null)
   const [popdf,setpopdf]=useState(null)
+  const [email,setEmail]=useState()
  
 
 
@@ -37,6 +40,40 @@ const downloadPdf=async()=>{
           }})
     console.log(res.data) 
     setpopdf(res.data)
+}
+
+
+const sendEmail=async()=>{
+    const quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
+    const res=await axios.post('http://localhost:4000/sendPO',{refreshToken:quickbooksCredentials,pOId:props.selectedPoId,email:email})
+    if(res.status==200)
+    {
+     console.log("toasting")
+     
+         toast.success('Approval Email Sent Successfuly', {
+           position: "top-center",
+           autoClose: 2000,
+           hideProgressBar: true,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+         });
+       }
+
+else{
+ 
+     toast.error('Error Occoured', {
+       position: "top-center",
+       autoClose: 2000,
+       hideProgressBar: true,
+       closeOnClick: true,
+       pauseOnHover: true,
+       draggable: true,
+       progress: undefined,
+     });
+  
+}
 }
 
   return (
@@ -177,13 +214,17 @@ const downloadPdf=async()=>{
     </table>
    
         </div>
-        <div className=' flex justify-center  items-center p-2 space-x-2'>
-     
-        <button onClick={()=>{
-            downloadPdf()
-        }} className='font-semibold p-2 rounded-md bg-blue-600 text-neutral-100 '>Download</button>
+        <hr className='h-4 mt-8'/>
+        <div className=' flex justify-start  items-center p-2 space-x-2'>
+                Approval
+            </div>
+            
+        <div className='flex justify-start items-center p-2 space-x-2'>
+        <input className="appearance-none block w-[80%] text-gray-700 border border-gray-500 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="approveremail" type="text" placeholder="Enter approver email id" onChange={(e)=>{setEmail(e.target.value)}} />
+        <button onClick={()=>{sendEmail()}}  className='w-[20%] font-medium p-2 rounded-md bg-[#426b79] text-neutral-100 '>Send</button>
+            </div>
+           
         
-        </div>
      </div>
 :null}
     </div>

@@ -53,7 +53,7 @@ const AllQbPo = () => {
                  Vendor Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Total Amount
+                    Total Amount 
                 </th>
                 <th scope="col" className="px-6 py-3">
                     Actions

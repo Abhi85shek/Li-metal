@@ -96,16 +96,13 @@ function App() {
        <ToastContainer />
         <Routes>    
         
-            <Route path="/" exact element={<CreateOrder />} />
-            {localStorage.getItem('quickbooksCredentials')!=null?
-                <Route exact path="/createOrder" element={<CreateOrder />} />  
-            :null}
+            <Route path="/" exact element={<Home />} />
                 <Route exact path="/login" element={<Home />} />  
                 <Route exact path="/home" element={<Home />} />  
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
-                {localStorage.getItem('quickbooksCredentials')!=null?
-                <Route exact path="/addService" element={<AddService />} /> 
- :null}
+               
+                <Route exact path="/createOrder" element={<AddService />} /> 
+
                 <Route exact path="/allSuppliers" element={<Suppliers />} /> 
                 {localStorage.getItem('quickbooksCredentials')!=null?
                 <Route exact path="/viewallqbpo" element={<ViewAllPos/>}/>
