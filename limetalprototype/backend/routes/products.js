@@ -146,4 +146,19 @@ router.post("/editProduct/:id",(req,res)=>{
     });
 });
 
+// Get The Tax Details 
+
+router.get("/taxDetails",async(req,res)=>{
+
+    db.query("SELECT * FROM qbtax",(err,result)=>{
+
+        if(err)
+        {
+            throw err;
+        }
+
+        res.status(201).send({message:"Successfull",data:result});
+    });
+});
+ 
 module.exports = router;

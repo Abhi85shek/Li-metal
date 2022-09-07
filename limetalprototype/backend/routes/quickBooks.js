@@ -2,17 +2,22 @@ const express = require('express');
 const router  = express.Router();
 const config = require('../config/config');
 const axios = require('axios');
+const vendor =require('../helpers/vendors');
 const OAuthClient =  require('intuit-oauth');
+const { buildQueries } = require('@testing-library/react');
 
 const quickBookLocalID = config.qb.quickBookLocalID
 const quickBookUrl = 'http://localhost:3001/home';
+const QUICK_BOOK_PROD_URL = 'https://quickbooks.api.intuit.com';
+
 const QUICK_BOOK_BASE_URL = config.qb.BASE_URL;
+
 const QUICK_BOOK_COMPANY_NUMBER = config.qb.COMPANY_NUMBER;
 
 var oauthClient = new OAuthClient({
     clientId: 'ABuhc0GyN2M5zgQMceAgco4DihVQsbPWxMgxs8qlwsRksWjhcf',            // enter the apps `clientId`
     clientSecret: 'DeJTAtT8Hy26rR9krlUiBvH8qT4kXPFc1sbioG6B',  // enter the apps `clientSecret`
-    environment:'sandbox',     // enter either `sandbox` or `production`
+    environment:'production',     // enter either `sandbox` or `production`
     redirectUri: quickBookUrl,      // enter the redirectUri
 });
 
@@ -100,8 +105,8 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     //     const response = await axios.post('https://developer.api.intuit.com/oauth2/v1/tokens/bearer',)
     // });
 
-// Get all PurchaseOrder from QuickBooks
-router.post('/getAllPurchaseOrder',async (req,res)=>{
+    // Get all PurchaseOrder from QuickBooks
+    router.post('/getAllPurchaseOrder',async (req,res)=>{
 
     try{
     const {refreshToken} = req.body;
@@ -154,7 +159,7 @@ router.post('/getAllPurchaseOrder',async (req,res)=>{
 
     // Get PurchaseOrder Deatials By ID
 
-router.post('/getPurchaseOrderById',async(req,res)=>{
+    router.post('/getPurchaseOrderById',async(req,res)=>{
 
     try{
     const {POId} = req.body;
@@ -256,7 +261,7 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
                 'Authorization': "Bearer " + refreshToken,
                 'Content-Type': 'application/octet-stream'
                 }
-            }
+            };
             const sendPOUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${pOId}/send?sendTo=${email}&minorversion=65`
             const response = await axios.post(sendPOUrl,{}, headers)
             if (response.status === 200){
@@ -275,6 +280,97 @@ router.post('/getPurchaseOrderById',async(req,res)=>{
             });
         }
 
+    });
+
+    // Create PO Number API
+
+    router.post('/createPO',async(req,res)=>{
+        try{
+                const {refreshToken} = req.body;
+                const {data} = req.body;
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Accept' : 'application/json',
+                    'Authorization': "Bearer " + refreshToken
+                };
+                let getPurchaseOrderBody = {};
+                const createInvoiceUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder?minorversion=40`;
+                const response = await axios.post(createInvoiceUrl,getPurchaseOrderBody,{headers});
+
+                if(response.status == 200)
+                {
+                        res.status(201).send({message:"PO created Successfully",});
+                }
+               
+        }
+        catch(e)
+        {
+            res.status(404).send({
+                message:e.message,
+                data:{e}
+            });
+        }
+    });
+
+
+    // Get All the Vendors Details from QuickBooks
+
+    router.get('/getAllVendors',async (req,res)=>{
+
+        try{
+            const {refreshToken} = req.body;
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept' : 'application/json',
+                'Authorization': "Bearer " + refreshToken
+            };
+
+            const vendorQuery =`select * from vendor`;
+            const getAllVendorsURL = `${QUICK_BOOK_PROD_URL}/v3/company/193514828133914/query?query=${vendorQuery}&minorversion=65`;
+            const response = await axios.get(getAllVendorsURL,{headers});
+            if(response.status == 200)
+            {
+                res.send({message:'successfull',data:response.data});
+            }
+            else
+            {
+                res.status(401).send({message:"Data Not Found"});
+            }
+        }
+        catch(e)
+        {
+            res.status(404).send({
+                message:e.message,
+                data:{e}
+            });
+
+        }
+    });
+
+    router.get("/insertVendors",async (req,res)=>{
+        for(let vend of vendor)
+            {
+               
+                let name=vend.DisplayName?vend.DisplayName:" ";
+                let streetAddress = vend.BillAddr? vend.BillAddr.Line1 + ' ' + vend.BillAddr.Line2 :" ";
+                let city = vend.BillAddr ? vend.BillAddr.City : " " ;
+                let country = vend.BillAddr ? vend.BillAddr.Country : " ";
+                let currency = vend.CurrencyRef ? vend.CurrencyRef.name:  " ";
+                let currencyValue = vend.CurrencyRef ? vend.CurrencyRef.value : " ";
+                let postalCode = vend.BillAddr? vend.BillAddr.PostalCode : " ";
+                let provinceCode = vend.BillAddr ? vend.BillAddr.CountrySubDivisionCode : " ";
+                let balance = vend.Balance ? vend.Balance: " ";
+                let qbId = vend.Id;
+                
+                db.query("INSERT INTO vendors (name,streetAddress,city,country,postalCode,currency,currencyValue,qbId,phone,email,supplierNumber,openBalance,province,provinceCode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                [name,streetAddress,city,country,postalCode,currency,currencyValue,qbId," "," "," ",balance," ",provinceCode],(err,result)=>{
+
+                            if(err)
+                            {
+                                throw err;
+                            }
+                });
+            }
     });
 
 module.exports = router;
