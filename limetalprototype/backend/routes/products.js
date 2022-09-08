@@ -22,8 +22,6 @@ router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
 // Get All Product API WHICH ARE CURRENTLY ACTIVE
 
 router.get('/allProductsActive',(req,res)=>{
-
-    
     db.query("SELECT * FROM allservices WHERE active=?",[1],(err,result)=>{
         if(err)
             {
