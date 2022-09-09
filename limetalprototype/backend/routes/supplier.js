@@ -1,4 +1,5 @@
 const express = require('express');
+const { qb } = require('../config/config');
 var router = express.Router();
 const db = require('../helpers/db');
 
@@ -115,4 +116,6 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
   };
   res.status(201).send({message:"Successfull",data:result});
 });
+
+
 module.exports = router;

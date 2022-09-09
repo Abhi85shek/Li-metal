@@ -5,6 +5,7 @@ const axios = require('axios');
 const vendor =require('../helpers/vendors');
 const OAuthClient =  require('intuit-oauth');
 const { buildQueries } = require('@testing-library/react');
+const Customer = require('../helpers/customer');
 
 const quickBookLocalID = config.qb.quickBookLocalID
 const quickBookUrl = 'http://localhost:3001/home';
@@ -360,6 +361,51 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                 let postalCode = vend.BillAddr? vend.BillAddr.PostalCode : " ";
                 let provinceCode = vend.BillAddr ? vend.BillAddr.CountrySubDivisionCode : " ";
                 let balance = vend.Balance ? vend.Balance: " ";
+                let qbId = vend.Id;  
+                db.query("INSERT INTO vendors (name,streetAddress,city,country,postalCode,currency,currencyValue,qbId,phone,email,supplierNumber,openBalance,province,provinceCode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                [name,streetAddress,city,country,postalCode,currency,currencyValue,qbId," "," "," ",balance," ",provinceCode],(err,result)=>{
+
+                            if(err)
+                            {
+                                throw err;
+                            }
+                });
+            }
+    });
+
+    // Insert Quickbooks Customer in Database
+
+    router.get("/insertCustomer",async (req,res)=>{
+
+        for (let cust of Customer)
+            {
+                let name = cust.DisplayName ? cust.DisplayName : " ";
+                let currencyValue = cust.CurrencyRef ? cust.CurrencyRef.value : " ";
+                let qbId = cust.Id;
+                db.query("INSERT INTO customers (name,qbId,currencyValue) VALUES (?,?,?)",
+                [name,qbId,currencyValue],(err,result)=>{
+                            if(err)
+                            {
+                                throw err;
+                            }
+                });
+            }
+    });
+
+
+    router.get("/insertVendors",async (req,res)=>{
+        for(let vend of vendor)
+            {
+               
+                let name=vend.DisplayName?vend.DisplayName:" ";
+                let streetAddress = vend.BillAddr? vend.BillAddr.Line1 + ' ' + vend.BillAddr.Line2 :" ";
+                let city = vend.BillAddr ? vend.BillAddr.City : " " ;
+                let country = vend.BillAddr ? vend.BillAddr.Country : " ";
+                let currency = vend.CurrencyRef ? vend.CurrencyRef.name:  " ";
+                let currencyValue = vend.CurrencyRef ? vend.CurrencyRef.value : " ";
+                let postalCode = vend.BillAddr? vend.BillAddr.PostalCode : " ";
+                let provinceCode = vend.BillAddr ? vend.BillAddr.CountrySubDivisionCode : " ";
+                let balance = vend.Balance ? vend.Balance: " ";
                 let qbId = vend.Id;
                 
                 db.query("INSERT INTO vendors (name,streetAddress,city,country,postalCode,currency,currencyValue,qbId,phone,email,supplierNumber,openBalance,province,provinceCode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -371,6 +417,22 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                             }
                 });
             }
+    });
+
+    // Get all the Customer From dataBase
+    router.get("/getAllCustomer",async (req,res)=>{
+
+        db.query("SELECT * FROM customers",(err,result)=>{
+    
+            if(err)
+            {
+                throw err;
+            }else
+            {
+                res.send({message:"Successfull",data:result});
+            }
+    
+        });
     });
 
 module.exports = router;
