@@ -14,6 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ViewAllPos from "./Pages/ViewAllPos";
 import Home from "./Pages/Home";
+import AllOrders from "./component/AllOrders";
 
 
 let logoutTimer;
@@ -102,6 +103,7 @@ function App() {
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
                
                 <Route exact path="/createOrder" element={<AddService />} /> 
+                <Route exact path="/viewallorders" element={<AllOrders />} /> 
 
                 <Route exact path="/allSuppliers" element={<Suppliers />} /> 
                 {localStorage.getItem('quickbooksCredentials')!=null?

@@ -11,24 +11,25 @@ const AddServicesForm = (props) => {
 
   const [serviceModalState,setServiceModalState] = useRecoilState(editModalAtom);
   const [serviceDetails,setServiceDetails] =useRecoilState(serviceDetailsAtom);
-  const [supplier,setSelectedSupplier]=useState(selectedSupplierAtom)
   const [supplierOrderCount,setSupplierOrderCount]=useState(supplierOrderCountAtom)
   const [allProducts,setAllProducts] = useState([]);
   const [taxList,setTaxList]=useState([])
   const [service,setService] = useState("");
+  const [serviceName,setServiceName]=useState("")
   const [description,setDescription] = useState("");
   const [quantity,setQuantity] = useState("");
   const [tax,setTax] = useState("");
   const [rate,setRate] =useState("");
   const [suppliers,setAllSuppliers]=useState([])
-  const [totalAmount,setTotalAmount] =useState(0);
+  const [taxName,setTaxName]=useState("")
+  const [allCustomers,setAllCustomers]=useState("")
+
+
   
 
   const getAllProducts = async()=>{
       const result = await axios.get("http://localhost:4000/allProductsActive");
       setAllProducts(result.data); 
-
-      
   }; 
 
   const getAllSuppliers = async()=>{
@@ -36,6 +37,14 @@ const AddServicesForm = (props) => {
       console.log(res.data.data)
     setAllSuppliers(res.data.data); 
     
+}; 
+
+
+const getAllCustomers = async()=>{
+  const res = await axios.get("http://localhost:4000/getAllCustomer");
+    console.log(res.data.data)
+  setAllCustomers(res.data.data); 
+  
 }; 
 
 const getAllTaxes=async()=>{
@@ -50,6 +59,9 @@ const handleSupplierChange=(val)=>{
   let supplierNum=arr[1]
   console.log(supplierNum)
   props.setSupplierNumber(supplierNum)
+  props.setSupplierQbId(arr[0])
+  props.setSupplierName(arr[3])
+
   // setSelectedSupplier(supplierNum)
 }
 
@@ -66,15 +78,27 @@ const handleSupplierChange=(val)=>{
   };
 
   const taxHandler =(e)=>{
-    if(e.target.checked)
-      {
-        setTax("HST ON");
-      }
-      else
-      {
-        setTax("HST OFF");
-      }
+    console.log(e)
+   let arr=e.split('-')
+   setTaxName(arr[1])
+   
   };
+
+  const serviceChangeHandler=(val)=>{
+    console.log(val)
+    let arr=val.split('-')
+    setService(arr[0])
+    setServiceName(arr[1])
+  }
+
+  const customerChangeHandler=(val)=>{
+    console.log(val)
+    let arr=val.split('-')
+    props.setCustomerId(arr[0])
+    props.setCustomerName(arr[1])
+    props.setCustomerCurrency(arr[2])
+  }
+
 
   const addServiceHandler=(e)=>{
     e.preventDefault();
@@ -82,11 +106,11 @@ const handleSupplierChange=(val)=>{
       ...oldVinDetails,
       {
         id:uuidv4(),
-        serviceName:service,
+        serviceName:serviceName, 
         description:description,
         quantity:quantity,
         rate:rate,
-        tax:tax,
+        tax:taxName,
         totalAmount:quantity* rate
        }
  ]);
@@ -99,7 +123,9 @@ const handleSupplierChange=(val)=>{
   useEffect(()=>{
     getAllProducts();
     getAllSuppliers();
-    getAllTaxes()
+    getAllTaxes();
+    getAllCustomers();
+
   },[]);
 
   return (
@@ -112,7 +138,7 @@ const handleSupplierChange=(val)=>{
             <option selected>Select a Supplier</option>
                     {
                          suppliers.map((cuurentsuppliers,id)=>( 
-                            <option value={cuurentsuppliers.qbId+'-'+cuurentsuppliers.supplierNumber+'-'+cuurentsuppliers.poCount} key={id}>{cuurentsuppliers.name}</option>
+                            <option value={cuurentsuppliers.qbId+'-'+cuurentsuppliers.supplierNumber+'-'+cuurentsuppliers.poCount+'-'+cuurentsuppliers.name} key={id}>{cuurentsuppliers.name}</option>
                         )
                         )
                     }
@@ -120,23 +146,39 @@ const handleSupplierChange=(val)=>{
             </>
             :null
             }
-        </div>
 
-        
+        </div>
+            {allCustomers.length>0?
+        <div className='pt-5'>
+        <label htmlFor="costCenter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Customer</label>
+            <select id="costCenter"  onChange={(e)=>{customerChangeHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Choose a Customer</option>
+                    {
+                         allCustomers.map((customer)=>( 
+                            <option value={customer.qbId+'-'+customer.name+'-'+customer.currencyValue} key={customer.id}>{customer.name}</option>
+                        )
+                        )
+                    }
+            </select>
+        </div>:null
+
+                  }
         <hr className='h-4  mt-8'/>
 
     <div className='pt-5'>
         <label htmlFor="costCenter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Service</label>
-            <select id="costCenter"  onChange={(e)=>{setService(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select id="costCenter"  onChange={(e)=>{serviceChangeHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option selected>Choose a Service</option>
                     {
                          allProducts.map((product)=>( 
-                            <option value={product.qbId} key={product.id}>{product.serviceName}</option>
+                            <option value={product.qbId+'-'+product.serviceName} key={product.id}>{product.serviceName}</option>
                         )
                         )
                     }
             </select>
         </div>
+
+      
       
    <div className="w-full mt-4">
       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">
@@ -160,11 +202,11 @@ const handleSupplierChange=(val)=>{
     </div>
     <div className='pt-2'>
         <label htmlFor="costCenter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Tax</label>
-            <select id="costCenter"  onChange={(e)=>{setService(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select id="costCenter"  onChange={(e)=>{taxHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option selected>Choose a Tax</option>
                     {
                          taxList.map((tax)=>( 
-                            <option value={tax.id} key={tax.id}>{tax.name}</option>
+                            <option value={tax.id+'-'+tax.name} key={tax.id}>{tax.name}</option>
                         )
                         )
                     }

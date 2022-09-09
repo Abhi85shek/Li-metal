@@ -14,6 +14,12 @@ const AddService = () => {
   const [serviceModalState,setServiceModalState] = useRecoilState(editModalAtom);
   const [quickBookURLcode,setquickbooksAuthCode]=useState()
   const [supplierNumber,setSupplierNumber]=useState("")
+  const [supplierName,setSupplierName]=useState("")
+  const [supplierQbId,setSupplierQbId]=useState()
+  const [customerId,setCustomerId]=useState("")
+  const [customerName,setCustomerName]=useState("")
+  const [totalAmount,setTotalAmount] =useState(0);
+  const [customerCurrency,setCustomerCurrency]=useState("")
 
 
   const connectQuickbooks=async()=>{
@@ -63,10 +69,28 @@ console.log(localStorage.getItem('quickbooksCredentials'))
     <>  
     <div className='flex flex-col p-2 justify-center items-center pt-5 font-raleway mt-5 '>
         <h1 className='font-bold text-2xl'>Create Purchase Order</h1>
-        <AddServicesForm supplierNumber={supplierNumber} setSupplierNumber={setSupplierNumber} />
+        <AddServicesForm supplierNumber={supplierNumber} 
+        setSupplierNumber={setSupplierNumber} 
+        supplierName={supplierName} 
+        setSupplierName={setSupplierName} 
+        supplierQbId={supplierQbId}  
+        setSupplierQbId={setSupplierQbId}
+        customerId={customerId}
+        setCustomerId={setCustomerId}
+        customerName={customerName}
+        setCustomerName={setCustomerName}
+        customerCurrency={customerCurrency}
+        setCustomerCurrency={setCustomerCurrency}
+        />
      { serviceList.length > 0 && serviceModalState && <AddServiceTable /> }
      <div className='flex w-[100%] h-auto  p-4 justify-center items-center mt-2'>
-      <CreateOrder supplierNumber={supplierNumber}/>
+      <CreateOrder 
+      supplierNumber={supplierNumber} 
+      supplierName={supplierName}
+       supplierQbId={supplierQbId}
+        customerId={customerId}
+         customerName={customerName}
+          customerCurrency={customerCurrency}/>
      </div>
     </div>
     </>

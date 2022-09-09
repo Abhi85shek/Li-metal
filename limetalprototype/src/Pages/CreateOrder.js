@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from '../component/Navbar';
 import selectedSupplierAtom from '../atoms/selectedSupplierAtom';
 import { useRecoilValue } from 'recoil';
+import serviceDetailsAtom from '../atoms/ServiceState';
 
 const CreateOrder = (props) => {
     const [areas,setAreas] = useState([]);
@@ -14,8 +15,10 @@ const CreateOrder = (props) => {
     const [areaOfWorkValue,setAreaOfWorkValue] = useState("");
     const [locationValue,setLocationValue]= useState("");
     const [poGenerateData,setPoGenerateData] = useState("");
-    const selectedSupplier=useRecoilValue(selectedSupplierAtom)
+    const [preProcessedAreaOfWork,setPreProcessedAreaOfWork]=useState("")
+    const [preProcessedCostCenter,setPreProcessedCostCenter]=useState("")
     const [supplierNumber,setSupplierNumber]=useState()
+    const serviceData=useRecoilValue(serviceDetailsAtom)
 
     const getArea = async ()=>{
         const result = await axios.get("http://localhost:4000/getAllArea");
@@ -46,6 +49,33 @@ const CreateOrder = (props) => {
             
     },[]);
 
+    const preprocessAreaofWork=(val)=>{
+        setAreaValue(val)
+        if(val.length==1)
+        {
+            console.log("check 1")
+            setPreProcessedAreaOfWork("0"+val)
+        }
+        else{
+            console.log("check 2")
+            setPreProcessedAreaOfWork(val)
+        }
+    }
+
+    const preprocessCostCenter=(val)=>{
+        setCostCenterValue(val)
+        if(val.length==1)
+        {
+            setPreProcessedCostCenter("0"+"0"+val)
+        }
+        else if(val.length==2){
+            setPreProcessedCostCenter("0"+val)
+        }
+        else{
+            setPreProcessedCostCenter(val)
+        }
+    }
+
     const generatePONum=()=>{
         console.log("inside fun")
         // let areaofWorkVal,costCenterVal;
@@ -72,24 +102,77 @@ const CreateOrder = (props) => {
         //     console.log("5")
         // }
        
-        let poNum="0"+areaValue+'-'+"0"+costCenterValue+'-'+"0"+areaOfWorkValue+'-'+"0"+locationValue+'-'+props.supplierNumber+""
+        let poNum="0"+areaValue+'-'+preProcessedAreaOfWork+'-'+preProcessedCostCenter+"-"+"0"+locationValue+'-'+props.supplierNumber+""
         console.log('suppnum')
         // console.log(selectedSupplier)
 
         setPoGenerateData(poNum)
     }
 
+    const createOrderSubmit=()=>{
+        let serviceDataArray=serviceData
+        console.log(serviceDataArray)
+        let TotalAmt=0
+        let Line=[]
+        let id=1
+        for (let data of serviceData )
+        {
+            TotalAmt+=data.totalAmount
+            let lineObj={}
+            lineObj.DetailType="ItemBasedExpenseLineDetail"
+            lineObj.Amount=data.totalAmount
+            lineObj.Id=id
+            lineObj.ItemBasedExpenseLineDetail={
+                "itemRef":{
+                    "name":data.serviceName,
+                    "value":data.serviceqbId
+                },
+                "Qty":data.quantity,
+                "TaxCodeRef":{
+                    "value":data.TaxCodeRef
+                },
+                "BillableStatus":"Non-Billable",
+                "UnitPrice":data.rate
+            }
+        Line.push(lineObj)
+        }
+        let orderObj={
+            "TotalAmt":TotalAmt,
+            "Line":Line,
+            "APAccountRef":{
+                "name": "Accounts Payable (A/P)",
+                "value": "33"
+            },
+            "VendorRef":{
+                "name":props.supplierName,
+            "value":props.supplierQbId,
+            },
+            "ShipTo":{
+                "name": props.customerName,
+                "value": props.customerId
+            }
+        }
+          console.log(orderObj)
+
+        }
+    
+
     useEffect(()=>{
+        console.log("area of work")
         if (areaValue.length>0){
+            console.log("area of work condition")
         getCostCenter();
         }
     },[areaValue]);
 
     useEffect(()=>{
+        console.log("cost center")
         if(costCenterValue.length>0){
+            console.log("cost center condition")
         getAreaOfWork();
         }
     },[costCenterValue]);
+
     useEffect(()=>{
         getLocation();
     },[]);
@@ -118,7 +201,7 @@ const CreateOrder = (props) => {
             <label htmlFor="area" className="float-right items-center text-sm font-medium text-gray-900 dark:text-gray-400">Area</label>
            </div>
            <div className='basis-5/6 '>
-            <select id="area" onChange={(e)=>{setAreaValue(e.target.value)}} value={areaValue} className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
+            <select id="area" onChange={(e)=>{preprocessAreaofWork(e.target.value)}} value={areaValue} className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
     {   areas.map((area)=>(
                 <option value={area.id} key={area.id}>{area.areaName}</option>
          ))
@@ -134,7 +217,7 @@ const CreateOrder = (props) => {
         <label htmlFor="costCenter" className="float-right items-center text-sm font-medium text-gray-900 dark:text-gray-400">Cost Center</label>
           </div>
           <div className='basis-5/6 '>
-            <select id="costCenter" onChange={(e)=>{setCostCenterValue(e.target.value)}}className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
+            <select id="costCenter" onChange={(e)=>{preprocessCostCenter(e.target.value)}}className="w-[100%] float-left h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg ">
           
             <option>Choose a Cost Center</option>
                     {
@@ -171,7 +254,11 @@ const CreateOrder = (props) => {
         <div className='flex flex-row text-center justify-center mt-4'>
             <p>Partial PO :&nbsp;&nbsp;{poGenerateData}</p>
         </div>:null
-}
+}       
+
+<div className='text-center mt-4'>
+            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={createOrderSubmit}>Create Order</button>
+        </div>
     </div>
     </div>
     </>
