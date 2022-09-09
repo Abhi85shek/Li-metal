@@ -84,7 +84,7 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
 // Get SupplierName and SupplierNumber
     router.get('/getSuppliers',async (req,res)=>{
         try {
-            db.query('SELECT name,supplierNumber,qbId,poCount FROM vendors',(err,result)=>{
+            db.query(`SELECT name,supplierNumber,qbId,poCount FROM vendors WHERE supplierNumber !=' '`,(err,result)=>{
                 if(err)
                     {
                         throw err;
