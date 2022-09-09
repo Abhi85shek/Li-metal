@@ -219,19 +219,18 @@ else{
             <div className="mt-3 w-[100%]">
             <Formik
        initialValues={{
-        supplierName:props.selectedSupplier.supplier,
-        company:props.selectedSupplier.company,
+        supplierName:props.selectedSupplier.name,
         streetAddress:props.selectedSupplier.streetAddress,
         city:props.selectedSupplier.city,
         province:props.selectedSupplier.Province,
-        country:props.selectedSupplier.Country,
+        country:props.selectedSupplier.country,
         postalCode:props.selectedSupplier.postalCode,
         taxSlip:props.selectedSupplier.taxSlip,
         phone:props.selectedSupplier.phone,
         email:props.selectedSupplier.email,
         openBalance:props.selectedSupplier.openBalance,
         supplierNumber:props.selectedSupplier.supplierNumber,
-        currency:props.selectedSupplier.currency
+        currency:props.selectedSupplier.currencyValue
 
        }}
       onSubmit={editSupplierHandler}
@@ -239,16 +238,16 @@ else{
          {({ errors, touched, isValidating }) => (
                 <Form onChange={handleOnChange} className="w-[100%]">
                     <div className='flex space-x-2 mt-8  '>
-                        <div className='basis-1/2'>
+                        <div className='basis-full'>
                         <label htmlFor='supplier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Name</label>
                         <Field placeholder="Enter Supplier Name" type="text" id="supplierName" validate={validateField} name="supplierName" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.supplierName && touched.supplierName && <div className='text-red-700'>{errors.supplierName}</div>}
                         </div>
-                        <div className='basis-1/2'>
+                        {/* <div className='basis-1/2'>
                         <label htmlFor='company' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Company Name</label>
                         <Field placeholder="Enter Supplier Company" type="text" id="company" validate={validateField} name="company" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.company && touched.company && <div className='text-red-700'>{errors.company}</div>}
-                        </div>
+                        </div> */}
                     </div>
                     <div className='flex-col mt-4'>
                     <label htmlFor='streetAddress' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Street Address</label>
@@ -259,7 +258,7 @@ else{
                     <div className='basis-1/3'>
                         <label htmlFor='country' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                        <Field placeholder={props.selectedSupplier.Country} as="select" id="country" validate={validateDropdownField} name="country" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
+                        <Field placeholder={props.selectedSupplier.country} as="select" id="country" validate={validateDropdownField} name="country" className="justify-start basis-full outline-none border-none active:outline-none hover:outline-none focus:outline-none">
                         <option  className='text-neutral-400 hover:bg-none' value={1}>Select Country</option>
                         {countries.length>0?
                         countries.map((country)=>
@@ -333,16 +332,12 @@ else{
                         
                     </div>
                     <div className='flex space-x-2 mt-4  '>
-                        <div className='basis-1/2'>
+                        <div className='basis-full'>
                         <label htmlFor='postalCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code/Zip Code</label>
                         <Field placeholder="Enter Supplier Postal Code" type="text" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.postalCode && touched.postalCode && <div className='text-red-700'>{errors.postalCode}</div>}
                         </div>
-                        <div className='basis-1/2'>
-                        <label htmlFor='taxSlip' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Tax Slip</label>
-                        <Field  placeholder="Enter Supplier Tax  Slip" type="text" id="taxSlip" validate={validateField} name="taxSlip" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-                        {errors.taxSlip && touched.taxSlip && <div className='text-red-700'>{errors.taxSlip}</div>}
-                        </div>
+                       
                     </div>
 
                     <div className='flex space-x-2 mt-4  '>
@@ -359,16 +354,16 @@ else{
                     </div>
 
                     <div className='flex space-x-2 mt-4  '>
-                        <div className='basis-1/3'>
+                        <div className='basis-2/3'>
                         <label htmlFor='openBalance' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Open Balance</label>
                         <Field placeholder="Enter Supplier Open Balance" type="text" id="openBalance" validate={validateField} name="openBalance" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.openBalance && touched.openBalance && <div className='text-red-700'>{errors.openBalance}</div>}
                         </div>
-                        <div className='basis-1/3'>
+                        {/* <div className='basis-1/3'>
                         <label htmlFor='supplierNumber' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Number</label>
                         <Field placeholder="Enter Supplier Number" type="text" id="supplierNumber" validate={validateField} name="supplierNumber" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.supplierNumber && touched.supplierNumber && <div className='text-red-700'>{errors.supplierNumber}</div>}
-                        </div>
+                        </div> */}
                         <div className='basis-1/3'>
                         <label htmlFor='currency' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Currency</label>
                         <div className='flex shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>

@@ -109,9 +109,7 @@ const AllSuppliers = () => {
                 <th scope="col" className="px-6 py-3">
                     Name
                 </th>
-                <th scope="col" className="px-6 py-3">
-                    Company
-                </th>
+
                 <th scope="col" className=" px-6 py-3 ">
                    Address
                 </th> 
@@ -134,16 +132,13 @@ const AllSuppliers = () => {
                 (
                     <tr className={index %2 == 0 ? "bg-neutral-100 border-b text-neutral-800 ": "bg-[#7DAFC1] border-b text-neutral-800"} key={supplier.id} >
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                        {supplier.supplier}
+                        {supplier.name}
                     </th>
-                    <td className="px-6 py-4">
-                        {supplier.company}
-                    </td>
                     <td className="px-6 py-4">
                         {supplier.streetAddress}
                     </td>
                     <td className="px-6 py-4">
-                      {supplier.Country.split('-')[0]}
+                      {supplier.country}
                     </td>
                     <td className="px-6 py-4">
                        {supplier.currency}

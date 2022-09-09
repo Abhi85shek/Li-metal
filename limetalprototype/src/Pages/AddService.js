@@ -13,6 +13,7 @@ const AddService = () => {
   const serviceList = useRecoilValue(serviceDetailsAtom);
   const [serviceModalState,setServiceModalState] = useRecoilState(editModalAtom);
   const [quickBookURLcode,setquickbooksAuthCode]=useState()
+  const [supplierNumber,setSupplierNumber]=useState("")
 
 
   const connectQuickbooks=async()=>{
@@ -62,10 +63,10 @@ console.log(localStorage.getItem('quickbooksCredentials'))
     <>  
     <div className='flex flex-col p-2 justify-center items-center pt-5 font-raleway mt-5 '>
         <h1 className='font-bold text-2xl'>Create Purchase Order</h1>
-        <AddServicesForm />
+        <AddServicesForm supplierNumber={supplierNumber} setSupplierNumber={setSupplierNumber} />
      { serviceList.length > 0 && serviceModalState && <AddServiceTable /> }
      <div className='flex w-[100%] h-auto  p-4 justify-center items-center mt-2'>
-      <CreateOrder/>
+      <CreateOrder supplierNumber={supplierNumber}/>
      </div>
     </div>
     </>

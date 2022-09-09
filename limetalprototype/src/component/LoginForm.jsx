@@ -131,7 +131,7 @@ const LoginForm = () => {
         <div className='min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
         <div className="w-[35%]  space-y-8 p-10 bg-clip-padding bg-opacity-80 backdrop-blur-sm rounded-2xl bg-white/30">
         <div>
-            <h2 className="mt-6 text-center text-4xl font-extrabold text-[#335663] leading-normal">Li-Metal Supply Management</h2>
+            <h2 className="mt-6 text-center text-4xl font-extrabold text-[#335663] leading-normal">Li-Metal PO Management</h2>
            <div className="flex flex-row justify-center items-center pt-8">
             <img src={logo}/>
             </div>

@@ -1,7 +1,10 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import Navbar from '../component/Navbar';
-const CreateOrder = () => {
+import selectedSupplierAtom from '../atoms/selectedSupplierAtom';
+import { useRecoilValue } from 'recoil';
+
+const CreateOrder = (props) => {
     const [areas,setAreas] = useState([]);
     const [areaValue,setAreaValue] = useState("");
     const [costCenters,setCostCenters] = useState([]);
@@ -11,6 +14,8 @@ const CreateOrder = () => {
     const [areaOfWorkValue,setAreaOfWorkValue] = useState("");
     const [locationValue,setLocationValue]= useState("");
     const [poGenerateData,setPoGenerateData] = useState("");
+    const selectedSupplier=useRecoilValue(selectedSupplierAtom)
+    const [supplierNumber,setSupplierNumber]=useState()
 
     const getArea = async ()=>{
         const result = await axios.get("http://localhost:4000/getAllArea");
@@ -40,6 +45,39 @@ const CreateOrder = () => {
             getArea();
             
     },[]);
+
+    const generatePONum=()=>{
+        console.log("inside fun")
+        // let areaofWorkVal,costCenterVal;
+        // if(costCenterValue.length==1){
+        //     costCenterVal="0"+costCenterValue
+        //     console.log("1")
+        // }
+        // else{
+        //     costCenterVal=costCenterValue+""
+        //     console.log("2")
+        // }
+        
+
+        // if(areaOfWorkValue.length==1){
+        //     areaofWorkVal="0"+"0"+areaOfWorkValue
+        //     console.log("3")
+        // }
+        // else if(areaOfWorkValue.length==2){
+        //     areaofWorkVal="0"+areaOfWorkValue
+        //     console.log("4")
+        // }
+        // else{
+        //     areaOfWorkValue=areaOfWorkValue
+        //     console.log("5")
+        // }
+       
+        let poNum="0"+areaValue+'-'+"0"+costCenterValue+'-'+"0"+areaOfWorkValue+'-'+"0"+locationValue+'-'+props.supplierNumber+""
+        console.log('suppnum')
+        // console.log(selectedSupplier)
+
+        setPoGenerateData(poNum)
+    }
 
     useEffect(()=>{
         if (areaValue.length>0){
@@ -127,11 +165,13 @@ const CreateOrder = () => {
         </div>
         </div>
         <div className='text-center mt-4'>
-            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={generatePoNumber}>Generate PO Number</button>
+            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={generatePONum}>Generate PO Number</button>
         </div>
-        <div className='text-center mt-4'>
-            <p>{poGenerateData}</p>
-        </div>
+        {poGenerateData.length>0?
+        <div className='flex flex-row text-center justify-center mt-4'>
+            <p>Partial PO :&nbsp;&nbsp;{poGenerateData}</p>
+        </div>:null
+}
     </div>
     </div>
     </>
