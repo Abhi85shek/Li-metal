@@ -14,11 +14,13 @@ const QUICK_BOOK_PROD_URL = 'https://quickbooks.api.intuit.com';
 const QUICK_BOOK_BASE_URL = config.qb.BASE_URL;
 
 const QUICK_BOOK_COMPANY_NUMBER = config.qb.COMPANY_NUMBER;
+console.log(QUICK_BOOK_COMPANY_NUMBER);
+console.log(QUICK_BOOK_BASE_URL);
 
 var oauthClient = new OAuthClient({
-    clientId: 'ABuhc0GyN2M5zgQMceAgco4DihVQsbPWxMgxs8qlwsRksWjhcf',            // enter the apps `clientId`
-    clientSecret: 'DeJTAtT8Hy26rR9krlUiBvH8qT4kXPFc1sbioG6B',  // enter the apps `clientSecret`
-    environment:'production',     // enter either `sandbox` or `production`
+    clientId: 'ABcuA9eU874j0XBEEikAj9AkCvnKKmTziYwo5dcrJp54VasODZ',            // enter the apps `clientId`
+    clientSecret: 'ExRpxe2thNamDU5LqB1QXcLVlX7kCaLz8pKHEsvL',  // enter the apps `clientSecret`
+    environment:'sandbox',     // enter either `sandbox` or `production`
     redirectUri: quickBookUrl,      // enter the redirectUri
 });
 
@@ -288,21 +290,25 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     router.post('/createPO',async(req,res)=>{
         try{
                 const {refreshToken} = req.body;
-                const {data} = req.body;
+              
+                const data = req.body['data'];
+                
                 const headers = {
                     'Content-Type': 'application/json',
                     'Accept' : 'application/json',
                     'Authorization': "Bearer " + refreshToken
                 };
-                let getPurchaseOrderBody = {};
+                let getPurchaseOrderBody = data;
+                console.log(getPurchaseOrderBody);
                 const createInvoiceUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder?minorversion=40`;
+                console.log(createInvoiceUrl);
                 const response = await axios.post(createInvoiceUrl,getPurchaseOrderBody,{headers});
-
+                console.log("Response");
+                console.log(response);
                 if(response.status == 200)
                 {
                         res.status(201).send({message:"PO created Successfully",});
                 }
-               
         }
         catch(e)
         {
