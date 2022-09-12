@@ -131,9 +131,9 @@ const CreateOrder = (props) => {
                     "value":data.serviceqbId
                 },
                 "Qty":data.quantity,
-                "TaxCodeRef":{
-                    "value":data.TaxCodeRef
-                },
+                // "TaxCodeRef":{
+                //     "value":data.TaxCodeRef
+                // },
                 "BillableStatus":"Non-Billable",
                 "UnitPrice":data.rate
             }

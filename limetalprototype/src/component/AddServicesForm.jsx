@@ -107,6 +107,7 @@ const handleSupplierChange=(val)=>{
       {
         id:uuidv4(),
         serviceName:serviceName, 
+        serviceqbId:service,
         description:description,
         quantity:quantity,
         rate:rate,
