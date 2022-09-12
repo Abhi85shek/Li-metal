@@ -130,12 +130,12 @@ const CreateOrder = (props) => {
                     "name":data.serviceName,
                     "value":data.serviceqbId
                 },
-                "Qty":data.quantity,
-                // "TaxCodeRef":{
-                //     "value":data.TaxCodeRef
-                // },
+                "Qty":data.quantity*1,
+                "TaxCodeRef":{
+                    "value":"NON",
+                },
                 "BillableStatus":"Non-Billable",
-                "UnitPrice":data.rate
+                "UnitPrice":data.rate*1
             }
         Line.push(lineObj)
         }

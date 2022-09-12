@@ -17,9 +17,9 @@ const AddServicesForm = (props) => {
   const [service,setService] = useState("");
   const [serviceName,setServiceName]=useState("")
   const [description,setDescription] = useState("");
-  const [quantity,setQuantity] = useState("");
+  const [quantity,setQuantity] = useState(0);
   const [tax,setTax] = useState("");
-  const [rate,setRate] =useState();
+  const [rate,setRate] =useState(0);
   const [suppliers,setAllSuppliers]=useState([])
   const [taxName,setTaxName]=useState("")
   const [allCustomers,setAllCustomers]=useState("")
