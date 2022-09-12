@@ -4,6 +4,9 @@ import Navbar from '../component/Navbar';
 import selectedSupplierAtom from '../atoms/selectedSupplierAtom';
 import { useRecoilValue } from 'recoil';
 import serviceDetailsAtom from '../atoms/ServiceState';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const CreateOrder = (props) => {
     const [areas,setAreas] = useState([]);
@@ -109,7 +112,7 @@ const CreateOrder = (props) => {
         setPoGenerateData(poNum)
     }
 
-    const createOrderSubmit=()=>{
+    const createOrderSubmit=async()=>{
         let serviceDataArray=serviceData
         console.log(serviceDataArray)
         let TotalAmt=0
@@ -137,6 +140,7 @@ const CreateOrder = (props) => {
         Line.push(lineObj)
         }
         let orderObj={
+            "DocNumber":poGenerateData,
             "TotalAmt":TotalAmt,
             "Line":Line,
             "APAccountRef":{
@@ -153,6 +157,21 @@ const CreateOrder = (props) => {
             }
         }
           console.log(orderObj)
+          const result = await axios.post(`http://localhost:4000/createPO`,{data:orderObj});
+          if(result.status==201)
+          {
+           console.log("toasting")
+           
+               toast.success('PO created successfully', {
+                 position: "top-center",
+                 autoClose: 2000,
+                 hideProgressBar: true,
+                 closeOnClick: true,
+                 pauseOnHover: true,
+                 draggable: true,
+                 progress: undefined,
+               });
+             }
 
         }
     
