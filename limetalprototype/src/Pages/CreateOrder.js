@@ -160,7 +160,7 @@ const CreateOrder = (props) => {
             // }
         Line.push({
             "DetailType":"ItemBasedExpenseLineDetail",
-            "Amount":parseFloat(data.totalAmt.toFixed(1)),
+            "Amount":parseFloat(data.TotalAmt.toFixed(1)),
             "Description":data.description,
             "Id":id+"",
             "LineNum":id*1,
