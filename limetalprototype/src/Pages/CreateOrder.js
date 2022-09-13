@@ -160,7 +160,7 @@ const CreateOrder = (props) => {
             // }
         Line.push({
             "DetailType":"ItemBasedExpenseLineDetail",
-            "Amount":data.totalAmount,
+            "Amount":data.totalAmount*1,
             "Description":data.description,
             "Id":id+"",
             "LineNum":id*1,
