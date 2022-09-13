@@ -122,25 +122,61 @@ const CreateOrder = (props) => {
         for (let data of serviceData )
         {
             TotalAmt+=data.totalAmount
-            let lineObj={}
-            lineObj.DetailType="ItemBasedExpenseLineDetail"
-            lineObj.Amount=data.totalAmount
-            lineObj.Description=data.description
-            lineObj.Id=id+""
-            lineObj.LineNum=id*1
-            lineObj.ItemBasedExpenseLineDetail={
+            // let lineObj={
+            //     "DetailType":"ItemBasedExpenseLineDetail",
+            //     "Amount":data.totalAmount,
+            //     "Description":data.description,
+            //     "Id":id+"",
+            //     "LineNum":id*1,
+            //     "ItemBasedExpenseLineDetail":{
+            //         "ItemRef":{
+            //             "name":data.serviceName,
+            //             "value":data.serviceqbId
+            //         },
+            //         "Qty":data.quantity*1,
+            //         "TaxCodeRef":{
+            //             "value":"NON"
+            //         },
+            //         "BillableStatus":"Non-Billable",
+            //         "UnitPrice":data.rate*1
+            //     }
+            // }
+            // lineObj.DetailType="ItemBasedExpenseLineDetail"
+            // lineObj.Amount=data.totalAmount
+            // lineObj.Description=data.description
+            // lineObj.Id=id+""
+            // lineObj.LineNum=id*1
+            // lineObj.ItemBasedExpenseLineDetail={
+            //     "ItemRef":{
+            //         "name":data.serviceName,
+            //         "value":data.serviceqbId
+            //     },
+            //     "Qty":data.quantity*1,
+            //     "TaxCodeRef":{
+            //         "value":"NON",
+            //     },
+            //     "BillableStatus":"Non-Billable",
+            //     "UnitPrice":data.rate*1
+            // }
+        Line.push({
+            "DetailType":"ItemBasedExpenseLineDetail",
+            "Amount":data.totalAmount,
+            "Description":data.description,
+            "Id":id+"",
+            "LineNum":id*1,
+            "ItemBasedExpenseLineDetail":{
                 "ItemRef":{
                     "name":data.serviceName,
                     "value":data.serviceqbId
                 },
                 "Qty":data.quantity*1,
                 "TaxCodeRef":{
-                    "value":"NON",
+                    "value":"NON"
                 },
                 "BillableStatus":"Non-Billable",
                 "UnitPrice":data.rate*1
             }
-        Line.push(lineObj)
+        })
         }
         let orderObj={
             "DocNumber":poGenerateData,
