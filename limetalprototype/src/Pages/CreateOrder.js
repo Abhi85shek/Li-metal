@@ -22,6 +22,7 @@ const CreateOrder = (props) => {
     const [preProcessedCostCenter,setPreProcessedCostCenter]=useState("")
     const [supplierNumber,setSupplierNumber]=useState()
     const serviceData=useRecoilValue(serviceDetailsAtom)
+    
 
     const getArea = async ()=>{
         const result = await axios.get("http://localhost:4000/getAllArea");
@@ -124,9 +125,11 @@ const CreateOrder = (props) => {
             let lineObj={}
             lineObj.DetailType="ItemBasedExpenseLineDetail"
             lineObj.Amount=data.totalAmount
-            lineObj.Id=id
+            lineObj.Description=data.description
+            lineObj.Id=id+""
+            lineObj.LineNum=id*1
             lineObj.ItemBasedExpenseLineDetail={
-                "itemRef":{
+                "ItemRef":{
                     "name":data.serviceName,
                     "value":data.serviceqbId
                 },
