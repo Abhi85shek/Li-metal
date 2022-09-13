@@ -160,7 +160,7 @@ const CreateOrder = (props) => {
             // }
         Line.push({
             "DetailType":"ItemBasedExpenseLineDetail",
-            "Amount":data.totalAmount*1,
+            "Amount":data.totalAmount.toFixed(1),
             "Description":data.description,
             "Id":id+"",
             "LineNum":id*1,
@@ -180,7 +180,7 @@ const CreateOrder = (props) => {
         }
         let orderObj={
             "DocNumber":poGenerateData,
-            "TotalAmt":TotalAmt,
+            "TotalAmt":TotalAmt.toFixed(1),
             "Line":Line,
             "APAccountRef":{
                 "name": "Accounts Payable (A/P)",
