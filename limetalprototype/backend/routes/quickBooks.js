@@ -18,9 +18,9 @@ console.log(QUICK_BOOK_COMPANY_NUMBER);
 console.log(QUICK_BOOK_BASE_URL);
 
 var oauthClient = new OAuthClient({
-    clientId: 'ABcuA9eU874j0XBEEikAj9AkCvnKKmTziYwo5dcrJp54VasODZ',            // enter the apps `clientId`
-    clientSecret: 'ExRpxe2thNamDU5LqB1QXcLVlX7kCaLz8pKHEsvL',  // enter the apps `clientSecret`
-    environment:'sandbox',     // enter either `sandbox` or `production`
+    clientId: 'ABcuA9eU874j0XBEEikAj9AkCvnKKmTziYwo5dcrJp54VasODZ',     // enter the apps `clientId`
+    clientSecret: 'ExRpxe2thNamDU5LqB1QXcLVlX7kCaLz8pKHEsvL',           // enter the apps `clientSecret`
+    environment:'sandbox',          // enter either `sandbox` or `production`
     redirectUri: quickBookUrl,      // enter the redirectUri
 });
 
@@ -290,21 +290,75 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     router.post('/createPO',async(req,res)=>{
         try{
                 const {refreshToken} = req.body;
-              
-                const data = req.body['data'];
-                
                 const headers = {
                     'Content-Type': 'application/json',
                     'Accept' : 'application/json',
                     'Authorization': "Bearer " + refreshToken
                 };
-                let getPurchaseOrderBody = data;
-                console.log(getPurchaseOrderBody);
+                const data = req.body['data'];
+                const {DocNumber} =  data;
+                const {TotalAmt} = data;
+              
+                const {Line} =data;
+              
+                const {APAccountRef} = data;
+                const {VendorRef} = data;
+                const {ShipTo} = data;
+              
+                let finalLine =[];
+                for(let i=0 ;i<Line.length;i++)
+                    {
+                        finalLine.push({
+                            "DetailType": "ItemBasedExpenseLineDetail",
+                            "Amount": Line[i].Amount, 
+                            "Id": Line[i].Id, 
+                            "Description": Line[i].Description,
+                            "LineNum": Line[i].LineNum,
+                            "ItemBasedExpenseLineDetail":{
+                            "ItemRef": {
+                                "name": Line[i].ItemBasedExpenseLineDetail.ItemRef.name, 
+                                "value": Line[i].ItemBasedExpenseLineDetail.ItemRef.value
+                              }, 
+                              "Qty": Line[i].ItemBasedExpenseLineDetail.Qty, 
+                              "TaxCodeRef": {
+                                "value": "NON"
+                              }, 
+                              "BillableStatus": "NotBillable", 
+                              "UnitPrice": Line[i].ItemBasedExpenseLineDetail.UnitPrice
+                            }
+                        })
+                    }
+                // console.log(finalLine);
+                let purchaseOrderBody = 
+                    {
+                        "TotalAmt": TotalAmt, 
+                        "DocNumber": DocNumber,
+                        "Line": finalLine, 
+                        "APAccountRef": {
+                          "name": APAccountRef.name, 
+                          "value": APAccountRef.value
+                        }, 
+                        "VendorRef": {
+                          "name": VendorRef.name, 
+                          "value": VendorRef.value
+                        },
+                        "ShipTo": {
+                          "name": ShipTo.name, 
+                          "value": ShipTo.value
+                        }
+                    };
+                    console.log(purchaseOrderBody);
+                    // Line.forEach((list)=>{
+                    //     purchaseOrderBody.Line.push(list);
+                    //     console.log(list);
+                    // })
+            
+                // console.log(getPurchaseOrderBody);
                 const createInvoiceUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder?minorversion=40`;
                 console.log(createInvoiceUrl);
-                const response = await axios.post(createInvoiceUrl,getPurchaseOrderBody,{headers});
-                console.log("Response");
-                console.log(response);
+                const response = await axios.post(createInvoiceUrl,purchaseOrderBody,{headers});
+              
+               
                 if(response.status == 200)
                 {
                         res.status(201).send({message:"PO created Successfully",});
