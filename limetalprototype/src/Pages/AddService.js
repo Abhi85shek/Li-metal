@@ -82,7 +82,7 @@ console.log(localStorage.getItem('quickbooksCredentials'))
         customerCurrency={customerCurrency}
         setCustomerCurrency={setCustomerCurrency}
         />
-     { serviceList.length > 0 && serviceModalState && <AddServiceTable /> }
+     { serviceList.length > 0 && serviceModalState && <AddServiceTable customerCurrency={customerCurrency}  /> }
      <div className='flex w-[100%] h-auto  p-4 justify-center items-center mt-2'>
       <CreateOrder 
       supplierNumber={supplierNumber} 

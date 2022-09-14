@@ -113,6 +113,7 @@ const handleSupplierChange=(val)=>{
         rate:rate,
         tax:taxName,
         totalAmount:quantity* rate
+
        }
  ]);
     setServiceModalState(true);
@@ -192,13 +193,13 @@ const handleSupplierChange=(val)=>{
       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="quantity">
         Quantity
       </label>
-      <input className="appearance-none block w-full text-gray-700 border border-gray-700 rounded py-2 px-4 mb-3 leading-tight focus:outline-none " id="quantity" type="number" placeholder="10" onChange={quantityHandler} value={quantity}/>
+      <input className="appearance-none block w-full text-gray-700 border border-gray-700 rounded py-2 px-4 mb-3 leading-tight focus:outline-none " id="quantity" type="number"  onChange={quantityHandler} value={quantity}/>
     </div>
     <div className="w-full md:w-1/2 px-3">
       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="rate">
         Rate
       </label>
-      <input className="appearance-none block w-full text-gray-700 border border-gray-500 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="rate" type="number" placeholder="600" onChange={rateHandler} value={rate}/>
+      <input className="appearance-none block w-full text-gray-700 border border-gray-500 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="rate" type="number" onChange={rateHandler} value={rate}/>
     </div>
     </div>
     <div className='pt-2'>
