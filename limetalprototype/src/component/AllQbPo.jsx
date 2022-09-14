@@ -78,7 +78,7 @@ const AllQbPo = () => {
                       {po.vendorName}
                     </td>
                     <td className="px-6 py-4">
-                       {po.totalAmount}
+                       {po.totalAmount}  {po.currencyName}
                     </td>
                     <td onClick={()=>{setPoDetailsVisible(true);setSelectedPoId(po.pOId)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
                        Info

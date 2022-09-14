@@ -134,6 +134,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                 obj.creationDate = item.TxnDate;
                 obj.totalAmount = item.TotalAmt
                 obj.vendorName = item.VendorRef.name;
+                obj.currencyName = item.CurrencyRef.value
                 
                 purchaseOrderDetails.push(obj);
             }
