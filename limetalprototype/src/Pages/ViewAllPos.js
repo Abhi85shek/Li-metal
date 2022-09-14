@@ -1,13 +1,7 @@
 import React from 'react'
 import AllQbPo from '../component/AllQbPo'
-
-
-
-
 const ViewAllPos = () => {
-
-  
-
+// Check
   return (
     <>
 
