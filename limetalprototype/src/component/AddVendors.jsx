@@ -231,7 +231,7 @@ else{
                                     <div className='flex space-x-2 mt-4  '>
                                         <div className='basis-1/2'>
                                         <label htmlFor='phone' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Phone</label>
-                                        <Field placeholder="Enter Vendor Phone Number" type="number" id="phone" validate={validatePhoneNumber} name="phone" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                                        <Field placeholder="Enter Vendor Phone Number" type="text" id="phone" validate={validatePhoneNumber} name="phone" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                                         {errors.phone && touched.phone && <div className='text-red-700'>{errors.phone}</div>}
                                         </div>
                                         <div className='basis-1/2'>
@@ -249,12 +249,12 @@ else{
                                         </div>
                                         <div className='basis-1/3'>
                                             <label htmlFor='taxIdentifier' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Tax Identifier</label>
-                                            <Field placeholder="Enter Tax Identifier" type="text" id="taxIdentifier" validate={validateField} name="taxIdentifier" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                                            <Field placeholder="Enter Tax Identifier" type="number" id="taxIdentifier" validate={validateField} name="taxIdentifier" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                                             {errors.taxIdentifier && touched.taxIdentifier && <div className='text-red-700'>{errors.taxIdentifier}</div>}
                                         </div>
                                         <div className='basis-1/3'>
                                             <label htmlFor='accountNumber' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Account Number</label>
-                                            <Field placeholder="Enter Account Number" type="number" id="accountNumber" validate={validateField} name="accountNumber" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                                            <Field placeholder="Enter Account Number" type="text" id="accountNumber" validate={validateField} name="accountNumber" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                                             {errors.accountNumber && touched.accountNumber && <div className='text-red-700'>{errors.accountNumber}</div>}
                                         </div>
                                     </div>
@@ -324,7 +324,7 @@ else{
                                     <div className='flex space-x-2 mt-4  '>
                                         <div className='basis-1/2'>
                                             <label htmlFor='postalCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code/Zip Code</label>
-                                            <Field placeholder="Enter Supplier Postal Code" type="number" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                                            <Field placeholder="Enter Supplier Postal Code" type="text" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                                             {errors.postalCode && touched.postalCode && <div className='text-red-700'>{errors.postalCode}</div>}
                                         </div>
                                         {/* <div className='basis-1/2'>
