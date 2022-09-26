@@ -16,7 +16,7 @@ const AddProduct = () => {
     const [type,setType] = useState("");
     const [accountIndex, setAccountIndex] = useState("");
     const [accounts, setAccounts] = useState([]);
-    const typeList = ['Non-Inventory']
+    const typeList = ['NonInventory']
 
 
     const fetchAccounts = async ()=>{
