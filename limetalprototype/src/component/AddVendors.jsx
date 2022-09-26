@@ -25,7 +25,7 @@ const AddVendors = () => {
   
   const [showModal,setShowModal]=useRecoilState(addNewVendorModalAtom)
   const [allCurrencies,setAllCurrencies]=useState([])
-  const [countries,setAllCountries]=useState([])
+  const [countries,setAllCountries]=useState(['USA-US', 'Canada-CA'])
   const [states,setAllStates]=useState([])
   const [cities,setAllCities]=useState([])
   const [selectedCountry,setSelectedCountry]=useState("")
@@ -34,16 +34,16 @@ const AddVendors = () => {
  
 
 
-  useEffect(()=>{
-    let curl=CurrencyList.getAll('en_US')
-    let countryList=Country.getAllCountries()
-    setAllCountries(countryList)
-    console.log(countryList)
-    let templist=Object.values(curl)
-    console.log(templist)
-    setAllCurrencies(templist)
-    console.log(allCurrencies)
-},[])
+//   useEffect(()=>{
+//     let curl=CurrencyList.getAll('en_US')
+//     let countryList=Country.getAllCountries()
+//     setAllCountries(countryList)
+//     console.log(countryList)
+//     let templist=Object.values(curl)
+//     console.log(templist)
+//     setAllCurrencies(templist)
+//     console.log(allCurrencies)
+// },[])
 
 const handleOnChange = (event) => {
  if(event.target.id=="country")
@@ -100,11 +100,11 @@ useEffect(()=>{
             addressLineOne: values.addressLineOne,
             addressLineTwo: values.addressLineTwo,
             addressLineThree: values.addressLineThree,
-            country: values.country,
+            country: values.country.split('-')[0],
             province: values.province,
             city: values.city,
             postalCode: values.postalCode,
-            countrySubDivisionCode: values.countrySubDivisionCode
+            countrySubDivisionCode: values.country.split('-')[1]
         }
     // console.log(vendorDetails, refreshToken)
 
@@ -279,7 +279,7 @@ else{
                                                 {countries.length>0?
                                                     countries.map((country)=>
                                                         (                          
-                                                            <option value={country.name+'-'+country.isoCode}> {country.name} </option>
+                                                            <option value={country}> {country.split('-')[0]} </option>
                                                         )
                                                     ) : <>  </>
                                                 }
@@ -327,11 +327,11 @@ else{
                                             <Field placeholder="Enter Supplier Postal Code" type="number" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                                             {errors.postalCode && touched.postalCode && <div className='text-red-700'>{errors.postalCode}</div>}
                                         </div>
-                                        <div className='basis-1/2'>
+                                        {/* <div className='basis-1/2'>
                                             <label htmlFor='countrySubDivisionCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country Sub-division Code</label>
                                             <Field  placeholder="Enter Country Sub-division Code" type="text" id="countrySubDivisionCode" validate={validateField} name="countrySubDivisionCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                                             {errors.countrySubDivisionCode && touched.countrySubDivisionCode && <div className='text-red-700'>{errors.countrySubDivisionCode}</div>}
-                                        </div>
+                                        </div> */}
                                     </div>
                     
                                     <div className='flex m-4 mt-8 justify-center items-center'>
