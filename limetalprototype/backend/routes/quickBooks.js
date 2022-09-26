@@ -439,6 +439,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                 'Accept' : 'application/json',
                 'Authorization': "Bearer " + refreshToken
             };
+            // Working
             const createItemBody = {
                 "Name": productName,
                 "PurchaseCost":parseInt(unitCost),
