@@ -12,27 +12,29 @@ const AddProduct = () => {
     const [showModal,setShowModal] = useRecoilState(addProductModalAtom);
     const [productName,setProductName] = useState("");
     const [description,setDescription] = useState("");
-    const [unitCost, setUnitCost] = useState(0);
+    const [unitCost, setUnitCost] = useState("");
     const [type,setType] = useState("");
-    const [accountNumber, setAccountNumber] = useState("");
+    const [accountIndex, setAccountIndex] = useState("");
     const [accounts, setAccounts] = useState([]);
     const typeList = ['Non-Inventory']
 
 
     const fetchAccounts = async ()=>{
       const accounts = await axios.get('http://localhost:4000/getAllAccounts');
-      // console.log(accounts.data.data);
+      console.log(accounts.data.data);
       setAccounts(accounts.data.data)
     }
 
-   const addProductHandler= async (e)=>{
-        e.preventDefault();
+   const addProductHandler= async ()=>{
         const productDetails = {
           productName:productName,
           productDescription:description,
           unitCost:unitCost,
           type:type,
-          accountNumber:accountNumber
+          accountDetails: {
+            name: accounts[accountIndex]['name'],
+            qbId: accounts[accountIndex]['qbid']
+          }
         }
         console.log(productDetails)
         const result = await axios.post('http://localhost:4000/createProduct', {productDetails: productDetails});
@@ -105,7 +107,7 @@ const AddProduct = () => {
                                 </div>
                                 <div className=''>
                                     <label htmlFor='unitCost' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Unit Cost</label>
-                                    <input type="number" min={1} id="unitCost" value={unitCost} placeholder='Enter Unit Cost'  onChange={(e)=>{setUnitCost(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'/>
+                                    <input type="text" id="unitCost" value={unitCost} placeholder='Enter Unit Cost'  onChange={(e)=>{setUnitCost(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'/>
                                 </div>
                                 <div className=''>
                                     <label htmlFor='productName' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Type</label>
@@ -115,10 +117,10 @@ const AddProduct = () => {
                                     </select>
                                 </div>
                                 <div className=''>
-                                    <label htmlFor='accountNumber' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Type</label>
-                                    <select id="accountNumber"value={accountNumber} onChange={(e)=>{setAccountNumber(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'>
-                                    <option>Select Account Number</option>
-                                    {accounts.map((a, i) => <option key={i} value={a.accountNumber} >{a.accountNumber}</option>)}
+                                    <label htmlFor='accountName' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Type</label>
+                                    <select id="accountName" onChange={(e)=>{setAccountIndex(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'>
+                                    <option>Select Account</option>
+                                    {accounts.map((a, i) => <option key={i} value={i} >{a.name}</option>)}
                                     </select>
                                 </div>
                                 <div className='flex m-4 mt-8 justify-center items-center'>
