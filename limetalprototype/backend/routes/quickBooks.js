@@ -488,6 +488,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
         const {postalCode} = req.body.vendorDetails;
         const {countrySubDivisionCode} = req.body.vendorDetails;
         // const {province} = req.body.vendorDetails;
+        // working
         const {TaxIdentifier} = req.body.vendorDetails;
         const {vendorName} = req.body.vendorDetails;
         console.log(accountNumber);
