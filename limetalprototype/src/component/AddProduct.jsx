@@ -37,7 +37,7 @@ const AddProduct = () => {
           }
         }
         console.log(productDetails)
-        const result = await axios.post('http://localhost:4000/createProduct', {productDetails: productDetails});
+        const result = await axios.post('http://localhost:4000/createItem', {productDetails: productDetails});
         if(result.status==200)
        {
         console.log("toasting")
