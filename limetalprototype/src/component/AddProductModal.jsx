@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import addProductModalAtom from '../atoms/addProductModalAtom';
 const AddProductModal = () => {
@@ -10,15 +10,35 @@ const AddProductModal = () => {
     const [description,setDescription] = useState("");
     const [unitCost, setUnitCost] = useState(0);
     const [type,setType] = useState("");
+    const [accountNumber, setAccountNumber] = useState("");
+    const [accounts, setAccounts] = useState([]);
     const typeList = ['Non-Inventory']
+
+
+    const fetchAccounts = async ()=>{
+      const accounts = await axios.get('http://localhost:4000/getAllAccounts');
+      // console.log(accounts.data.data);
+      setAccounts(accounts.data.data)
+    }
 
    const addProductHandler= async (e)=>{
         e.preventDefault();
-        console.log({productName:productName,productDescription:description,unitCost:unitCost,type:type})
-        // const result = await axios.post('http://localhost:4000/createProduct',{productName:productName,productDescription:description,type:type});
+        const productDetails = {
+          productName:productName,
+          productDescription:description,
+          unitCost:unitCost,
+          type:type,
+          accountNumber:accountNumber
+        }
+        console.log(productDetails)
+        const result = await axios.post('http://localhost:4000/createProduct', {productDetails: productDetails});
         setShowModal(false);
-        // alert(result.data.message);
+        alert(result.data.message);
    };
+
+   useEffect(() => {
+    fetchAccounts()
+  }, []);
 
 
   return (
@@ -45,13 +65,20 @@ const AddProductModal = () => {
                     </div>
                     <div className=''>
                         <label htmlFor='unitCost' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Unit Cost</label>
-                        <input type="number" min={1} id="unitCost" placeholder='Enter Unit Cost'  onChange={(e)=>{setUnitCost(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'/>
+                        <input type="number" min={1} id="unitCost" value={unitCost} placeholder='Enter Unit Cost'  onChange={(e)=>{setUnitCost(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'/>
                     </div>
                     <div className=''>
                         <label htmlFor='productName' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Type</label>
                         <select id="productName"value={type} onChange={(e)=>{setType(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'>
                           <option>Select Product Type</option>
                           {typeList.map((l, i) => <option key={i} value={l} >{l}</option>)}
+                        </select>
+                    </div>
+                    <div className=''>
+                        <label htmlFor='accountNumber' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Type</label>
+                        <select id="accountNumber"value={accountNumber} onChange={(e)=>{setAccountNumber(e.target.value)}} className='shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'>
+                          <option>Select Account Number</option>
+                          {accounts.map((a, i) => <option key={i} value={a.accountNumber} >{a.accountNumber}</option>)}
                         </select>
                     </div>
                     <div className='flex'>
