@@ -26,6 +26,7 @@ const AddProduct = () => {
     }
 
    const addProductHandler= async ()=>{
+        const refreshToken = localStorage.getItem('quickbooksCredentials')
         const productDetails = {
           productName:productName,
           productDescription:description,
@@ -37,7 +38,7 @@ const AddProduct = () => {
           }
         }
         console.log(productDetails)
-        const result = await axios.post('http://localhost:4000/createItem', {productDetails: productDetails});
+        const result = await axios.post('http://localhost:4000/createItem', {productDetails: productDetails, refreshToken: refreshToken});
         if(result.status==200)
        {
         console.log("toasting")
