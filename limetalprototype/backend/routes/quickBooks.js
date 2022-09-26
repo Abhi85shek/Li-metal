@@ -428,15 +428,21 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
 
         try{
             const {refreshToken} = req.body;
+            const {productName}  = req.body.productDetails;
+            const {productDescription} = req.body.productDetails;
+            const {type} = req.body.productDetails;
+            const {unitCost}  =req.body.productDetails;
+            console.log(unitCost);
+            console.log(parseInt(unitCost));
             const headers = {
                 'Content-Type': 'application/json',
                 'Accept' : 'application/json',
                 'Authorization': "Bearer " + refreshToken
             };
             const createItemBody = {
-                "Name": "Testing Using Node.js App Only",
-                "PurchaseCost":10,
-                "Description":"Final Testing for NonInventory Items",
+                "Name": productName,
+                "PurchaseCost":parseInt(unitCost),
+                "Description":productDescription,
                 "IncomeAccountRef":{
                   "name": "Sales of Product Income", 
                   "value": "79"
@@ -448,7 +454,6 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                 }
               };
             const createItemURL = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/item?minorversion=65`;
-            console.log(createItemURL);
             const response = await axios.post(createItemURL,createItemBody,{headers});
             if(response.status == 200)
             {
@@ -473,7 +478,6 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
 
     router.post('/createVendor',async (req,res)=>{
     try{    
-        
         const {refreshToken} = req.body;
         const {accountNumber} = req.body.vendorDetails;
         const {addressLineOne} = req.body.vendorDetails;
@@ -568,10 +572,6 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             {
                 res.send({message:"Successfull",data:result})
             }
-
-
-
-
         });
     });
 
