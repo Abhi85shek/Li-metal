@@ -106,10 +106,11 @@ useEffect(()=>{
             postalCode: values.postalCode,
             countrySubDivisionCode: values.country.split('-')[1]
         }
-    // console.log(vendorDetails, refreshToken)
+    console.log(vendorDetails, refreshToken)
 
         const result = await axios.post('http://localhost:4000/createVendor',{vendorDetails: vendorDetails, refreshToken: refreshToken});
-        if(result.status==201)
+        console.log(result.status)
+        if(result.status==200)
        {
         console.log("toasting")
         
