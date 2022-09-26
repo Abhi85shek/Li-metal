@@ -479,13 +479,16 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
         const {addressLineOne} = req.body.vendorDetails;
         const {addressLineTwo} = req.body.vendorDetails;
         const {addressLineThree} = req.body.vendorDetails;
+        const {country} = req.body.vendorDetails;
         const {city} = req.body.vendorDetails;
         const {CompanyName}  =req.body.vendorDetails;
         const {email} = req.body.vendorDetails;
         const {FamilyName} = req.body.vendorDetails;
         const {phone} = req.body.vendorDetails;
         const {postalCode} = req.body.vendorDetails;
+        const {countrySubDivisionCode} = req.body.vendorDetails;
         // const {province} = req.body.vendorDetails;
+        // working
         const {TaxIdentifier} = req.body.vendorDetails;
         const {vendorName} = req.body.vendorDetails;
         console.log(accountNumber);
@@ -522,7 +525,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
               "Line2": addressLineTwo, 
               "Line1": addressLineOne, 
               "PostalCode": postalCode, 
-              "CountrySubDivisionCode": CountrySubDivisionCode
+              "CountrySubDivisionCode": countrySubDivisionCode
             }, 
             "GivenName": vendorName, 
             "PrintOnCheckName": CompanyName
