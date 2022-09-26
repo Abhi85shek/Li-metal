@@ -2,7 +2,7 @@ import React,{useEffect, useRef, useState} from 'react';
 import Navbar from '../component/Navbar';
 import axios from 'axios';
 import CreateProduct from '../component/CreateProduct';
-import AddProductModal from '../component/AddProductModal';
+import AddProduct from '../component/AddProduct';
 import addProductModalAtom from '../atoms/addProductModalAtom';
 import { useRecoilState,useRecoilValue} from 'recoil';
 import ProductArchiveModal from '../component/ProductArchiveModal';
@@ -193,7 +193,7 @@ const AllProducts = () => {
     totalNumberOfPages = Math.ceil(totalRecords/10);
   return (
     <>
-  { showModal ? <AddProductModal /> : " "}
+  { showModal ? <AddProduct /> : " "}
   { showEditModal ? <EditProductModal selectedProduct={selectedProduct}  /> : " "}
    {archiveShowModal ? <ProductArchiveModal  product={selectedArchivedProduct} /> : " "}
     {/* <div>Products Page</div> */}
