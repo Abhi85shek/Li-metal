@@ -25,7 +25,7 @@ const AddVendors = () => {
   
   const [showModal,setShowModal]=useRecoilState(addNewVendorModalAtom)
   const [allCurrencies,setAllCurrencies]=useState([])
-  const [countries,setAllCountries]=useState(['India-IN', 'Canada-CA'])
+  const [countries,setAllCountries]=useState(['USA-US', 'Canada-CA'])
   const [states,setAllStates]=useState([])
   const [cities,setAllCities]=useState([])
   const [selectedCountry,setSelectedCountry]=useState("")
