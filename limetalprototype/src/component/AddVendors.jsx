@@ -106,37 +106,37 @@ useEffect(()=>{
             postalCode: values.postalCode,
             countrySubDivisionCode: values.country.split('-')[1]
         }
-    console.log(vendorDetails, refreshToken)
+    // console.log(vendorDetails, refreshToken)
 
-//         const result = await axios.post('http://localhost:4000/createVendor',{vendorDetails: vendorDetails, refreshToken: refreshToken});
-//         if(result.status==201)
-//        {
-//         console.log("toasting")
+        const result = await axios.post('http://localhost:4000/createVendor',{vendorDetails: vendorDetails, refreshToken: refreshToken});
+        if(result.status==201)
+       {
+        console.log("toasting")
         
-//             toast.success('Vendor added successfully', {
-//               position: "top-center",
-//               autoClose: 2000,
-//               hideProgressBar: true,
-//               closeOnClick: true,
-//               pauseOnHover: true,
-//               draggable: true,
-//               progress: undefined,
-//             });
-//           }
+            toast.success('Vendor added successfully', {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
    
-// else{
-//     setTimeout(()=>{
-//         toast.error('Error Occoured', {
-//           position: "top-center",
-//           autoClose: 2000,
-//           hideProgressBar: true,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true,
-//           progress: undefined,
-//         });
-//       },0);
-// }
+else{
+    setTimeout(()=>{
+        toast.error('Error Occoured', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },0);
+}
         setShowModal(false);
         
    };
