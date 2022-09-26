@@ -123,10 +123,10 @@ const AddProduct = () => {
                                     {accounts.map((a, i) => <option key={i} value={i} >{a.name}</option>)}
                                     </select>
                                 </div>
+                            </form>
                                 <div className='flex m-4 mt-8 justify-center items-center'>
                                         <button class="text-white w-full bg-[#426b79] hover:bg-[#305460] focus:bg-[#2c4b58] font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2  focus:outline-none " onClick={() => addProductHandler()}>Create Product</button>
-                                </div>
-                            </form>           
+                                </div>         
                             </div>
                         </div>
                     </div>
