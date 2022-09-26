@@ -6,6 +6,7 @@ const vendor =require('../helpers/vendors');
 const OAuthClient =  require('intuit-oauth');
 const { buildQueries } = require('@testing-library/react');
 const Customer = require('../helpers/customer');
+const account = require('../helpers/accounts');
 
 const quickBookLocalID = config.qb.quickBookLocalID
 const quickBookUrl = 'http://localhost:3001/home';
@@ -172,8 +173,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
         'Content-Type': 'application/json',
         'Accept' : 'application/json',
         'Authorization': "Bearer " + refreshToken
-    };
-    
+    };  
     const getPurchaseOrderByIdURL = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder/${POId}?minorversion=65`;
     const response = await axios.get(getPurchaseOrderByIdURL,{headers});
     if(response.status === 200)
@@ -274,7 +274,6 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                     data: response.data
                 });
             }
-
         }
         catch(e)
         {
@@ -356,13 +355,10 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             
                 // console.log(getPurchaseOrderBody);
                 const createInvoiceUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder?minorversion=40`;
-                console.log(createInvoiceUrl);
-                const response = await axios.post(createInvoiceUrl,purchaseOrderBody,{headers});
-              
-               
+                const response = await axios.post(createInvoiceUrl,purchaseOrderBody,{headers}); 
                 if(response.status == 200)
                 {
-                        res.status(201).send({message:"PO created Successfully",});
+                        res.status(201).send({message:"PO created Successfully"});
                 }
         }
         catch(e)
@@ -374,6 +370,24 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
         }
     });
 
+
+    // Delete Purchase ORder From QuickBooks
+
+    router.get('/deletePO',async (req,res)=>{
+
+        try {
+            const {refreshToken} = req.body;
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept' : 'application/json',
+                'Authorization': "Bearer " + refreshToken
+            };
+        }
+        catch(e)
+        {
+
+        }
+    });
 
     // Get All the Vendors Details from QuickBooks
 
@@ -388,7 +402,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             };
 
             const vendorQuery =`select * from vendor`;
-            const getAllVendorsURL = `${QUICK_BOOK_PROD_URL}/v3/company/193514828133914/query?query=${vendorQuery}&minorversion=65`;
+            const getAllVendorsURL = `${QUICK_BOOK_BASE_URL}/v3/company/193514828133914/query?query=${vendorQuery}&minorversion=65`;
             const response = await axios.get(getAllVendorsURL,{headers});
             if(response.status == 200)
             {
@@ -409,23 +423,166 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
         }
     });
 
-    router.get("/insertVendors",async (req,res)=>{
-        for(let vend of vendor)
-            {
-               
-                let name=vend.DisplayName?vend.DisplayName:" ";
-                let streetAddress = vend.BillAddr? vend.BillAddr.Line1 + ' ' + vend.BillAddr.Line2 :" ";
-                let city = vend.BillAddr ? vend.BillAddr.City : " " ;
-                let country = vend.BillAddr ? vend.BillAddr.Country : " ";
-                let currency = vend.CurrencyRef ? vend.CurrencyRef.name:  " ";
-                let currencyValue = vend.CurrencyRef ? vend.CurrencyRef.value : " ";
-                let postalCode = vend.BillAddr? vend.BillAddr.PostalCode : " ";
-                let provinceCode = vend.BillAddr ? vend.BillAddr.CountrySubDivisionCode : " ";
-                let balance = vend.Balance ? vend.Balance: " ";
-                let qbId = vend.Id;  
-                db.query("INSERT INTO vendors (name,streetAddress,city,country,postalCode,currency,currencyValue,qbId,phone,email,supplierNumber,openBalance,province,provinceCode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                [name,streetAddress,city,country,postalCode,currency,currencyValue,qbId," "," "," ",balance," ",provinceCode],(err,result)=>{
+    // API to create Items in QuickBooks
+    router.post('/createItem',async(req,res)=>{
 
+        try{
+            const {refreshToken} = req.body;
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept' : 'application/json',
+                'Authorization': "Bearer " + refreshToken
+            };
+            const createItemBody = {
+                "Name": "Testing Using Node.js App Only",
+                "PurchaseCost":10,
+                "Description":"Final Testing for NonInventory Items",
+                "IncomeAccountRef":{
+                  "name": "Sales of Product Income", 
+                  "value": "79"
+                },
+                "Type": "NonInventory", 
+                "ExpenseAccountRef": {
+                  "name": "Cost of Goods Sold", 
+                  "value": "80"
+                }
+              };
+            const createItemURL = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/item?minorversion=65`;
+            console.log(createItemURL);
+            const response = await axios.post(createItemURL,createItemBody,{headers});
+            if(response.status == 200)
+            {
+                res.send({message:'successfull',data:response.data});
+            }
+            else
+            {
+                res.status(401).send({message:"Data Not Found"});
+            }
+            
+        }
+        catch(e)
+        {
+            res.status(404).send({
+                message:e.message,
+                data:{e}
+            });
+        }
+    });
+
+    // API to create Vendors in Quickbooks
+
+    router.post('/createVendor',async (req,res)=>{
+    try{    
+        
+        const {refreshToken} = req.body;
+        const {accountNumber} = req.body.vendorDetails;
+        const {addressLineOne} = req.body.vendorDetails;
+        const {addressLineTwo} = req.body.vendorDetails;
+        const {addressLineThree} = req.body.vendorDetails;
+        const {city} = req.body.vendorDetails;
+        const {CompanyName}  =req.body.vendorDetails;
+        const {email} = req.body.vendorDetails;
+        const {FamilyName} = req.body.vendorDetails;
+        const {phone} = req.body.vendorDetails;
+        const {postalCode} = req.body.vendorDetails;
+        // const {province} = req.body.vendorDetails;
+        const {TaxIdentifier} = req.body.vendorDetails;
+        const {vendorName} = req.body.vendorDetails;
+        console.log(accountNumber);
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept' : 'application/json',
+            'Authorization': "Bearer " + refreshToken
+        };
+        const createBodyVendor = 
+        {
+            "PrimaryEmailAddr": {
+              "Address": email
+            },
+            "WebAddr": {
+                "URI": "http://DiannesAutoShop.com"
+            },
+            "PrimaryPhone": {
+              "FreeFormNumber": phone
+            },
+            "DisplayName": vendorName, 
+            // "Suffix": "Sr.", 
+            // "Title": "Ms.", 
+            // "Mobile": {
+            //   "FreeFormNumber": "(650) 555-2000"
+            // }, 
+            "FamilyName": FamilyName, 
+            "TaxIdentifier": TaxIdentifier, 
+            "AcctNum": accountNumber, 
+            "CompanyName": CompanyName, 
+            "BillAddr": {
+              "City": city, 
+              "Country": country, 
+              "Line3": addressLineThree, 
+              "Line2": addressLineTwo, 
+              "Line1": addressLineOne, 
+              "PostalCode": postalCode, 
+              "CountrySubDivisionCode": CountrySubDivisionCode
+            }, 
+            "GivenName": vendorName, 
+            "PrintOnCheckName": CompanyName
+        };
+        const createVendorUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/vendor?minorversion=40`;
+        const response = await axios.post(createVendorUrl,createBodyVendor,{headers});
+        if(response.status == 200)
+        {
+            res.send({message:'Vendor Successfull Created',data:response.data});
+        }
+        else
+        {
+            res.status(401).send({message:"Data Not Found"});
+        }
+    }
+    catch(e)
+    {
+        res.status(404).send({
+            message:e.message,
+            data:{e}
+        });
+    }
+
+
+    });
+
+
+    // Get all the Accounts from Database 
+
+    router.get("/getAllAccounts",async (req,res)=>{
+
+        db.query("SELECT * FROM qbaccounts",(err,result)=>{
+
+            if(err)
+            {
+                throw err;
+            }
+            else
+            {
+                res.send({message:"Successfull",data:result})
+            }
+
+
+
+
+        });
+    });
+
+    router.get("/insertAccounts",async (req,res)=>{
+        for(let acc of account)
+            {
+                let name=acc.Name?acc.Name:" ";
+                let classification = acc.Classification? acc.Classification : " ";
+                let accountType = acc.AccountType ? acc.AccountType : " " ;
+                let accountSubType = acc.AccountSubType ? acc.AccountSubType : " ";
+                let accountNumber = acc.AcctNum? acc.AcctNum:" ";
+                let currencyValue = acc.CurrencyRef ? acc.CurrencyRef.value : " ";
+                let qbId = acc.Id;  
+                db.query("INSERT INTO qbaccounts (name,classification,accountType,accountSubType,accountNumber,currency,qbId) VALUES (?,?,?,?,?,?,?)",
+                [name,classification,accountType,accountSubType,accountNumber,currencyValue,qbId],(err,result)=>{
                             if(err)
                             {
                                 throw err;
@@ -437,7 +594,6 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     // Insert Quickbooks Customer in Database
 
     router.get("/insertCustomer",async (req,res)=>{
-
         for (let cust of Customer)
             {
                 let name = cust.DisplayName ? cust.DisplayName : " ";

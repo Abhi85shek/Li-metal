@@ -102,6 +102,23 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
         }
     });
 
+// Get all the Accounts Data from Database
+
+    router.get('/getAllAccounts',async (req,res)=>{
+
+        db.query('SELECT * FROM qbaccounts',(err,result)=>{
+            if(err)
+            {
+                throw err;
+            }
+            else
+            {
+                res.status(201).send({message:"Successfull",data:result});
+            }
+
+
+        });
+    });
 
 // Search a Supplier
     router.post('/searchSupplier/:curr_page/:curr_count',async(req,res)=>
