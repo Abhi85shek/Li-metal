@@ -14,6 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ViewAllPos from "./Pages/ViewAllPos";
 import Home from "./Pages/Home";
+import Dashboard from "./Pages/Dashboard";
 import AllOrders from "./component/AllOrders";
 
 
@@ -99,7 +100,8 @@ function App() {
         
             <Route path="/" exact element={<Home />} />
                 <Route exact path="/login" element={<Home />} />  
-                <Route exact path="/home" element={<Home />} />  
+                <Route exact path="/home" element={<Home />} />   
+                <Route exact path="/dashboard" element={<Dashboard />} /> 
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
                
                 <Route exact path="/createOrder" element={<AddService />} /> 
