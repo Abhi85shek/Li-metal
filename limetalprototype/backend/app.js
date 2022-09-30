@@ -8,6 +8,7 @@ const db = require('./helpers/db');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const approversRoute = require('./routes/approvers');
 const poRoutes =require("./routes/poGenerate");
 const products = require("./routes/products");
 const suppliers = require("./routes/supplier"); 
@@ -25,6 +26,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/',products);

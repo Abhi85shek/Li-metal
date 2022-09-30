@@ -158,5 +158,23 @@ router.get("/taxDetails",async(req,res)=>{
         res.status(201).send({message:"Successfull",data:result});
     });
 });
+
+// GET all the Approvers
+
+router.get('/getApprovers',(req,res)=>{
+ 
+    db.query('SELECT * FROM approvers',(err,result)=>{
+
+        if(err)
+        {
+          return res.status(500).json({success:false,message:err});
+        }
+        else{
+          return res.status(201).send({success:true,data:result});
+        }
+    });
+
+});
+
  
 module.exports = router;

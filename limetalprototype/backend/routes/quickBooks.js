@@ -432,8 +432,6 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             const {productDescription} = req.body.productDetails;
             const {type} = req.body.productDetails;
             const {unitCost}  =req.body.productDetails;
-            console.log(unitCost);
-            console.log(parseInt(unitCost));
             const headers = {
                 'Content-Type': 'application/json',
                 'Accept' : 'application/json',
