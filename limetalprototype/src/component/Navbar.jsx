@@ -141,6 +141,9 @@ const disconnectQuickbooks=()=>{
           <Link to="/home">Home</Link>
         </li>
         <li>
+          <Link to="/dashboard">Dashboard</Link>
+        </li>
+        <li>
            <div onClick={()=>{setViewOrdersMenu(!viewOrdersMenu);setViewQbMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Orders
            
