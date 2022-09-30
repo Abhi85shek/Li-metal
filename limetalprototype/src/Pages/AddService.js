@@ -20,6 +20,8 @@ const AddService = () => {
   const [customerName,setCustomerName]=useState("")
   const [totalAmount,setTotalAmount] =useState(0);
   const [customerCurrency,setCustomerCurrency]=useState("")
+  const [primaryApprover,setPrimaryApprover]=useState("")
+  const [secondaryApprover,setSecondaryApprover]=useState("")
 
 
   const connectQuickbooks=async()=>{
@@ -82,7 +84,7 @@ console.log(localStorage.getItem('quickbooksCredentials'))
         customerCurrency={customerCurrency}
         setCustomerCurrency={setCustomerCurrency}
         />
-     { serviceList.length > 0 && serviceModalState && <AddServiceTable customerCurrency={customerCurrency}  /> }
+     { serviceList.length > 0 && serviceModalState && <AddServiceTable customerCurrency={customerCurrency} primaryApprover={primaryApprover} setPrimaryApprover={setPrimaryApprover} secondaryApprover={secondaryApprover} setSecondaryApprover ={setSecondaryApprover} />}
      <div className='flex w-[100%] h-auto  p-4 justify-center items-center mt-2'>
       <CreateOrder 
       supplierNumber={supplierNumber} 

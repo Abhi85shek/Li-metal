@@ -5,6 +5,7 @@ import deleteModalAtom from '../atoms/deleteModalAtom';
 import confirmModalAtom from '../atoms/confirmModalAtom';
 import { v4 as uuidv4 } from "uuid";
 import DeleteModal from './DeleteModal';
+import axios from 'axios';
 import { useEffect } from 'react';
 const AddServiceTable = (props) => {
 
@@ -12,7 +13,10 @@ const AddServiceTable = (props) => {
   const [confirmModal,setConfirmModal] = useRecoilState(confirmModalAtom);
   const [selectedService,setSelectedService] = useState(null);
   const [totalAmount,setTotalAmount]=useState(0)
- 
+ const [allApprovers,setAllApprovers]=useState([])
+ const [primaryApprover,setPrimaryApprover]=useState("")
+  const [secondaryApprover,setSecondaryApprover]=useState("")
+
     const serviceDetails = useRecoilValue(serviceDetailsAtom);
     const editHandler =(service)=>{
       setShowModal(true);
@@ -22,13 +26,29 @@ const AddServiceTable = (props) => {
 
 
 useEffect(()=>{
+  getAllApprovers();
   let total=0
   for(let service of serviceDetails)
   {
     total+=service.totalAmount
   }
   setTotalAmount(total)
-})
+},[])
+
+const getAllApprovers = async()=>{
+  const res = await axios.get("http://localhost:4000/getApprovers");
+    console.log(res.data.data)
+    setAllApprovers(res.data.data); 
+}; 
+
+const primaryApproverHandler=(e)=>{
+  props.setPrimaryApprover(e)
+}
+
+const secondaryApproverHandler=(e)=>{
+  props.setSecondaryApprover(e)
+}
+
 
     return (
     <>
@@ -102,7 +122,37 @@ useEffect(()=>{
             <div className='flex flex-row justify-center items-center'>
              <b> Total Amount:</b> {totalAmount}
             </div>:null}
-            
+
+            {allApprovers.length>0?
+    <div className='pt-2 flex flex-row justify-center items-center w-[80%]'>
+        <label htmlFor="approvers" className="block m-1 text-sm font-medium text-gray-900 dark:text-gray-400"></label>
+            <select id="approvers"  onChange={(e)=>{primaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Select Primary Approver</option>
+                    {
+                         allApprovers.map((approver)=>( 
+                            <option value={approver.id} key={approver.id}>{approver.name}</option>
+                        )
+                        )
+                    }
+            </select>
+        </div>:null
+}
+
+{totalAmount>5000 && allApprovers.length>0?
+        <div className='pt-2 flex flex-row justify-center items-center w-[80%]'>
+        <label htmlFor="approvers" className="block m-2 text-sm font-medium text-gray-900 dark:text-gray-400"></label>
+            <select id="approvers"  onChange={(e)=>{secondaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Select Secondary Approver</option>
+                    {
+                         allApprovers.map((approver)=>( 
+                            <option value={approver.id} key={approver.id}>{approver.name}</option>
+                        )
+                        )
+                    }
+            </select>
+        </div>:null
+}
+
             {/* <button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-7 py-2.5 mr-2 mb-2 mt-3 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Procced to PO Generation</button> */}
             </>
   )

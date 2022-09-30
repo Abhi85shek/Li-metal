@@ -23,6 +23,10 @@ const AddServicesForm = (props) => {
   const [suppliers,setAllSuppliers]=useState([])
   const [taxName,setTaxName]=useState("")
   const [allCustomers,setAllCustomers]=useState("")
+  const [allApproverss,setAllApprovers]=useState("")
+  const [primaryApprover,setPrimaryApprover]=useState("")
+  const [secondaryApprover,setSecondaryApprover]=useState("")
+  const [totalBillAmount,setTotalBillAmount]=useState()
 
 
   
@@ -46,6 +50,14 @@ const getAllCustomers = async()=>{
   setAllCustomers(res.data.data); 
   
 }; 
+
+
+const getAllApprovers = async()=>{
+  const res = await axios.get("http://localhost:4000/getApprovers");
+    console.log(res.data.data)
+    setAllApprovers(res.data.data); 
+}; 
+
 
 const getAllTaxes=async()=>{
 
@@ -84,6 +96,14 @@ const handleSupplierChange=(val)=>{
    
   };
 
+  const primaryApproverHandler=(e)=>{
+    setPrimaryApprover(e)
+  }
+
+  const secondaryApproverHandler=(e)=>{
+    setSecondaryApprover(e)
+  }
+
   const serviceChangeHandler=(val)=>{
     console.log(val)
     let arr=val.split('-')
@@ -102,6 +122,9 @@ const handleSupplierChange=(val)=>{
 
   const addServiceHandler=(e)=>{
     e.preventDefault();
+    // let totalBillAmount=0
+   
+
     setServiceDetails((oldVinDetails)=>[
       ...oldVinDetails,
       {
@@ -121,13 +144,21 @@ const handleSupplierChange=(val)=>{
     setQuantity("");
     setDescription("");
     setRate("");
+   
+    //   for(let service of serviceDetails)
+    //   {
+    //     totalBillAmount+=service.totalAmount
+    //   }
+    
+    // console.log(totalBillAmount)
+    // setTotalBillAmount(totalBillAmount)
   };
   useEffect(()=>{
     getAllProducts();
     getAllSuppliers();
     getAllTaxes();
     getAllCustomers();
-
+    getAllApprovers();
   },[]);
 
   return (
@@ -217,6 +248,35 @@ const handleSupplierChange=(val)=>{
     <div className='flex space-x-10 justify-center mt-4'>
         <button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' onClick={addServiceHandler}>Add New Service</button>
     </div>
+    {/* {allApproverss.length>0?
+    <div className='pt-2'>
+        <label htmlFor="approvers" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Approvers</label>
+            <select id="approvers"  onChange={(e)=>{primaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Select Primary Approver</option>
+                    {
+                         allApproverss.map((approver)=>( 
+                            <option value={approver.id} key={approver.id}>{approver.name}</option>
+                        )
+                        )
+                    }
+            </select>
+        </div>:null
+} */}
+        {/* {totalBillAmount>5000 && allApproverss.length>0?
+        <div className='pt-2'>
+        <label htmlFor="approvers" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Tax</label>
+            <select id="approvers"  onChange={(e)=>{secondaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Select Secondary Approver</option>
+                    {
+                         allApproverss.map((approver)=>( 
+                            <option value={approver.id} key={approver.id}>{approver.name}</option>
+                        )
+                        )
+                    }
+            </select>
+        </div>:null
+} */}
+
 </form>
 )
 }
