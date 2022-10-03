@@ -63,6 +63,25 @@ router.get("/getLocation",(req,res)=>{
     });
 });
 
+
+router.post("/storelocal", async (req,res)=>{
+
+    db.query("INSERT INTO limetalorders (totalAmount,docNumber,detailType,line,apAccountRefname,apAccountRefvalue,vendorRefname,vendorRefValue,shipToName,shipToValue) VALUES (?,?,?,?,?,?,?,?,?,?)",[],(err,result)=>{
+
+        if(err)
+            {
+               return res.status(500).json({success:false,error:err});
+            }
+        else
+        {
+            res.status(200).send({success:true,message:"Order Created Successfully"})
+        }
+    
+    });
+});
+
+
+
 router.post("/generatePO",async (req,res)=>{
     const {areaId} =req.body;
     const {costCenterId} =req.body;
