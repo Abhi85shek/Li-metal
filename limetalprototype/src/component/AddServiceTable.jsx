@@ -27,13 +27,14 @@ const AddServiceTable = (props) => {
 
 useEffect(()=>{
   getAllApprovers();
+  console.log("effect")
   let total=0
   for(let service of serviceDetails)
   {
     total+=service.totalAmount
   }
   setTotalAmount(total)
-},[])
+},[props.serviceCount])
 
 const getAllApprovers = async()=>{
   const res = await axios.get("http://localhost:4000/getApprovers");

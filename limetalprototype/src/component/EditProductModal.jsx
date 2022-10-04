@@ -15,7 +15,7 @@ const EditProductModal = (props) => {
     const [type,setType] = useState(props.selectedProduct.type);
     const [productId,setProductId]=useState(props.selectedProduct.id)
 
-   const editProduct= async (e)=>{
+    const editProduct= async (e)=>{
         e.preventDefault();
         let id=productId
         const result = await axios.post(`http://localhost:4000/editProduct/${id}`,{productName:productName,description:description,type:type});

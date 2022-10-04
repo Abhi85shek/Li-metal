@@ -2,10 +2,12 @@ import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import Navbar from '../component/Navbar';
 import selectedSupplierAtom from '../atoms/selectedSupplierAtom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import serviceDetailsAtom from '../atoms/ServiceState';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import completeOrderModalVisibleAtom from '../atoms/completeOrderModalVisibleAtom';
+import CompleteOrderModal from '../component/CompleteOrderModal';
 
 
 const CreateOrder = (props) => {
@@ -21,6 +23,7 @@ const CreateOrder = (props) => {
     const [preProcessedAreaOfWork,setPreProcessedAreaOfWork]=useState("")
     const [preProcessedCostCenter,setPreProcessedCostCenter]=useState("")
     const [supplierNumber,setSupplierNumber]=useState()
+    const [showModal,setShowModal]=useRecoilState(completeOrderModalVisibleAtom)
     const serviceData=useRecoilValue(serviceDetailsAtom)
     
 
@@ -111,6 +114,10 @@ const CreateOrder = (props) => {
         // console.log(selectedSupplier)
 
         setPoGenerateData(poNum)
+    }
+
+    const handleCreateOrder=()=>{
+        setShowModal(true)
     }
 
     const createOrderSubmit=async()=>{
@@ -237,6 +244,7 @@ const CreateOrder = (props) => {
     },[]);
   return (
     <>
+    { showModal && <CompleteOrderModal/> }
     <div className=' w-full flex flex-row items-center justify-center  p-6'>
     <div className='w-full'>
         <div className='flex flex-row justify-center items center p-2 '>
@@ -327,9 +335,10 @@ const CreateOrder = (props) => {
         </div>
 
 <div className='text-center mt-4'>
-            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={createOrderSubmit}>Create Order</button>
+            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={handleCreateOrder}>Create Order</button>
         </div>
     </div>
+   
     </div>
     </>
   )

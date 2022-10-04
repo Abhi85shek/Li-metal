@@ -24,6 +24,7 @@ const AddServicesForm = (props) => {
   const [taxName,setTaxName]=useState("")
   const [allCustomers,setAllCustomers]=useState("")
   const [allApproverss,setAllApprovers]=useState("")
+  const [total,setTotalAmount]=useState(0)
   const [primaryApprover,setPrimaryApprover]=useState("")
   const [secondaryApprover,setSecondaryApprover]=useState("")
   const [totalBillAmount,setTotalBillAmount]=useState()
@@ -43,6 +44,16 @@ const AddServicesForm = (props) => {
     
 }; 
 
+useEffect(()=>{
+  // getAllApprovers();
+  console.log("effect")
+  let total=0
+  for(let service of serviceDetails)
+  {
+    total+=service.totalAmount
+  }
+  setTotalAmount(total)
+},serviceDetails)
 
 const getAllCustomers = async()=>{
   const res = await axios.get("http://localhost:4000/getAllCustomer");
@@ -122,8 +133,10 @@ const handleSupplierChange=(val)=>{
 
   const addServiceHandler=(e)=>{
     e.preventDefault();
-    // let totalBillAmount=0
-   
+    // let totalBillAmount=0\
+    let serviceCount=props.serviceCount
+    serviceCount+=serviceCount
+   props.setServiceCount(serviceCount)
 
     setServiceDetails((oldVinDetails)=>[
       ...oldVinDetails,
@@ -144,7 +157,13 @@ const handleSupplierChange=(val)=>{
     setQuantity("");
     setDescription("");
     setRate("");
-   
+    let total=0
+  // for(let service of serviceDetails)
+  // {
+  //   total+=service.totalAmount
+  // }
+  // setTotalAmount(total)
+
     //   for(let service of serviceDetails)
     //   {
     //     totalBillAmount+=service.totalAmount
@@ -248,6 +267,11 @@ const handleSupplierChange=(val)=>{
     <div className='flex space-x-10 justify-center mt-4'>
         <button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' onClick={addServiceHandler}>Add New Service</button>
     </div>
+
+    {total>0?
+            <div className='flex flex-row justify-center items-center'>
+             <b> Total Amount:</b> {total}
+            </div>:null}
     {/* {allApproverss.length>0?
     <div className='pt-2'>
         <label htmlFor="approvers" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Approvers</label>
