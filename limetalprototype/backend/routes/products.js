@@ -173,8 +173,24 @@ router.get('/getApprovers',(req,res)=>{
           return res.status(201).send({success:true,data:result});
         }
     });
-
 });
 
- 
+
+// Get all the Primary Approvers 
+
+    router.get("/getprimaryapprovers", (req,res)=>{
+
+        db.query('SELECT * FROM approvers WHERE approverType = ?',[0],(err,result)=>{
+
+            if(err)
+            {
+              return res.status(500).json({success:false,message:err});
+            }
+            else{
+              return res.status(201).send({success:true,data:result});
+            }
+        });
+
+    });
+
 module.exports = router;
