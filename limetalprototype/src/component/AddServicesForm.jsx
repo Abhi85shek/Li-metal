@@ -53,6 +53,7 @@ useEffect(()=>{
     total+=service.totalAmount
   }
   setTotalAmount(total)
+
 },serviceDetails)
 
 const getAllCustomers = async()=>{

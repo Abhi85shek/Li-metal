@@ -6,14 +6,21 @@ import completeOrderModalVisibleAtom from '../atoms/completeOrderModalVisibleAto
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
+import AddServiceTable from './AddServiceTable';
+import { AiOutlineClose } from 'react-icons/ai';
+import serviceDetailsAtom from '../atoms/ServiceState';
+import { useRecoilValue } from 'recoil';
 
 const CompleteOrderModal = (props) => {
   
     const [showModal,setShowModal] = useRecoilState(completeOrderModalVisibleAtom); 
     const [primaryApprovers,setPrimaryApprovers]=useState([])
     const [secondaryApprovers,setSecondaryApprovers]=useState([])
-    const [primaryApprover,setPrimaryApprover]=useState("")
-    const [secondaryApprover,setSecondaryApprover]=useState("")
+    const [primaryApprover,setPrimaryApprover]=useState(0)
+    const [secondaryApprover,setSecondaryApprover]=useState(0)
+    const serviceDetails = useRecoilValue(serviceDetailsAtom);
+    const [totalAmount,setTotalAmount]=useState(0)
+    
 
    useEffect(()=>{
     getAllPrimaryApprovers();
@@ -32,41 +39,82 @@ const CompleteOrderModal = (props) => {
   }; 
 
   const primaryApproverHandler=(e)=>{
-    props.setPrimaryApprover(e)
+    setPrimaryApprover(e)
   }
   
   const secondaryApproverHandler=(e)=>{
-    props.setSecondaryApprover(e)
+    setSecondaryApprover(e)
   }
   
+  useEffect(()=>{
+   
+    console.log("effect")
+    console.log(props.orderObj)
+    let total=0
+    for(let service of serviceDetails)
+    {
+      total+=service.totalAmount
+    }
+    setTotalAmount(total)
+    
+  },[])
+
+  const createOrderSubmit=()=>{
+    let totalApprovers=secondaryApprover==0?1:2
+    if(primaryApprover==0||(totalAmount>5000 && secondaryApprover==0)){
+      alert("Select Approvers")
+      return
+    }
+    if(primaryApprover==secondaryApprover){
+      alert("Both Approvers can't be same")
+      return
+    }
+
+    let orderObj=props.orderObj
+    orderObj.primaryApprover=primaryApprover
+    orderObj.secondaryApprover=secondaryApprover
+    orderObj.totalApprovers=totalApprovers
+    console.log(orderObj)
+  
+  }
 
   return (
-    <> 
-    
-       <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ">
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+    <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity pt-5" aria-hidden="true"></div>
     <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-    <div className="relative inline-block align-middle  rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-[80%]">
-      <div className="bg-[#6BA4B8] px-4 pt-5 pb-4 sm:p-6 sm:pb-4 ">
-        <div className="sm:items-start">
-          <div className="mt-3 text-center  sm:mt-0 sm:ml-4 sm:text-left">
-          <div className='flex bg-[#426b79] p-4 '>
+    <div className=" inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-7xl sm:w-full">
+    <div className='flex bg-[#426b79] p-4 '>
                 <div className='basis-2/3 justify-start'>
-                <h3 className="text-xl leading -6 font-medium text-neutral-50 justify-center items-center"  id="modal-title">Complete Order</h3>
+                <h3 className="text-xl leading -6 font-medium text-neutral-50 justify-center items-center"  id="modal-title">Review Order</h3>
                 </div>
                 
                 <div className='basis-1/3'>
-                    
+                    <div className='flex justify-end'>
+                    <AiOutlineClose onClick={()=>{setShowModal(false)}} size={30} className='text-neutral-50 hover:cursor-pointer' />
+                    </div>
                     </div>
                </div>
-           <div className='flex flex-row justify-center items center pt-4 w-full'>
-            <div className='flex flex-col justify-center items-center'>
-            {primaryApprovers.length>0?
-    <div className='pt-2 flex flex-row justify-center items-center'>
+    
+    <div className='m-2 flex flex-row justify-center items-center'>
+      <div className='basis-full'>
+        <AddServiceTable isReadOnly={true}/>
+        <div className='basis-full w-[100%] h-50 '>
+        <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
+          <div className='p-2 basis-1/2 flex flex-row'>
+           <b>Total : </b> &nbsp;&nbsp; {props.orderObj.TotalAmt} &nbsp; <b>{props.customerCurrency}</b>
+          </div>
+          <div className='p-2 basis-1/2 flex flex-row justify-end'>
+            <div className='float-right'>
+           <b>Partial PO Number : </b> {props.orderObj.DocNumber}
+           </div>
+          </div>
+          </div>
+        {primaryApprovers.length>0?
+    <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
         <label htmlFor="approvers" className="block m-1 text-sm font-medium text-gray-900 dark:text-gray-400"></label>
-            <select id="approvers"  onChange={(e)=>{primaryApproverHandler(e.target.value)}} className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Select Primary Approver</option>
+            <select id="approvers"  onChange={(e)=>{primaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected value={0}>Select Primary Approver</option>
                     {
                          primaryApprovers.map((approver)=>( 
                             <option value={approver.id} key={approver.id}>{approver.name}</option>
@@ -76,11 +124,11 @@ const CompleteOrderModal = (props) => {
             </select>
         </div>:null
 }
-{secondaryApprovers.length>0?
-    <div className='pt-2 flex flex-row justify-center items-center w-[80%]'>
+{secondaryApprovers.length>0 && totalAmount>5000 ?
+    <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
         <label htmlFor="approvers" className="block m-1 text-sm font-medium text-gray-900 dark:text-gray-400"></label>
             <select id="approvers"  onChange={(e)=>{secondaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Select Secondary Approver</option>
+            <option selected value={0}>Select Secondary Approver</option>
                     {
                          secondaryApprovers.map((approver)=>( 
                             <option value={approver.id} key={approver.id}>{approver.name}</option>
@@ -90,23 +138,16 @@ const CompleteOrderModal = (props) => {
             </select>
         </div>:null
 }
-            </div>
-
-           </div>
-          </div>
+<div className='p-2 flex flex-row justify-center items-center w-[100%]'>
+<button className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md " onClick={createOrderSubmit}>Create Order</button>
+  </div>
         </div>
       </div>
-      <div className="bg-[#6BA4B8] px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-        {/* <button type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">Invite</button> */}
-        <button type="button" onClick={()=>{setShowModal(false)}} className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Submit</button>
-       
-      </div>
     </div>
-    
+      
+    </div>
   </div>
-  
 </div>
-</>
   )
 }
 

@@ -3,7 +3,6 @@ import React from 'react';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import editProductModalVisible from '../atoms/editProductModalVisible';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

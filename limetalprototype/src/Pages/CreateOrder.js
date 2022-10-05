@@ -25,7 +25,7 @@ const CreateOrder = (props) => {
     const [supplierNumber,setSupplierNumber]=useState()
     const [showModal,setShowModal]=useRecoilState(completeOrderModalVisibleAtom)
     const serviceData=useRecoilValue(serviceDetailsAtom)
-    
+    const [orderObj,setOrderObj]=useState(null)    
 
     const getArea = async ()=>{
         const result = await axios.get("http://localhost:4000/getAllArea");
@@ -203,22 +203,24 @@ const CreateOrder = (props) => {
             }
         }
           console.log(orderObj)
-          let quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-          const result = await axios.post(`http://localhost:4000/createPO`,{data:orderObj,refreshToken:quickbooksCredentials});
-          if(result.status==201)
-          {
-           console.log("toasting")
+          setOrderObj(orderObj)
+          setShowModal(true)
+        //   let quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
+        //   const result = await axios.post(`http://localhost:4000/createPO`,{data:orderObj,refreshToken:quickbooksCredentials});
+        //   if(result.status==201)
+        //   {
+        //    console.log("toasting")
            
-               toast.success('PO created successfully', {
-                 position: "top-center",
-                 autoClose: 2000,
-                 hideProgressBar: true,
-                 closeOnClick: true,
-                 pauseOnHover: true,
-                 draggable: true,
-                 progress: undefined,
-               });
-             }
+        //        toast.success('PO created successfully', {
+        //          position: "top-center",
+        //          autoClose: 2000,
+        //          hideProgressBar: true,
+        //          closeOnClick: true,
+        //          pauseOnHover: true,
+        //          draggable: true,
+        //          progress: undefined,
+        //        });
+        //      }
 
         }
     
@@ -242,9 +244,9 @@ const CreateOrder = (props) => {
     useEffect(()=>{
         getLocation();
     },[]);
-  return (
+  return ( 
     <>
-    { showModal && <CompleteOrderModal/> }
+    { showModal && <CompleteOrderModal orderObj={orderObj}  customerCurrency={props.customerCurrency} /> }
     <div className=' w-full flex flex-row items-center justify-center  p-6'>
     <div className='w-full'>
         <div className='flex flex-row justify-center items center p-2 '>
@@ -335,7 +337,7 @@ const CreateOrder = (props) => {
         </div>
 
 <div className='text-center mt-4'>
-            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={handleCreateOrder}>Create Order</button>
+            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={createOrderSubmit}>Review Order</button>
         </div>
     </div>
    

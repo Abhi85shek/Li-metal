@@ -34,6 +34,7 @@ useEffect(()=>{
     total+=service.totalAmount
   }
   setTotalAmount(total)
+  // props.setTotalAmount(total)
 },[props.serviceCount])
 
 const getAllApprovers = async()=>{
@@ -79,9 +80,11 @@ const secondaryApproverHandler=(e)=>{
                 <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                   Amount
                 </th>
+               {!props.isReadOnly?
                 <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                   Action
-                </th>
+                </th>:null
+}
               </tr>
             </thead>
             <tbody>
@@ -106,9 +109,11 @@ const secondaryApproverHandler=(e)=>{
                       <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                       {list.totalAmount} {props.customerCurrency}
                       </td> 
+                      {!props.isReadOnly?
                       <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         <p className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer' onClick={()=>{editHandler(list);}}>Delete</p>
-                      </td>          
+                      </td> :null
+}         
                 </tr>
                 ))
               }
@@ -119,40 +124,12 @@ const secondaryApproverHandler=(e)=>{
             </div>
             </div>
             </div>
-            {totalAmount>0?
+            {/* {totalAmount>0?
             <div className='flex flex-row justify-center items-center'>
              <b> Total Amount:</b> {totalAmount}
-            </div>:null}
+            </div>:null} */}
 
-            {allApprovers.length>0?
-    <div className='pt-2 flex flex-row justify-center items-center w-[80%]'>
-        <label htmlFor="approvers" className="block m-1 text-sm font-medium text-gray-900 dark:text-gray-400"></label>
-            <select id="approvers"  onChange={(e)=>{primaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Select Primary Approver</option>
-                    {
-                         allApprovers.map((approver)=>( 
-                            <option value={approver.id} key={approver.id}>{approver.name}</option>
-                        )
-                        )
-                    }
-            </select>
-        </div>:null
-}
-
-{totalAmount>5000 && allApprovers.length>0?
-        <div className='pt-2 flex flex-row justify-center items-center w-[80%]'>
-        <label htmlFor="approvers" className="block m-2 text-sm font-medium text-gray-900 dark:text-gray-400"></label>
-            <select id="approvers"  onChange={(e)=>{secondaryApproverHandler(e.target.value)}} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Select Secondary Approver</option>
-                    {
-                         allApprovers.map((approver)=>( 
-                            <option value={approver.id} key={approver.id}>{approver.name}</option>
-                        )
-                        )
-                    }
-            </select>
-        </div>:null
-}
+          
 
             {/* <button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-7 py-2.5 mr-2 mb-2 mt-3 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Procced to PO Generation</button> */}
             </>

@@ -18,11 +18,12 @@ const AddService = () => {
   const [supplierQbId,setSupplierQbId]=useState()
   const [customerId,setCustomerId]=useState("")
   const [customerName,setCustomerName]=useState("")
-  const [totalAmount,setTotalAmount] =useState(0);
+  const [totalAmount,setTotalAmount] =useState(null);
   const [customerCurrency,setCustomerCurrency]=useState("")
   const [primaryApprover,setPrimaryApprover]=useState("")
   const [secondaryApprover,setSecondaryApprover]=useState("")
   const [serviceCount,setServiceCount]=useState(0)
+ 
 
 
   const connectQuickbooks=async()=>{
@@ -86,8 +87,11 @@ console.log(localStorage.getItem('quickbooksCredentials'))
         setCustomerCurrency={setCustomerCurrency}
         serviceCount={serviceCount}
         setServiceCount={setServiceCount}
+        totalAmount={totalAmount}
+        setTotalAmount={setTotalAmount}
         />
-     { serviceList.length > 0 && serviceModalState && <AddServiceTable customerCurrency={customerCurrency} primaryApprover={primaryApprover} setPrimaryApprover={setPrimaryApprover} secondaryApprover={secondaryApprover} setSecondaryApprover ={setSecondaryApprover} serviceCount={serviceCount}  setServiceCount={setServiceCount}/>}
+     { serviceList.length > 0 && serviceModalState && <AddServiceTable customerCurrency={customerCurrency} primaryApprover={primaryApprover} setPrimaryApprover={setPrimaryApprover} secondaryApprover={secondaryApprover} setSecondaryApprover ={setSecondaryApprover} serviceCount={serviceCount}  setServiceCount={setServiceCount} isReadOnly={false} totalAmount={totalAmount}
+        setTotalAmount={setTotalAmount}/>}
      <div className='flex w-[100%] h-auto  p-4 justify-center items-center mt-2'>
       <CreateOrder 
       supplierNumber={supplierNumber} 
@@ -95,7 +99,9 @@ console.log(localStorage.getItem('quickbooksCredentials'))
        supplierQbId={supplierQbId}
         customerId={customerId}
          customerName={customerName}
-          customerCurrency={customerCurrency}/>
+          customerCurrency={customerCurrency}
+          totalAmount={totalAmount}
+        setTotalAmount={setTotalAmount}/>
      </div>
     </div>
     </>
