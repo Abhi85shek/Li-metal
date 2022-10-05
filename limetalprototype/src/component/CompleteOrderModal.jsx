@@ -98,7 +98,9 @@ const CompleteOrderModal = (props) => {
     
     <div className='m-2 flex flex-row justify-center items-center'>
       <div className='basis-full'>
+        <div className='rounded-md shadow-lg bg-[#426b79] p-2'>
         <AddServiceTable isReadOnly={true}/>
+        </div>
         <div className='basis-full w-[100%] h-50 '>
         <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
           <div className='p-2 basis-1/2 flex flex-row'>
