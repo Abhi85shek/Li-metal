@@ -45,7 +45,20 @@ const CompleteOrderModal = (props) => {
   const secondaryApproverHandler=(e)=>{
     setSecondaryApprover(e)
   }
-  
+
+  // API function to store the Pi in the Local Database
+
+  const createOrderHandler = async(orderObj)=>{
+    const result = await axios.post("http://localhost:4000/storelocal",{orderObj:orderObj});
+    
+    if(result.status === 200)
+    {
+    return true;
+    }
+
+    return false;
+  };
+
   useEffect(()=>{
    
     console.log("effect")
@@ -74,7 +87,16 @@ const CompleteOrderModal = (props) => {
     orderObj.primaryApprover=primaryApprover
     orderObj.secondaryApprover=secondaryApprover
     orderObj.totalApprovers=totalApprovers
-    console.log(orderObj)
+
+    if(createOrderHandler(orderObj))
+      {
+        alert("Order Created Successfully");
+      }
+      else
+      {
+        alert("Internal Server Error");
+      }
+    console.log(orderObj);
   
   }
 
