@@ -189,6 +189,8 @@ const CreateOrder = (props) => {
             "DocNumber":poGenerateData,
             "TotalAmt":TotalAmt,
             "Line":Line,
+            "customerName":props.customerName,
+            "supplierName":props.supplierName,
             "APAccountRef":{
                 "name": "Accounts Payable (A/P)",
                 "value": "33"
