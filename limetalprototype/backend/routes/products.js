@@ -163,7 +163,7 @@ router.get("/taxDetails",async(req,res)=>{
 
 router.get('/getApprovers',(req,res)=>{
  
-    db.query('SELECT * FROM approvers',(err,result)=>{
+    db.query('SELECT * FROM limetalusers WHERE type=?',["approver"],(err,result)=>{
 
         if(err)
         {

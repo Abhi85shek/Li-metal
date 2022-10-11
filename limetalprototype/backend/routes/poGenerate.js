@@ -133,6 +133,47 @@ router.post("/getAllApproversPo",(req,res)=>{
 
 });
 
+
+// Approvers Change the Status of PO
+
+router.post("/approvepo",(req,res)=>{
+
+    const {approversId} = req.body;
+    const {poId} = req.body;
+    db.query("SELECT primaryApprover,secondaryApprover FROM limetalorders WHERE id=?",[poId],(err,result)=>{
+
+        if(err)
+        {
+           return res.status(500).json({success:false,error:err});
+        }
+        else
+        {
+            if(result[0].primaryApprover!=0 && result[0].secondaryApprover==0)
+                {
+                    db.query('UPDATE limetalorders SET overallStatus=? WHERE id=?',[2,poId],(err,result)=>{
+
+                        if(err)
+                        {
+                        return res.status(500).json({success:false,error:err});
+                        }
+                        else
+                        {
+                        return res.status(200).send({success:true,message:result});
+                        }
+    });
+            }
+                else
+                {
+                    return res.status(404).json({message:"No Po Found",success:false});
+                }
+        }
+    })
+
+});
+
+
+
+
 router.post("/generatePO",async (req,res)=>{
     const {areaId} =req.body;
     const {costCenterId} =req.body;
