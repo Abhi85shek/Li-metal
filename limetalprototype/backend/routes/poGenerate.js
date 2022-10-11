@@ -138,7 +138,7 @@ router.post("/getAllApproversPo",(req,res)=>{
 
 router.post("/approvepo",(req,res)=>{
 
-    const {approversId} = req.body;
+    // const {approversId} = req.body;
     const {poId} = req.body;
     db.query("SELECT primaryApprover,secondaryApprover FROM limetalorders WHERE id=?",[poId],(err,result)=>{
 
