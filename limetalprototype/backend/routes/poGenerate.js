@@ -129,8 +129,6 @@ router.post("/getAllPrimaryApproversPo",(req,res)=>{
             {
                 res.status(200).send({success:true,data:result});
             }
-
-
     });
 
 });
