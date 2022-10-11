@@ -176,11 +176,11 @@ router.get('/getApprovers',(req,res)=>{
 });
 
 
-// Get all the Primary Approvers 
+// Get all the Secondary Approvers 
 
     router.get("/getprimaryapprovers", (req,res)=>{
 
-        db.query('SELECT * FROM approvers WHERE approverType = ?',[0],(err,result)=>{
+        db.query('SELECT * FROM approvers WHERE approverType = ?',[1],(err,result)=>{
 
             if(err)
             {
