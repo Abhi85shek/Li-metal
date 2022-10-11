@@ -116,7 +116,7 @@ router.get("/getallPo",(req,res)=>{
     });
 });
 
-router.post("/getAllPrimaryApproversPo",(req,res)=>{
+router.post("/getAllApproversPo",(req,res)=>{
 
     const {primaryApproversId} = req.body;
     db.query("SELECT * FROM limetalorders WHERE primaryApprover=?",[primaryApproversId],(err,result)=>{
