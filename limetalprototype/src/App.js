@@ -40,6 +40,7 @@ function App() {
     localStorage.setItem('uType',uType);
     localStorage.setItem('email',email)
     localStorage.setItem('name',userName)
+    localStorage.setItem('uid',uid)
     setUserId(uid);
     setToken(token);
     setUserType(uType)

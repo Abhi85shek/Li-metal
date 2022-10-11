@@ -3,27 +3,44 @@ import axios from 'axios';
 
 import ViewPoDetails from './ViewPoDetails';
 import { useRecoilState } from 'recoil';
-import viewQbPoDetailModalAtom from '../atoms/viewQbPoDetailsModalAtom';
-import allOrderDetailsVisibleAtom from '../atoms/allOrderDetailsVisibleAtom';
+import orderDetailsModalVisibleAtom from '../atoms/orderDetailsModalVisibleAtom';
+import ViewOrderDetailsModal from './ViewOrderDetailsModal';
 
 
 const AllOrders = () => {
 
     
     const [allOrdersList,SetallOrdersList] = useState([]);
-    const [allOrderDetailsVisible,setallOrderDetailsVisible ]=useRecoilState(allOrderDetailsVisibleAtom)
+    const [showModal,setShowModal] = useRecoilState(orderDetailsModalVisibleAtom); 
     const [selectedOrderId,setselectedOrderId]=useState(0)
+    const [selectedOrder,setSelectedOrder]=useState(null)
     
 
     const getAllOrders = async ()=>{
-        const quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
 
-        const result = await axios.post(`http://localhost:4000/getAllPurchaseOrder`,{refreshToken:quickbooksCredentials});
+        const result = await axios.post(`http://localhost:4000/getAllApproversPo`,{primaryApproversId : localStorage.getItem('uid')});
         console.log(result)
         SetallOrdersList(result.data.data);
        
 
     };
+    
+    const approveOrder=async(po)=>{
+       const selectedOrder=po
+        const orderObj={}
+            orderObj.id=selectedOrder.id
+            orderObj.overallStatus=selectedOrder.overallStatus
+            orderObj.primaryApproved=selectedOrder.primaryApproved
+            orderObj.secondaryApproved=selectedOrder.secondaryApproved
+            orderObj.primaryApproversId=selectedOrder.primaryApproversId
+            orderObj.secondaryApproversId=selectedOrder.secondaryApproversId
+            orderObj.action="Approved"
+            orderObj.uid=localStorage.getItem('uid')
+            console.log(orderObj)
+            const result = await axios.post(`http://localhost:4000/approvepo`,{poId:selectedOrder.id});
+            console.log(result)
+        
+    }
 
     
 
@@ -38,20 +55,15 @@ const AllOrders = () => {
   
   return (
     <>
-    {/* {allOrderDetailsVisible&& <ViewPoDetails selectedOrderId={selectedOrderId}/>} */}
+    {showModal  && <ViewOrderDetailsModal selectedOrder={selectedOrder} approveOrder={approveOrder}/>}
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-6 mt-4">
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-[#7DAFC1] dark:bg-gray-700 dark:text-gray-400 shadow-md ">
             <tr>
-                <th scope="col" className="px-6 py-3">
-                 Id
-                </th>
+                
                 <th scope="col" className="px-6 py-3">
                 PO Number
                 </th>
-                <th scope="col" className=" px-6 py-3 ">
-                   Creation Date
-                </th> 
                 <th   scope="col" className="px-6 py-3">
                  Vendor Name
                 </th>
@@ -59,35 +71,52 @@ const AllOrders = () => {
                     Total Amount 
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Actions
+                    Stage
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Actions
+                    Info
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Action 
                 </th>
             </tr>
         </thead>
         <tbody>
             {allOrdersList.length!=0?
            allOrdersList.map((po,index)=>
+        
+
                 (<>
                     <tr className={index %2 == 0 ? "bg-neutral-100 border-b text-neutral-800 ": "bg-[#7DAFC1] border-b text-neutral-800"} key={index} >
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                        {po.pOId}
-                    </th>
+            
                     <td className="px-6 py-4">
-                        {po.pONumber}
+                        {po.docNumber}
                     </td>
                     <td className="px-6 py-4">
-                        {po.creationDate}
-                    </td>
-                    <td className="px-6 py-4">
-                      {po.vendorName}
+                      {po.supplierName}
                     </td>
                     <td className="px-6 py-4">
                        {po.totalAmount}
                     </td>
-                    <td onClick={()=>{setallOrderDetailsVisible(true);setselectedOrderId(po.pOId)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
-                       Info
+                    { po.overallStatus==0?
+                    <td>
+                        Approval Pending
+                    </td>:
+                    po.overallStatus==1?
+                    <td>
+                        Half Approved
+                    </td>:
+                     <td>
+                    Approved
+                 </td>
+                        
+                    }
+                    <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
+                       View
+                    </td>
+                    <td><button onClick={()=>{approveOrder(po)}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer">
+                       Approve
+                       </button>
                     </td>
                    
             

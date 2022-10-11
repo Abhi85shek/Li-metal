@@ -75,11 +75,31 @@ const CompleteOrderModal = (props) => {
   const createOrderSubmit=()=>{
     let totalApprovers=secondaryApprover==0?1:2
     if(primaryApprover==0||(totalAmount>5000 && secondaryApprover==0)){
-      alert("Select Approvers")
-      return
+      setTimeout(()=>{
+        toast.error('Select Approvers', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },0);
+    return
     }
     if(primaryApprover==secondaryApprover){
-      alert("Both Approvers can't be same")
+      setTimeout(()=>{
+        toast.error('Both Approvers cannot be the same', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },0);
       return
     }
 
@@ -90,11 +110,31 @@ const CompleteOrderModal = (props) => {
 
     if(createOrderHandler(orderObj))
       {
-        alert("Order Created Successfully");
+        setTimeout(()=>{
+          toast.success('Order Successfullly stored', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        },0);
       }
       else
       {
-        alert("Internal Server Error");
+        setTimeout(()=>{
+          toast.error('Error Occoured', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        },0);
       }
     console.log(orderObj);
   
