@@ -116,11 +116,22 @@ router.get("/getallPo",(req,res)=>{
     });
 });
 
-router.post("/getApproversPo",(req,res)=>{
+router.post("/getAllPrimaryApproversPo",(req,res)=>{
 
-    const {approversId} = req.body;
+    const {primaryApproversId} = req.body;
+    db.query("SELECT * FROM limetalorders WHERE primaryApprover=?",[primaryApproversId],(err,result)=>{
 
-    db.query("SELECT * FROM limetalorders WHERE")
+        if(err)
+            {
+                res.status(500).json({success:false,error:err});
+            }
+            else
+            {
+                res.status(200).send({success:true,data:result});
+            }
+
+
+    });
 
 });
 
