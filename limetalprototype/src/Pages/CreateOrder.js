@@ -122,6 +122,21 @@ const CreateOrder = (props) => {
 
     const createOrderSubmit=async()=>{
         let serviceDataArray=serviceData
+        if(serviceDataArray.length==0||poGenerateData.length==0||props.supplierQbId.length==0||props.customerId.length==0)
+        {
+            setTimeout(()=>{
+                toast.error('Please fill all the order details', {
+                  position: "top-center",
+                  autoClose: 2000,
+                  hideProgressBar: true,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              },0);
+              return
+        }
         console.log(serviceDataArray)
         let TotalAmt=0
         let Line=[]

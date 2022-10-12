@@ -73,6 +73,21 @@ const CompleteOrderModal = (props) => {
   },[])
 
   const createOrderSubmit=()=>{
+    if(primaryApprover==localStorage.getItem('uid')||secondaryApprover==localStorage.getItem('uid'))
+    {
+      setTimeout(()=>{
+        toast.error('Creator cannot be approver', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },0);
+    return
+    }
     let totalApprovers=secondaryApprover==0?1:2
     if(primaryApprover==0||(totalAmount>5000 && secondaryApprover==0)){
       setTimeout(()=>{

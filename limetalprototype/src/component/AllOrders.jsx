@@ -38,7 +38,21 @@ const AllOrders = () => {
             orderObj.uid=localStorage.getItem('uid')
             console.log(orderObj)
             const result = await axios.post(`http://localhost:4000/approvepo`,{poId:selectedOrder.id});
-            console.log(result)
+            if(result.status === 200)
+            {
+                setTimeout(()=>{
+                    window.location.reload();
+                    // toast.success('Order Successfullly stored', {
+                    //   position: "top-center",
+                    //   autoClose: 2000,
+                    //   hideProgressBar: true,
+                    //   closeOnClick: true,
+                    //   pauseOnHover: true,
+                    //   draggable: true,
+                    //   progress: undefined,
+                    // });
+                  },0);
+            }
         
     }
 
@@ -114,8 +128,8 @@ const AllOrders = () => {
                     <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
                        View
                     </td>
-                    <td><button onClick={()=>{approveOrder(po)}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer">
-                       Approve
+                    <td><button onClick={()=>{approveOrder(po)}} disabled={po.overallStatus==2} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                     { po.overallStatus==0||po.overallStatus==1? `Approve`:`Approved`}
                        </button>
                     </td>
                    
