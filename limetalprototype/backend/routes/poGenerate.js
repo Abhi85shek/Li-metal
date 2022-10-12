@@ -119,7 +119,7 @@ router.get("/getallPo",(req,res)=>{
 router.post("/getAllApproversPo",(req,res)=>{
 
     const {primaryApproversId} = req.body;
-    db.query("SELECT * FROM limetalorders WHERE primaryApprover=?",[primaryApproversId],(err,result)=>{
+    db.query("SELECT * FROM limetal_dev.limetalorders WHERE primaryApprover = ? UNION SELECT * FROM limetal_dev.limetalorders WHERE secondaryApprover=? AND overallStatus IN ('1','2')",[primaryApproversId,primaryApproversId],(err,result)=>{
 
         if(err)
             {
