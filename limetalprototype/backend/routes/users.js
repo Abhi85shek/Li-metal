@@ -41,6 +41,6 @@ router.post("/login",async (req,res)=>{
 
 });
 
-
 router.use(checkAuth);
+
 module.exports = router;
