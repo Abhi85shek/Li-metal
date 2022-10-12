@@ -178,9 +178,9 @@ router.get('/getApprovers',(req,res)=>{
 
 // Get all the Secondary Approvers 
 
-    router.get("/getprimaryapprovers", (req,res)=>{
+    router.get("/getsecondaryapprovers", (req,res)=>{
 
-        db.query('SELECT * FROM approvers WHERE approverType = ?',[1],(err,result)=>{
+        db.query('SELECT * FROM limetalusers WHERE type=? AND approverType = ?',["approver",1],(err,result)=>{
 
             if(err)
             {
