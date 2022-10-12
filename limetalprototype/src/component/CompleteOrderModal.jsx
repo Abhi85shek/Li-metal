@@ -28,12 +28,12 @@ const CompleteOrderModal = (props) => {
    },[])
 
    const getAllPrimaryApprovers = async()=>{
-    const res = await axios.get("http://localhost:4000/getPrimaryApprovers");
+    const res = await axios.get("http://localhost:4000/getApprovers");
       console.log(res.data.data)
       setPrimaryApprovers(res.data.data); 
   }; 
   const getAllSecondaryApprovers = async()=>{
-    const res = await axios.get("http://localhost:4000/getApprovers");
+    const res = await axios.get("http://localhost:4000/getsecondaryapprovers");
       console.log(res.data.data)
       setSecondaryApprovers(res.data.data); 
   }; 
@@ -136,6 +136,10 @@ const CompleteOrderModal = (props) => {
             progress: undefined,
           });
         },0);
+        setTimeout(()=>{
+          window.location.reload()
+        },10);
+
       }
       else
       {
@@ -196,7 +200,7 @@ const CompleteOrderModal = (props) => {
             <option selected value={0}>Select Primary Approver</option>
                     {
                          primaryApprovers.map((approver)=>( 
-                            <option value={approver.id} key={approver.id}>{approver.name}</option>
+                            <option value={approver.id} key={approver.id}>{approver.fullName}</option>
                         )
                         )
                     }
@@ -210,7 +214,7 @@ const CompleteOrderModal = (props) => {
             <option selected value={0}>Select Secondary Approver</option>
                     {
                          secondaryApprovers.map((approver)=>( 
-                            <option value={approver.id} key={approver.id}>{approver.name}</option>
+                            <option value={approver.id} key={approver.id}>{approver.fullName}</option>
                         )
                         )
                     }
