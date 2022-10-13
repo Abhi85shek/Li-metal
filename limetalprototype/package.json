@@ -13,6 +13,7 @@
     "currency-list": "^1.0.8",
     "formik": "^2.2.9",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
     "pdfjs": "^2.4.7",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",

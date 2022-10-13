@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import completeOrderModalVisibleAtom from '../atoms/completeOrderModalVisibleAtom';
 import CompleteOrderModal from '../component/CompleteOrderModal';
+import moment from 'moment';
 
 
 const CreateOrder = (props) => {
@@ -236,6 +237,7 @@ const CreateOrder = (props) => {
             "DocNumber":poGenerateData,
             "TotalAmt":TotalAmt,
             "Line":Line,
+            "creationDate":moment().format('MM-Do-YYYY HH:MI:SS'),
             "customerName":props.customerName,
             "supplierName":props.supplierName,
             "APAccountRef":{
