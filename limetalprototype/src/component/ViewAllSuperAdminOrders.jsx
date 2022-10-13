@@ -36,14 +36,9 @@ const ViewAllSuperAdminOrders = () => {
    
 
     const sendToQuickBooks=async(po)=>{
+        console.log(po)
         let quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-        const res=axios.post(`http://localhost:4000/createPO`,{
-
-            headers:{
-    
-              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
-    
-            },data:po,refreshToken:quickbooksCredentials
+        const res=axios.post(`http://localhost:4000/createPO`,{data:po,refreshToken:quickbooksCredentials
           })
     }
 
