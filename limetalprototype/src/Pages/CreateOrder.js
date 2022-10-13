@@ -28,22 +28,54 @@ const CreateOrder = (props) => {
     const [orderObj,setOrderObj]=useState(null)    
 
     const getArea = async ()=>{
-        const result = await axios.get("http://localhost:4000/getAllArea");
+        const result = await axios.get("http://localhost:4000/getAllArea",{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setAreas(result.data);
     };
     
     const getCostCenter = async ()=>{
-        const result = await axios.get(`http://localhost:4000/getCostCenter/${areaValue}`);
+        const result = await axios.get(`http://localhost:4000/getCostCenter/${areaValue}`,{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setCostCenters(result.data);
     };
 
     const getLocation =async ()=>{
-        const result = await axios.get("http://localhost:4000/getLocation");
+        const result = await axios.get("http://localhost:4000/getLocation",{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setLocations(result.data);
     };
 
     const getAreaOfWork =async ()=>{
-        const result = await axios.get(`http://localhost:4000/getAreaOfWork/${costCenterValue}`);
+        const result = await axios.get(`http://localhost:4000/getAreaOfWork/${costCenterValue}`,{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
        setAreaOfWorks(result.data);
     };
     

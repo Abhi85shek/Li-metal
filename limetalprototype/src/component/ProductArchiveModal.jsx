@@ -22,7 +22,15 @@ const ProductArchiveModal = ({product}) => {
             {
                 active = 0;
             }
-        const result = await axios.post("http://localhost:4000/archiveProductById",{id:product.id,active:active}); 
+        const result = await axios.post("http://localhost:4000/archiveProductById",{id:product.id,active:active},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          }); 
         if(active == 1)
         {
             alert("UnArchive Done");

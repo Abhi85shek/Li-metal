@@ -22,7 +22,15 @@ const AllSuppliers = () => {
 
     const getAllSuppliers = async ()=>{
 
-        const result = await axios.get(`http://localhost:4000/allSuppliers/${currentPage}/${currentCount}`);
+        const result = await axios.get(`http://localhost:4000/allSuppliers/${currentPage}/${currentCount}`,{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setallSuppliers(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
 
@@ -30,13 +38,29 @@ const AllSuppliers = () => {
 
     const getSupplierByNameForFirstSearch = async ()=>{
         setCurrentPage(0)
-        const result = await axios.post(`http://localhost:4000/searchSupplier/${0}/${currentCount}`, {supplierName:searchSupplier});
+        const result = await axios.post(`http://localhost:4000/searchSupplier/${0}/${currentCount}`, {supplierName:searchSupplier},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setallSuppliers(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };
 
     const getSuppliersByName = async ()=>{
-        const result = await axios.post(`http://localhost:4000/searchSupplier/${currentPage}/${currentCount}`, {supplierName:searchSupplier});
+        const result = await axios.post(`http://localhost:4000/searchSupplier/${currentPage}/${currentCount}`, {supplierName:searchSupplier},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setallSuppliers(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };

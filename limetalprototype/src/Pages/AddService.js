@@ -27,7 +27,15 @@ const AddService = () => {
 
 
   const connectQuickbooks=async()=>{
-    const result = await axios.get('http://localhost:4000/quickBookAuthorizationUrl');
+    const result = await axios.get('http://localhost:4000/quickBookAuthorizationUrl',{
+
+      headers:{
+
+        Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+      }
+
+    });
     console.log(result)
   }
 
@@ -40,7 +48,15 @@ const AddService = () => {
 
 const quicksConnect=async()=>{
 console.log("quickbooks auth")
-const response = await axios.get(`http://localhost:4000/quickBookAuthorizationUrl`);
+const response = await axios.get(`http://localhost:4000/quickBookAuthorizationUrl`,{
+
+  headers:{
+
+    Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+  }
+
+});
 if(response.status === 200){
     const quickBookAuthUrl = response.data.data;
     //check logined status in quick book
@@ -59,7 +75,15 @@ let code = splitedList1[0].split("=")[1];
 let state = splitedList1[1].split("=")[1];
 let realmId = splitedList1[2].split("=")[1];
 console.log(code+" "+state +" " + realmId)
-const res= await axios.get(`http://localhost:4000/quickBookToken/${code}/${state}/${realmId}`)
+const res= await axios.get(`http://localhost:4000/quickBookToken/${code}/${state}/${realmId}`,{
+
+  headers:{
+
+    Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+  }
+
+})
 console.log(res.data)
 if(res.status==200)
 {

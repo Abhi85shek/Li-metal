@@ -19,7 +19,15 @@ function QuickbooksAuthModal(props) {
         let state = splitedList1[1].split("=")[1];
         let realmId = splitedList1[2].split("=")[1];
         console.log(code+" "+state +" " + realmId)
-       const res= await axios.get(`http://localhost:4000/quickBookToken/${code}/${state}/${realmId}`)
+       const res= await axios.get(`http://localhost:4000/quickBookToken/${code}/${state}/${realmId}`,{
+
+        headers:{
+
+          Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+        }
+
+      })
        console.log(res.data)
        if(res.status==200)
        {

@@ -16,7 +16,15 @@ const AddProductModal = () => {
 
 
     const fetchAccounts = async ()=>{
-      const accounts = await axios.get('http://localhost:4000/getAllAccounts');
+      const accounts = await axios.get('http://localhost:4000/getAllAccounts',{
+
+        headers:{
+
+          Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+        }
+
+      });
       // console.log(accounts.data.data);
       setAccounts(accounts.data.data)
     }
@@ -31,7 +39,15 @@ const AddProductModal = () => {
           accountNumber:accountNumber
         }
         console.log(productDetails)
-        const result = await axios.post('http://localhost:4000/createProduct', {productDetails: productDetails});
+        const result = await axios.post('http://localhost:4000/createProduct', {
+
+          headers:{
+  
+            Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+  
+          }
+  
+        },{productDetails: productDetails});
         setShowModal(false);
         alert(result.data.message);
    };

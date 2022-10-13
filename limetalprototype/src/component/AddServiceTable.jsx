@@ -38,7 +38,15 @@ useEffect(()=>{
 },[props.serviceCount])
 
 const getAllApprovers = async()=>{
-  const res = await axios.get("http://localhost:4000/getApprovers");
+  const res = await axios.get("http://localhost:4000/getApprovers",{
+
+    headers:{
+
+      Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+    }
+
+  });
     console.log(res.data.data)
     setAllApprovers(res.data.data); 
 }; 

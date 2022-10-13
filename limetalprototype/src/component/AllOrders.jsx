@@ -18,7 +18,15 @@ const AllOrders = () => {
 
     const getAllOrders = async ()=>{
 
-        const result = await axios.post(`http://localhost:4000/getAllApproversPo`,{primaryApproversId : localStorage.getItem('uid')});
+        const result = await axios.post(`http://localhost:4000/getAllApproversPo`,{primaryApproversId : localStorage.getItem('uid')},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         console.log(result)
         SetallOrdersList(result.data.data);
        
@@ -37,7 +45,15 @@ const AllOrders = () => {
             orderObj.action="Approved"
             orderObj.uid=localStorage.getItem('uid')
             console.log(orderObj)
-            const result = await axios.post(`http://localhost:4000/approvepo`,{poId:selectedOrder.id});
+            const result = await axios.post(`http://localhost:4000/approvepo`,{poId:selectedOrder.id},{
+
+                headers:{
+        
+                  Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+        
+                }
+        
+              });
             if(result.status === 200)
             {
                 setTimeout(()=>{
@@ -118,7 +134,7 @@ const AllOrders = () => {
                     </td>:
                     po.overallStatus==1?
                     <td>
-                        Half Approved
+                        Semi Approved
                     </td>:
                      <td>
                     Approved
@@ -128,8 +144,8 @@ const AllOrders = () => {
                     <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
                        View
                     </td>
-                    <td><button onClick={()=>{approveOrder(po)}} disabled={po.overallStatus==2} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
-                     { po.overallStatus==0||po.overallStatus==1? `Approve`:`Approved`}
+                    <td><button onClick={()=>{approveOrder(po)}} disabled={po.overallStatus==2||(po.overallStatus==1 && po.secondaryApprover!=localStorage.getItem('uid') )} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                     { po.overallStatus==0 ||po.overallStatus==1 && po.secondaryApprover==localStorage.getItem('uid')? `Approve`:`Approved`}
                        </button>
                     </td>
                    

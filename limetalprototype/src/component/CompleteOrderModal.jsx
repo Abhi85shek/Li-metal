@@ -28,12 +28,28 @@ const CompleteOrderModal = (props) => {
    },[])
 
    const getAllPrimaryApprovers = async()=>{
-    const res = await axios.get("http://localhost:4000/getApprovers");
+    const res = await axios.get("http://localhost:4000/getApprovers",{
+
+      headers:{
+
+        Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+      }
+
+    });
       console.log(res.data.data)
       setPrimaryApprovers(res.data.data); 
   }; 
   const getAllSecondaryApprovers = async()=>{
-    const res = await axios.get("http://localhost:4000/getsecondaryapprovers");
+    const res = await axios.get("http://localhost:4000/getsecondaryapprovers",{
+
+      headers:{
+
+        Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+      }
+
+    });
       console.log(res.data.data)
       setSecondaryApprovers(res.data.data); 
   }; 
@@ -49,7 +65,15 @@ const CompleteOrderModal = (props) => {
   // API function to store the Pi in the Local Database
 
   const createOrderHandler = async(orderObj)=>{
-    const result = await axios.post("http://localhost:4000/storelocal",{orderObj:orderObj});
+    const result = await axios.post("http://localhost:4000/storelocal",{orderObj:orderObj},{
+
+      headers:{
+
+        Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+      }
+
+    });
     
     if(result.status === 200)
     {
