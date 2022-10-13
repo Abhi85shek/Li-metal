@@ -36,9 +36,33 @@ const ViewAllSuperAdminOrders = () => {
    
 
     const sendToQuickBooks=async(po)=>{
+
+        let orderObj={
+            "DocNumber":po.docNumber,
+            "TotalAmt":po.totalAmount,
+            "Line":po.line,
+            "APAccountRef":{
+                "name": po.apAccountRefname,
+                "value": po.apAccountRefValue
+            },
+            "VendorRef":{
+                "name":po.vendorRefname,                
+            "value":po.vendorRefValue           
+            },
+            "ShipTo":{
+                "name": po.shipToName,
+                "value": po.shipToValue
+            }
+        }
         console.log(po)
         let quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-        const res=axios.post(`http://localhost:4000/createPO`,{data:po,refreshToken:quickbooksCredentials
+        const res=axios.post(`http://localhost:4000/createPO`,{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            },data:orderObj,refreshToken:quickbooksCredentials
           })
     }
 
