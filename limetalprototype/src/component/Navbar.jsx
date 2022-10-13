@@ -20,6 +20,7 @@ const [viewQbMenu,setViewQbMenu ]=useState(false)
 let viewAdminMenu=localStorage.getItem('uType')==='admin'?true:false
 console.log(viewAdminMenu)
 const [viewOrdersMenu,setViewOrdersMenu]=useState(false)
+const [toggleAdminMenu,setToggleAdminMenu]=useState(false)
 
   const navigate=useNavigate()
   const signOutHandler = ()=>{
@@ -173,11 +174,24 @@ const disconnectQuickbooks=()=>{
         </li>
         {viewAdminMenu?
             <li>
-             <Link to="/viewadminallorders">Admin</Link> 
+            
+             <div onClick={()=>{setToggleAdminMenu(!toggleAdminMenu);setViewQbMenu(false);setViewOrdersMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+            Admin
+            {toggleAdminMenu?
+            <div className='flex-col z-50 absolute bg-[#6BA4B8] text-neutral-100 space-y-2 p-2'>
+             <Link to="/viewadminallorders"> <div className='mt-4' >View All</div></Link>
+            
+              {/* <Link to="/createorder"> <div className='mt-4' >Create</div></Link> */}
+              
+            </div>
+:null}
+    
+           
+            </div>
             </li>
               :null}
         <li>
-           <div onClick={()=>{setViewOrdersMenu(!viewOrdersMenu);setViewQbMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+           <div onClick={()=>{setViewOrdersMenu(!viewOrdersMenu);setViewQbMenu(false);setToggleAdminMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Orders
            
             {viewOrdersMenu?
@@ -200,7 +214,7 @@ const disconnectQuickbooks=()=>{
         </li>
         {
              localStorage.getItem('qbConnectVisible')==='2'?
-           <div onClick={()=>{setViewQbMenu(!viewQbMenu);setViewOrdersMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+           <div onClick={()=>{setViewQbMenu(!viewQbMenu);setViewOrdersMenu(false);setToggleAdminMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Quickbooks
            
             {viewQbMenu?

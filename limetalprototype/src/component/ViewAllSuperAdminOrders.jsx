@@ -18,7 +18,7 @@ const ViewAllSuperAdminOrders = () => {
 
     const getAllOrders = async ()=>{
 
-        const result = await axios.post(`http://localhost:4000/getAllApproversPo`,{primaryApproversId : localStorage.getItem('uid')},{
+        const result = await axios.get(`http://localhost:4000/getallPo`,{
 
             headers:{
     
@@ -35,7 +35,18 @@ const ViewAllSuperAdminOrders = () => {
     
    
 
+    const sendToQuickBooks=async(po)=>{
+        let quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
+        const res=axios.post(`http://localhost:4000/sendToQuickBooks`,{
+
+            headers:{
     
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          },{data:po,refreshToken:quickbooksCredentials})
+    }
 
 
 
@@ -92,6 +103,7 @@ const ViewAllSuperAdminOrders = () => {
                        {po.totalAmount}
                     </td>
                    
+                    { po.overallStatus==0?
                     <td>
                         Approval Pending
                     </td>:
@@ -102,6 +114,8 @@ const ViewAllSuperAdminOrders = () => {
                      <td>
                     Approved
                  </td>
+                        
+                    }
                         
                     
                     <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
