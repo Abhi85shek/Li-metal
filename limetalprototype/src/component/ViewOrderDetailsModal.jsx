@@ -18,6 +18,16 @@ const ViewOrderDetailsModal = (props) => {
     const approveOrder =async()=>{
         await props.approveOrder()
     }
+
+    const handleSubmit=async()=>{
+      if(props.admin){
+      await  props.sendToQuickBooks()
+      }
+      else{
+      await  approveOrder()
+      }
+
+    }
  
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -39,23 +49,43 @@ const ViewOrderDetailsModal = (props) => {
     
     <div className='m-2 flex flex-row justify-center items-center'>
       <div className='basis-full'>
+      <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
+          <div className='p-2 basis-1/2 flex flex-row'>
+           <b>Customer Name : </b> &nbsp;&nbsp; {selectedOrder.customerName} &nbsp; <b>{props.customerCurrency}</b>
+          </div>
+          <div className='p-2 basis-1/2 flex flex-row justify-end'>
+            <div className='float-right'>
+           <b>Date: </b> {selectedOrder.docNumber}
+           </div>
+          </div>
+          </div>
+           <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
+          <div className='p-2 basis-full flex flex-row'>
+           <b>Supplier Name : </b> &nbsp;&nbsp; {selectedOrder.supplierName} &nbsp; <b>{props.customerCurrency}</b>
+          </div>
+         
+          </div>
         <div className='rounded-md shadow-lg bg-[#426b79] p-1'>
         <ViewServicesTable line={JSON.parse(selectedOrder.line)} />
         </div>
         <div className='basis-full w-[100%] h-50 '>
         <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
           <div className='p-2 basis-1/2 flex flex-row'>
-           <b>Total : </b> &nbsp;&nbsp; {selectedOrder.TotalAmt} &nbsp; <b>{props.customerCurrency}</b>
+           <b>Total : </b> &nbsp;&nbsp; {selectedOrder.totalAmount} &nbsp; <b>{props.customerCurrency}</b>
           </div>
           <div className='p-2 basis-1/2 flex flex-row justify-end'>
             <div className='float-right'>
-           <b>Partial PO Number : </b> {selectedOrder.DocNumber}
+           <b>Partial PO Number : </b> {selectedOrder.docNumber}
            </div>
           </div>
           </div>
      
-<div className='p-2 flex flex-row justify-center items-center w-[100%]'>
-<button className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md ">Approve</button>
+<div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
+<button onClick={handleSubmit} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md ">
+  {props.admin==true?`QB Create`:`Approve`}</button>
+  <button onClick={()=>{return}} className="text-white bg-[#a83743] hover:bg-[#223c45] p-2 rounded-md ">
+ Reject</button>
+
   </div>
         </div>
       </div>

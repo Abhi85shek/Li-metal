@@ -59,7 +59,7 @@ const ViewAllSuperAdminOrders = () => {
   
   return (
     <>
-    {showModal  && <ViewOrderDetailsModal selectedOrder={selectedOrder}/>}
+    {showModal  && <ViewOrderDetailsModal selectedOrder={selectedOrder} admin={true} sendToQuickBooks={sendToQuickBooks} />}
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-6 mt-4">
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-[#7DAFC1] dark:bg-gray-700 dark:text-gray-400 shadow-md ">
@@ -121,7 +121,7 @@ const ViewAllSuperAdminOrders = () => {
                     <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
                        View
                     </td>
-                    <td><button onClick={()=>{return}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                    <td><button onClick={()=>{sendToQuickBooks()}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
                         QB Create
                        </button>
                     </td>

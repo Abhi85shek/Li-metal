@@ -42,23 +42,23 @@ const ViewServicesTable = (props) => {
             {  serviceDetails.length > 0   &&
                 serviceDetails.map((list)=>(
                   <tr className="bg-gray-100 border-b" key={list.id}>
-                      <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        {list.serviceName}
+                      <td className="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                        {list.ItemBasedExpenseLineDetail?.ItemRef?.name}
                       </td>
-                      <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {list.description}
+                      <td className="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                      {list.Description}
                       </td>
-                      <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {list.quantity}
+                      <td className="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                      {list.ItemBasedExpenseLineDetail?.Qty}
                       </td>    
-                      <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {list.rate}
+                      <td className="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                      {list.ItemBasedExpenseLineDetail?.UnitPrice}
                       </td> 
-                      <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                       {list.tax}
+                      <td className="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                       {list.ItemBasedExpenseLineDetail?.TaxCodeRef?.value}
                       </td> 
-                      <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                      {list.totalAmount}
+                      <td className="text-md text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                      {list.Amount}
                       </td> 
         
                 </tr>
