@@ -33,12 +33,28 @@ const AddServicesForm = (props) => {
   
 
   const getAllProducts = async()=>{
-      const result = await axios.get("http://localhost:4000/allProductsActive");
+      const result = await axios.get("http://localhost:4000/allProductsActive",{
+
+        headers:{
+
+          Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+        }
+
+      });
       setAllProducts(result.data); 
   }; 
 
   const getAllSuppliers = async()=>{
-    const res = await axios.get("http://localhost:4000/getSuppliers");
+    const res = await axios.get("http://localhost:4000/getSuppliers",{
+
+      headers:{
+
+        Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+      }
+
+    });
       console.log(res.data.data)
     setAllSuppliers(res.data.data); 
     
@@ -57,7 +73,15 @@ useEffect(()=>{
 },serviceDetails)
 
 const getAllCustomers = async()=>{
-  const res = await axios.get("http://localhost:4000/getAllCustomer");
+  const res = await axios.get("http://localhost:4000/getAllCustomer",{
+
+    headers:{
+
+      Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+    }
+
+  });
     console.log(res.data.data)
   setAllCustomers(res.data.data); 
   
@@ -65,7 +89,15 @@ const getAllCustomers = async()=>{
 
 
 const getAllApprovers = async()=>{
-  const res = await axios.get("http://localhost:4000/getApprovers");
+  const res = await axios.get("http://localhost:4000/getApprovers",{
+
+    headers:{
+
+      Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+    }
+
+  });
     console.log(res.data.data)
     setAllApprovers(res.data.data); 
 }; 
@@ -73,7 +105,15 @@ const getAllApprovers = async()=>{
 
 const getAllTaxes=async()=>{
 
-  const res = await axios.get("http://localhost:4000/taxDetails");
+  const res = await axios.get("http://localhost:4000/taxDetails",{
+
+    headers:{
+
+      Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+    }
+
+  });
   console.log(res.data.data)
 setTaxList(res.data.data); 
 }

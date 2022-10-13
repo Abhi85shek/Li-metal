@@ -108,7 +108,15 @@ useEffect(()=>{
         }
     console.log(vendorDetails, refreshToken)
 
-        const result = await axios.post('http://localhost:4000/createVendor',{vendorDetails: vendorDetails, refreshToken: refreshToken});
+        const result = await axios.post('http://localhost:4000/createVendor',{vendorDetails: vendorDetails, refreshToken: refreshToken},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         console.log(result.status)
         if(result.status==200)
        {

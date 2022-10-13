@@ -32,18 +32,42 @@ const AllProducts = () => {
 
     const getAllProducts = async ()=>{
         
-        const result = await axios.get(`http://localhost:4000/allProducts/${currentPage}/${currentCount}`);
+        const result = await axios.get(`http://localhost:4000/allProducts/${currentPage}/${currentCount}`,{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };
     const getProductByNameForFirstSearch = async ()=>{
         setCurrentPage(0)
-        const result = await axios.post(`http://localhost:4000/searchOrder/${0}/${currentCount}`, {productName:searchProduct});
+        const result = await axios.post(`http://localhost:4000/searchOrder/${0}/${currentCount}`, {productName:searchProduct},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };
     const getProductByName = async ()=>{
-        const result = await axios.post(`http://localhost:4000/searchOrder/${currentPage}/${currentCount}`, {productName:searchProduct});
+        const result = await axios.post(`http://localhost:4000/searchOrder/${currentPage}/${currentCount}`, {productName:searchProduct},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
     };
@@ -108,7 +132,15 @@ const AllProducts = () => {
         }
     }
         console.log(newfilterString)
-        const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:newfilterString});
+        const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:newfilterString},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         setAllProducts(result.data.data.cur_records);
         setTotalRecords(result.data.data.total_count);
         // setTypeFilterVisible(false)

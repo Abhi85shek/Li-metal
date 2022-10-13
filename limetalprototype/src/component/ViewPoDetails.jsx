@@ -25,7 +25,15 @@ const ViewPoDetails = (props) => {
 
  const fetChPoDetailsById=async()=>{
     const quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-    const res= await axios.post('http://localhost:4000/getPurchaseOrderById',{POId:props.selectedPoId,refreshToken:quickbooksCredentials})
+    const res= await axios.post('http://localhost:4000/getPurchaseOrderById',{POId:props.selectedPoId,refreshToken:quickbooksCredentials},{
+
+        headers:{
+
+          Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+        }
+
+      })
     console.log(res.data.data) 
     if(res.status==200){
          setPoDetails(res.data.data)
@@ -45,7 +53,15 @@ const downloadPdf=async()=>{
 
 const sendEmail=async()=>{
     const quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-    const res=await axios.post('http://localhost:4000/sendPO',{refreshToken:quickbooksCredentials,pOId:props.selectedPoId,email:email})
+    const res=await axios.post('http://localhost:4000/sendPO',{refreshToken:quickbooksCredentials,pOId:props.selectedPoId,email:email},{
+
+        headers:{
+
+          Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+        }
+
+      })
     if(res.status==200)
     {
      console.log("toasting")

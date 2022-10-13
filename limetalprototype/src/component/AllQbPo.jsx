@@ -17,7 +17,15 @@ const AllQbPo = () => {
     const getAllQbPoList = async ()=>{
         const quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
 
-        const result = await axios.post(`http://localhost:4000/getAllPurchaseOrder`,{refreshToken:quickbooksCredentials});
+        const result = await axios.post(`http://localhost:4000/getAllPurchaseOrder`,{refreshToken:quickbooksCredentials},{
+
+            headers:{
+    
+              Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+    
+            }
+    
+          });
         console.log(result)
         SetAllQbpolist(result.data.data);
        

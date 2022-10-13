@@ -130,7 +130,15 @@ useEffect(()=>{
         }
 
 
-        const result = await axios.post(`http://localhost:4000/editSupplier/${props.selectedSupplier.id}`,{supplierDetails:supplierDetails});
+        const result = await axios.post(`http://localhost:4000/editSupplier/${props.selectedSupplier.id}`,{supplierDetails:supplierDetails},{
+
+          headers:{
+  
+            Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+  
+          }
+  
+        });
         if(result.status==201)
        {
         console.log("toasting")

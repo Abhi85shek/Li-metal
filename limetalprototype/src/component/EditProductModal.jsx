@@ -17,7 +17,15 @@ const EditProductModal = (props) => {
     const editProduct= async (e)=>{
         e.preventDefault();
         let id=productId
-        const result = await axios.post(`http://localhost:4000/editProduct/${id}`,{productName:productName,description:description,type:type});
+        const result = await axios.post(`http://localhost:4000/editProduct/${id}`,{productName:productName,description:description,type:type},{
+
+          headers:{
+  
+            Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+  
+          }
+  
+        });
         setShowModal(false);
         console.log(result)
         if(result.status==201)
