@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ViewServicesTable from './ViewServicesTable';
 import { AiOutlineClose } from 'react-icons/ai';
+import moment from 'moment'
 
 
 const ViewOrderDetailsModal = (props) => {
@@ -27,6 +28,14 @@ const ViewOrderDetailsModal = (props) => {
       await  approveOrder()
       }
 
+    }
+    const parseDate=(date)=>{
+      var t = "2010-06-09 13:12:01".split(/[- :]/);
+
+// Apply each element to the Date function
+var d = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+
+console.log(d);
     }
  
   return (
@@ -55,7 +64,7 @@ const ViewOrderDetailsModal = (props) => {
           </div>
           <div className='p-2 basis-1/2 flex flex-row justify-end'>
             <div className='float-right'>
-           <b>Date: </b> {selectedOrder.docNumber}
+           <b>Date: </b> {selectedOrder.creationDate}
            </div>
           </div>
           </div>

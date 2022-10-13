@@ -10,6 +10,7 @@ import AddServiceTable from './AddServiceTable';
 import { AiOutlineClose } from 'react-icons/ai';
 import serviceDetailsAtom from '../atoms/ServiceState';
 import { useRecoilValue } from 'recoil';
+import moment from 'moment';
 
 const CompleteOrderModal = (props) => {
   
@@ -146,6 +147,7 @@ const CompleteOrderModal = (props) => {
     orderObj.primaryApprover=primaryApprover
     orderObj.secondaryApprover=secondaryApprover
     orderObj.totalApprovers=totalApprovers
+    orderObj.creationDate=moment().format('YYYY-MM-DD HH:MI:SS')
 
     if(createOrderHandler(orderObj))
       {
@@ -161,7 +163,7 @@ const CompleteOrderModal = (props) => {
           });
         },0);
         setTimeout(()=>{
-          window.location.reload()
+          // window.location.reload()
         },10);
 
       }
@@ -209,7 +211,7 @@ const CompleteOrderModal = (props) => {
           </div>
           <div className='p-2 basis-1/2 flex flex-row justify-end'>
             <div className='float-right'>
-           <b>Date: </b> {props.orderObj.creationDate}
+           <b>Date: </b> {moment().format('MM/DD/YYYY HH:mm')}
            </div>
           </div>
           </div>
