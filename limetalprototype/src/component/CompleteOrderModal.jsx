@@ -203,6 +203,22 @@ const CompleteOrderModal = (props) => {
     
     <div className='m-2 flex flex-row justify-center items-center'>
       <div className='basis-full'>
+      <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
+          <div className='p-2 basis-1/2 flex flex-row'>
+           <b>Customer Name : </b> &nbsp;&nbsp; {props.orderObj.customerName} &nbsp; <b>{props.customerCurrency}</b>
+          </div>
+          <div className='p-2 basis-1/2 flex flex-row justify-end'>
+            <div className='float-right'>
+           <b>Date: </b> {props.orderObj.creationDate}
+           </div>
+          </div>
+          </div>
+           <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
+          <div className='p-2 basis-full flex flex-row'>
+           <b>Supplier Name : </b> &nbsp;&nbsp; {props.orderObj.supplierName} &nbsp; <b>{props.customerCurrency}</b>
+          </div>
+         
+          </div>
         <div className='rounded-md shadow-lg bg-[#426b79] p-1'>
         <AddServiceTable isReadOnly={true}/>
         </div>
