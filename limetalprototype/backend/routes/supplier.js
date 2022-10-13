@@ -2,6 +2,10 @@ const express = require('express');
 const { qb } = require('../config/config');
 var router = express.Router();
 const db = require('../helpers/db');
+const checkAuth = require('../middleware/check-auth');
+
+
+    router.use(checkAuth);
 
 // Create a Supplier
 

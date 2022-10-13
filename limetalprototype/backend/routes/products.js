@@ -1,7 +1,11 @@
 const express = require('express');
 var router = express.Router();
 const db = require('../helpers/db');
+const checkAuth = require('../middleware/check-auth');
 
+
+
+router.use(checkAuth);
 // Get All Product API
 
 router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{

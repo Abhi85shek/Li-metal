@@ -1,7 +1,10 @@
 const express = require('express');
 var router = express.Router();
 var db = require("../helpers/db");
+const checkAuth = require('../middleware/check-auth');
 
+
+router.use(checkAuth);
 router.get("/getAllArea",(req,res)=>{
 
     db.query("SELECT * FROM areatable",(err,result)=>
@@ -119,7 +122,7 @@ router.get("/getallPo",(req,res)=>{
 router.post("/getAllApproversPo",(req,res)=>{
 
     const {primaryApproversId} = req.body;
-    db.query("SELECT * FROM limetal_dev.limetalorders WHERE primaryApprover = ? UNION SELECT * FROM limetal_dev.limetalorders WHERE secondaryApprover=? AND overallStatus IN ('1','2')",[primaryApproversId,primaryApproversId],(err,result)=>{
+    db.query("SELECT * FROM limetalorders WHERE primaryApprover = ? UNION SELECT * FROM limetal_dev.limetalorders WHERE secondaryApprover=? AND overallStatus IN ('1','2')",[primaryApproversId,primaryApproversId],(err,result)=>{
 
         if(err)
             {
@@ -162,7 +165,7 @@ router.post("/approvepo",(req,res)=>{
             }
                 else if(result[0].primaryApprover!= 0 && result[0].secondaryApprover!=0 && result[0].overallStatus == 0)
                 {
-                    db.query("UPDATE limetalorders SET overallStatus WHERE id=?",[1,poId],(err,result)=>{
+                    db.query("UPDATE limetalorders SET overallStatus=? WHERE id=?",[1,poId],(err,result)=>{
                         if(err)
                         {
                         return res.status(500).json({success:false,error:err});
