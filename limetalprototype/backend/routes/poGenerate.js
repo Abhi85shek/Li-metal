@@ -176,9 +176,22 @@ router.post("/approvepo",(req,res)=>{
                         }
                     });
                 }
+                else if(result[0].primaryApprover!=0 && result[0].secondaryApprover!= 0 && result[0].overallStatus ==1)
+                {
+                    db.query("UPDATE limetalorders SET overallStatus=? WHERE id=?",[2,poId],(err,result)=>{
+                        if(err)
+                        {
+                        return res.status(500).json({success:false,error:err});
+                        }
+                        else
+                        {
+                        return res.status(200).send({success:true,message:result});
+                        }
+                    });
+                }
                 else
                 {
-                    return res.status(404).json({success:false,message:""})
+                    return res.status(404).json({success:false,message:"No PO Found"})
                 }
         }
     })
