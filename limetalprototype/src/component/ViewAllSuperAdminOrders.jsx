@@ -43,9 +43,9 @@ const ViewAllSuperAdminOrders = () => {
     
               Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
     
-            }
+            },data:po,refreshToken:quickbooksCredentials
     
-          },{data:po,refreshToken:quickbooksCredentials})
+          })
     }
 
 
