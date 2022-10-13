@@ -237,7 +237,6 @@ const CreateOrder = (props) => {
             "DocNumber":poGenerateData,
             "TotalAmt":TotalAmt,
             "Line":Line,
-            "creationDate":moment().format('MM-Do-YYYY HH:mm:SS'),
             "customerName":props.customerName,
             "supplierName":props.supplierName,
             "APAccountRef":{
