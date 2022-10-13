@@ -44,7 +44,6 @@ const ViewAllSuperAdminOrders = () => {
               Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
     
             },data:po,refreshToken:quickbooksCredentials
-    
           })
     }
 
@@ -121,7 +120,7 @@ const ViewAllSuperAdminOrders = () => {
                     <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
                        View
                     </td>
-                    <td><button onClick={()=>{sendToQuickBooks()}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                    <td><button onClick={()=>{sendToQuickBooks(po)}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
                         QB Create
                        </button>
                     </td>
