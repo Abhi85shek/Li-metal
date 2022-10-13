@@ -16,6 +16,7 @@ import ViewAllPos from "./Pages/ViewAllPos";
 import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
 import AllOrders from "./component/AllOrders";
+import SuperAdminOrdersView from "./Pages/SuperAdminOrdersView";
 
 
 let logoutTimer;
@@ -112,6 +113,9 @@ function App() {
                 {localStorage.getItem('quickbooksCredentials')!=null?
                 <Route exact path="/viewallqbpo" element={<ViewAllPos/>}/>
                 :null}
+                {localStorage.getItem('uType')=='admin'?
+                 <Route exact path="/viewadminallorders" element={<SuperAdminOrdersView/>}/>:null
+                }
                 <Route path="*" element={<PageNotFound />} exact/>
 
         </Routes>  

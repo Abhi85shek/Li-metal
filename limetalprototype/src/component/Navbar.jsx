@@ -17,6 +17,8 @@ const Navbar = () => {
   const [quickBookURLcode,setquickbooksAuthCode]=useState()
   const [qbConnectvisible,setqbConnectModalVisible]=useState(false)
 const [viewQbMenu,setViewQbMenu ]=useState(false)
+let viewAdminMenu=localStorage.getItem('uType')==='admin'?true:false
+console.log(viewAdminMenu)
 const [viewOrdersMenu,setViewOrdersMenu]=useState(false)
 
   const navigate=useNavigate()
@@ -51,6 +53,8 @@ const [viewOrdersMenu,setViewOrdersMenu]=useState(false)
     setInterval(()=> {localStorage.removeItem('quickbooksCredentials')
   console.log('removed')}, 3600000);
   },[])
+
+
 
   useEffect(()=>{
    if(localStorage.getItem('quickbooksCredentials')===null && localStorage.getItem('qbConnectVisible')==='2')
@@ -167,6 +171,11 @@ const disconnectQuickbooks=()=>{
         <li>
           <Link to="/dashboard">Dashboard</Link>
         </li>
+        {viewAdminMenu?
+            <li>
+             <Link to="/viewadminallorders">Admin</Link> 
+            </li>
+              :null}
         <li>
            <div onClick={()=>{setViewOrdersMenu(!viewOrdersMenu);setViewQbMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Orders
@@ -179,6 +188,8 @@ const disconnectQuickbooks=()=>{
               
             </div>
 :null}
+    
+           
             </div>
             </li>   
          <li>
