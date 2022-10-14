@@ -5,7 +5,7 @@ const checkAuth = require('../middleware/check-auth');
 const moment = require('moment');
 
 
-router.use(checkAuth);
+// router.use(checkAuth);
 router.get("/getAllArea",(req,res)=>{
 
     db.query("SELECT * FROM areatable",(err,result)=>
@@ -76,7 +76,7 @@ router.post("/storelocal", async (req,res)=>{
     // console.log(req.body.orderObj.APAccountRef.name);
 
     const apName = req.body.orderObj.APAccountRef.name
-    const apValue = req.body.orderObj.APAccountRef.name
+    const apValue = req.body.orderObj.APAccountRef.value
     const {DocNumber} =req.body.orderObj;
     const {Line} =req.body.orderObj;
     const {shipTo} =req.body.orderObj;

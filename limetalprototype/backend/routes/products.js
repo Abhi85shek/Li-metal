@@ -5,7 +5,7 @@ const checkAuth = require('../middleware/check-auth');
 
 
 
-router.use(checkAuth);
+// router.use(checkAuth);
 // Get All Product API
 
 router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{

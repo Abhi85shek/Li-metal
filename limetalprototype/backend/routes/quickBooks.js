@@ -4,9 +4,9 @@ const config = require('../config/config');
 const axios = require('axios');
 const vendor =require('../helpers/vendors');
 const OAuthClient =  require('intuit-oauth');
-const { buildQueries } = require('@testing-library/react');
 const Customer = require('../helpers/customer');
 const account = require('../helpers/accounts');
+const db =require("../helpers/db");
 
 const quickBookLocalID = config.qb.quickBookLocalID
 const quickBookUrl = 'http://localhost:3001/home';
@@ -24,6 +24,7 @@ var oauthClient = new OAuthClient({
     environment:'sandbox',          // enter either `sandbox` or `production`
     redirectUri: quickBookUrl,      // enter the redirectUri
 });
+
 
 // Get of Code,RealmId and testState
 
@@ -285,11 +286,15 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
 
     });
 
+    // require.use(checkAuth);
     // Create PO Number API
 
     router.post('/createPO',async(req,res)=>{
+        console.log("Hello")
         try{
+                const {poId} = req.body;
                 const {refreshToken} = req.body;
+                // console.log(refreshToken);
                 const headers = {
                     'Content-Type': 'application/json',
                     'Accept' : 'application/json',
@@ -297,10 +302,10 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                 };
                 const data = req.body['data'];
                 const {DocNumber} =  data;
-                const {TotalAmt} = data;
-              
-                const {Line} =data;
-              
+                const {TotalAmt} = +data;
+                console.log(TotalAmt);
+                const {Line} = data;
+                console.log(Line[0].ItemBasedExpenseLineDetail);
                 const {APAccountRef} = data;
                 const {VendorRef} = data;
                 const {ShipTo} = data;
@@ -323,7 +328,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                               "TaxCodeRef": {
                                 "value": "NON"
                               }, 
-                              "BillableStatus": "NotBillable", 
+                              "BillableStatus": "NotBillable",
                               "UnitPrice": Line[i].ItemBasedExpenseLineDetail.UnitPrice
                             }
                         })
@@ -347,18 +352,30 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                           "value": ShipTo.value
                         }
                     };
-                    console.log(purchaseOrderBody);
+                    // console.log(purchaseOrderBody);
                     // Line.forEach((list)=>{
                     //     purchaseOrderBody.Line.push(list);
                     //     console.log(list);
                     // })
-            
-                // console.log(getPurchaseOrderBody);
+                    // console.log(ge)
+                console.log(purchaseOrderBody);
                 const createInvoiceUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder?minorversion=40`;
+                console.log(createInvoiceUrl);
                 const response = await axios.post(createInvoiceUrl,purchaseOrderBody,{headers}); 
+                console.log(response);
                 if(response.status == 200)
                 {
-                        res.status(201).send({message:"PO created Successfully"});
+                    
+
+                        db.query("UPDATE limetalorders SET overallStatus =? WHERE id=?",[3,poId],(err,result)=>{
+                            if(err)
+                                {
+                                return res.json({success:false,message:err});
+                              }
+                                
+                            res.status(201).send({message:"PO created Successfully"});
+                         });
+
                 }
         }
         catch(e)

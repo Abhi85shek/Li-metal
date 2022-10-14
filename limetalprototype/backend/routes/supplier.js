@@ -5,7 +5,7 @@ const db = require('../helpers/db');
 const checkAuth = require('../middleware/check-auth');
 
 
-    router.use(checkAuth);
+    // router.use(checkAuth);
 
 // Create a Supplier
 
