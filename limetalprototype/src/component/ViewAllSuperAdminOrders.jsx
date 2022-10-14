@@ -39,7 +39,7 @@ const ViewAllSuperAdminOrders = () => {
 
         let orderObj={
             "DocNumber":po.docNumber,
-            "TotalAmt":po.totalAmount,
+            "TotalAmt":parseInt(po.totalAmount),
             "Line":JSON.parse(po.line),
             "APAccountRef":{
                 "name": po.apAccountRefname,
