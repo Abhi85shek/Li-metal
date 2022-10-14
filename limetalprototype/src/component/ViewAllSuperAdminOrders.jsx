@@ -65,7 +65,7 @@ const ViewAllSuperAdminOrders = () => {
             },data:orderObj,refreshToken:quickbooksCredentials,poId:po.id
           })
           console.log(res)
-          if(res.status==201)
+          if(res.status==200)
           {
             setTimeout(()=>{
                 toast.success('Order Successfullly stored', {
