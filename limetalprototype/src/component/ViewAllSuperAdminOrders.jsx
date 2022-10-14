@@ -64,6 +64,20 @@ const ViewAllSuperAdminOrders = () => {
     
             },data:orderObj,refreshToken:quickbooksCredentials,poId:po.id
           })
+          if(res.status==201)
+          {
+            setTimeout(()=>{
+                toast.success('Order Successfullly stored', {
+                  position: "top-center",
+                  autoClose: 2000,
+                  hideProgressBar: true,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              },0);
+         
     }
 
 
