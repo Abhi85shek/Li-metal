@@ -169,9 +169,6 @@ const disconnectQuickbooks=()=>{
         <li>
           <Link to="/home">Home</Link>
         </li>
-        <li>
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
         {viewAdminMenu?
             <li>
             

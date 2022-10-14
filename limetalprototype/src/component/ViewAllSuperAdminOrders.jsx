@@ -98,9 +98,11 @@ const ViewAllSuperAdminOrders = () => {
                 <th scope="col" className="px-6 py-3">
                     Info
                 </th>
+               {localStorage.getItem('quickbooksCredentials')!=null?
                 <th scope="col" className="px-6 py-3">
                     Action 
-                </th>
+                </th>:null
+}
             </tr>
         </thead>
         <tbody>
@@ -139,11 +141,13 @@ const ViewAllSuperAdminOrders = () => {
                     <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
                        View
                     </td>
-                    <td><button onClick={()=>{sendToQuickBooks(po)}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                   
+                  {localStorage.getItem('quickbooksCredentials')!=null?
+                   <td><button disabled={po.overallStatus!=2} onClick={()=>{sendToQuickBooks(po)}} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
                         QB Create
                        </button>
-                    </td>
-                   
+                    </td> :null
+}               
             
                 </tr>
                 </>
