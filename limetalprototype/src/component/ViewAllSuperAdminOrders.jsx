@@ -79,7 +79,7 @@ const ViewAllSuperAdminOrders = () => {
               },0);
          
     }
-
+    }
 
 
     useEffect(()=>{
