@@ -56,7 +56,7 @@ const ViewAllSuperAdminOrders = () => {
         }
         console.log(po)
         let quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-        const res=axios.post(`http://localhost:4000/createPO`,{
+        const res=await axios.post(`http://localhost:4000/createPO`,{
 
             headers:{
     
@@ -65,7 +65,7 @@ const ViewAllSuperAdminOrders = () => {
             },data:orderObj,refreshToken:quickbooksCredentials,poId:po.id
           })
           console.log(res)
-          if(res.status==200)
+          if(res.status==200||res.status==201)
           {
             setTimeout(()=>{
                 toast.success('Order Successfullly stored', {
