@@ -84,7 +84,7 @@ const AllOrders = () => {
   
   return (
     <>
-    {showModal  && <ViewOrderDetailsModal selectedOrder={selectedOrder} approveOrder={approveOrder}/>}
+    {showModal  && <ViewOrderDetailsModal selectedOrder={selectedOrder} approveOrder={approveOrder} approver={true}/>}
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-6 mt-4">
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-[#7DAFC1] dark:bg-gray-700 dark:text-gray-400 shadow-md ">
@@ -151,10 +151,42 @@ const AllOrders = () => {
                     <td onClick={()=>{setShowModal(true);setSelectedOrder(po)}} className="px-6 py-4 font-light underline hover:cursor-pointer">
                        View
                     </td>
-                    <td><button onClick={()=>{approveOrder(po)}} disabled={po.overallStatus==2||(po.overallStatus==1 && po.secondaryApprover!=localStorage.getItem('uid') )} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                    { po.overallStatus==0||po.overallStatus==1?
+                    <td>
+                        <button onClick={()=>{approveOrder(po)}}  className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
                      { po.overallStatus==0 ||po.overallStatus==1 && po.secondaryApprover==localStorage.getItem('uid')? `Approve`:`Approved`}
                        </button>
-                    </td>
+                    </td>:
+                    po.overallStatus==2?
+                    <td>
+                   <button disabled  className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                    Approved
+                       </button>
+                </td>:
+                po.overallStatus==3?
+                 <td>
+                <button disabled  className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                    QB Created
+                       </button>
+             </td>:
+             po.overallStatus==4?
+             <td>
+           <button disabled  className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                    Rejected
+                       </button>
+          </td>:   
+         null  
+                        
+                    }
+
+                    {/* <td>
+                    {
+                        
+                    }    
+                    <button onClick={()=>{approveOrder(po)}} disabled={(po.overallStatus==2||po.overallStatus==3||po.overallStatus==4)||(po.overallStatus==1 && po.secondaryApprover!=localStorage.getItem('uid') )} className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                     { po.overallStatus==0 ||po.overallStatus==1 && po.secondaryApprover==localStorage.getItem('uid')? `Approve`:`Approved`}
+                       </button>
+                    </td> */}
                    
             
                 </tr>

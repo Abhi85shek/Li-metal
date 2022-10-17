@@ -147,6 +147,7 @@ const CompleteOrderModal = (props) => {
     orderObj.primaryApprover=primaryApprover
     orderObj.secondaryApprover=secondaryApprover
     orderObj.totalApprovers=totalApprovers
+    orderObj.userId=localStorage.getItem('uid')
     orderObj.creationDate=moment().format('YYYY-MM-DD HH:MI:SS')
 
     if(createOrderHandler(orderObj))
@@ -163,8 +164,8 @@ const CompleteOrderModal = (props) => {
           });
         },0);
         setTimeout(()=>{
-          // window.location.reload()
-        },10);
+          window.location.reload()
+        },100);
 
       }
       else

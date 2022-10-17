@@ -19,6 +19,47 @@ const ViewOrderDetailsModal = (props) => {
     const approveOrder =async()=>{
         await props.approveOrder()
     }
+    const rejectOrder=async(id)=>{
+      const poid=id
+      const result = await axios.get(`http://localhost:4000/changestatetoreject/${poid}`,{
+
+        headers:{
+
+          Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+        }
+
+      });
+      if(result.status==201||result.status==200)
+   {
+    console.log("toasting")
+    
+        toast.success('Order Rejected Successfuly', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+       setShowModal(false)
+      }
+
+else{
+setTimeout(()=>{
+    toast.error('Error Occoured', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  },0);
+}
+    }
 
     const handleSubmit=async()=>{
       if(props.admin){
@@ -88,14 +129,47 @@ console.log(d);
            </div>
           </div>
           </div>
-     
+
+  
+{/* adin console */}
+{props.admin?
 <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
-<button onClick={handleSubmit} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md ">
-  {props.admin==true?`QB Create`:`Approve`}</button>
-  <button onClick={()=>{return}} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md ">
+<button onClick={handleSubmit} disabled={selectedOrder.overallStatus!=2} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
+  QB Create</button>
+  <button onClick={()=>{rejectOrder(selectedOrder.id)}} disabled={selectedOrder.overallStatus>=3} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed">
  Reject</button>
 
-  </div>
+  </div>:null
+}
+  {/*  */}
+  
+  {
+    props.approver?
+    <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
+    <button onClick={handleSubmit} disabled={selectedOrder.overallStatus>=2} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
+      Approve</button>
+      <button onClick={()=>{rejectOrder(selectedOrder.id)}} disabled={selectedOrder.overallStatus>=2} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed">
+     Reject</button>
+    
+      </div>:null
+  }
+
+{props.viewSelfOrder?   
+ <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
+ <button disabled={selectedOrder.overallStatus==3} onClick={()=>{props.deleteOrder(selectedOrder.id);setShowModal(false)}} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md  disabled:bg-neutral-500 disabled:cursor-not-allowed">
+Delete</button>
+
+ </div>:null  
+ 
+  }
+  
+  {/* <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
+<button onClick={handleSubmit} disabled={selectedOrder.overallStatus>=3 && props.admin==true||(selectedOrder.overallStatus>=2 && !props.admin)} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
+  {props.admin==true?`QB Create`:`Approve`}</button>
+  <button onClick={()=>{rejectOrder(selectedOrder.id)}} disabled={selectedOrder.overallStatus>=2||(selectedOrder.overallStatus<=3 && props.admin==true) } className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed">
+ Reject</button>
+
+  </div>: */}
         </div>
       </div>
     </div>

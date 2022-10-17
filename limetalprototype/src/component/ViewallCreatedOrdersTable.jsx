@@ -84,7 +84,7 @@ else{
   
   return (
     <>
-    {showModal  && <ViewOrderDetailsModal selectedOrder={selectedOrder} />}
+    {showModal  && <ViewOrderDetailsModal selectedOrder={selectedOrder} viewSelfOrder={true} deleteOrder={deleteOrder}/>}
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg px-6 mt-4">
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-[#7DAFC1] dark:bg-gray-700 dark:text-gray-400 shadow-md ">

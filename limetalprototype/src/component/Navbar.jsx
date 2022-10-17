@@ -21,6 +21,7 @@ let viewAdminMenu=localStorage.getItem('uType')==='admin'?true:false
 console.log(viewAdminMenu)
 const [viewOrdersMenu,setViewOrdersMenu]=useState(false)
 const [toggleAdminMenu,setToggleAdminMenu]=useState(false)
+const [toggleUserMenu,setToggleUserMenu]=useState(false)
 
   const navigate=useNavigate()
   const signOutHandler = ()=>{
@@ -162,9 +163,9 @@ const disconnectQuickbooks=()=>{
             }
           
         </li>
-        <li className='flex flex-row space-x-2 gap-2'>
+        {/* <li className='flex flex-row space-x-2 gap-2'>
           <BiUser size={20}/>{auth.userName}
-        </li>
+        </li> */}
        
         <li>
           <Link to="/home">Home</Link>
@@ -172,7 +173,7 @@ const disconnectQuickbooks=()=>{
         {viewAdminMenu?
             <li>
             
-             <div onClick={()=>{setToggleAdminMenu(!toggleAdminMenu);setViewQbMenu(false);setViewOrdersMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+             <div onClick={()=>{setToggleAdminMenu(!toggleAdminMenu);setViewQbMenu(false);setViewOrdersMenu(false);setToggleUserMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Admin
             {toggleAdminMenu?
             <div className='flex-col z-50 absolute bg-[#6BA4B8] text-neutral-100 space-y-2 p-2'>
@@ -188,7 +189,7 @@ const disconnectQuickbooks=()=>{
             </li>
               :null}
         <li>
-           <div onClick={()=>{setViewOrdersMenu(!viewOrdersMenu);setViewQbMenu(false);setToggleAdminMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+           <div onClick={()=>{setViewOrdersMenu(!viewOrdersMenu);setViewQbMenu(false);setToggleAdminMenu(false);setToggleUserMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Orders 
             {viewOrdersMenu?
             <div className='flex-col z-50 absolute bg-[#6BA4B8] text-neutral-100 space-y-2 p-2'>
@@ -209,7 +210,7 @@ const disconnectQuickbooks=()=>{
         </li>
         {
              localStorage.getItem('qbConnectVisible')==='2'?
-           <div onClick={()=>{setViewQbMenu(!viewQbMenu);setViewOrdersMenu(false);setToggleAdminMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+           <div onClick={()=>{setViewQbMenu(!viewQbMenu);setViewOrdersMenu(false);setToggleAdminMenu(false);setToggleUserMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
             Quickbooks
            
             {viewQbMenu?
@@ -222,8 +223,17 @@ const disconnectQuickbooks=()=>{
             }
         
         <li>
-          <Link to="/login" onClick={signOutHandler}>Sign Out</Link>
-        </li>
+           <div onClick={()=>{setViewOrdersMenu(false);setViewQbMenu(false);setToggleAdminMenu(false);setToggleUserMenu(!toggleUserMenu)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
+         <div className='flex flex-row'>{auth.userName} <BiUser className='ml-2' size={20}/></div>
+            {toggleUserMenu?
+            <div className='flex-col z-50 absolute bg-[#6BA4B8] text-neutral-100 space-y-2 p-2'>
+             <Link to="/changepassword"> <div className='mt-4' >Change Password</div></Link>
+              <hr/>
+              <Link onClick={signOutHandler} to="/login"> <div className='mt-4' >Logout</div></Link>
+            </div>
+:null}         
+            </div>
+            </li>   
       </ul>
     </div>
     </div>
