@@ -74,7 +74,7 @@ router.post("/storelocal", async (req,res)=>{
 
     // const {APAccountRef}  = req.body.orderObj;
     // console.log(req.body.orderObj.APAccountRef.name);
-
+    const {userId} = req.body.orderObj;
     const apName = req.body.orderObj.APAccountRef.name
     const apValue = req.body.orderObj.APAccountRef.value
     const {DocNumber} =req.body.orderObj;
@@ -92,8 +92,8 @@ router.post("/storelocal", async (req,res)=>{
 
     // const {totalApprovers} = req.body.orderObj;  
 
-    db.query("INSERT INTO limetalorders (supplierName,customerName,totalAmount,docNumber,detailType,line,apAccountRefname,apAccountRefvalue,vendorRefname,vendorRefValue,shipToName,shipToValue,primaryApprover,secondaryApprover,primaryApproved,secondaryApproved,overallStatus,creationDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-    [supplierName,customerName,TotalAmt,DocNumber,"ItemBasedExpenseLineDetail",JSON.stringify(Line),apName,apValue,VendorRef.name,VendorRef.value,shipName,shipValue,primaryApprover,secondaryApprover,0,0,0,creationDate],(err,result)=>{
+    db.query("INSERT INTO limetalorders (supplierName,customerName,totalAmount,docNumber,detailType,line,apAccountRefname,apAccountRefvalue,vendorRefname,vendorRefValue,shipToName,shipToValue,primaryApprover,secondaryApprover,primaryApproved,secondaryApproved,overallStatus,creationDate,createdBy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    [supplierName,customerName,TotalAmt,DocNumber,"ItemBasedExpenseLineDetail",JSON.stringify(Line),apName,apValue,VendorRef.name,VendorRef.value,shipName,shipValue,primaryApprover,secondaryApprover,0,0,0,creationDate,userId],(err,result)=>{
         if(err)
             {
                return res.status(500).json({success:false,error:err});
