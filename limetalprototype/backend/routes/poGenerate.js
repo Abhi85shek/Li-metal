@@ -221,7 +221,15 @@ router.post("/getorderofuser",async (req,res)=>{
 
 // Delete PO which is Rejected
 
-router.post()
+router.post('/delete/:id',async(req,res)=>{
+
+    const poId = req.params.id;
+ 
+    db.query('SELECT * FROM')
+
+
+
+});
 
 router.post("/generatePO",async (req,res)=>{
     const {areaId} =req.body;
