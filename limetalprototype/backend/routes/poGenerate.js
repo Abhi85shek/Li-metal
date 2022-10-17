@@ -221,12 +221,9 @@ router.post("/getorderofuser",async (req,res)=>{
 
 // Delete PO which is Rejected
 
-router.post('/delete/:id',async(req,res)=>{
-
+router.get('/deletepo/:id',async(req,res)=>{
     const poId = req.params.id;
-
-
-    db.query("SEELCT * FROM limetalorders WHERE id =?",[poId],(err,result)=>{
+    db.query("SELECT * FROM limetalorders WHERE id =?",[poId],(err,result)=>{
 
         if(err)
             {
