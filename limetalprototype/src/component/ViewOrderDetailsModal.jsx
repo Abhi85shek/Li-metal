@@ -92,7 +92,7 @@ console.log(d);
 <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
 <button onClick={handleSubmit} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md ">
   {props.admin==true?`QB Create`:`Approve`}</button>
-  <button onClick={()=>{return}} className="text-white bg-[#a83743] hover:bg-[#223c45] p-2 rounded-md ">
+  <button onClick={()=>{return}} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md ">
  Reject</button>
 
   </div>

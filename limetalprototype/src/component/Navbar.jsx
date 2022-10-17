@@ -189,18 +189,16 @@ const disconnectQuickbooks=()=>{
               :null}
         <li>
            <div onClick={()=>{setViewOrdersMenu(!viewOrdersMenu);setViewQbMenu(false);setToggleAdminMenu(false)}} className='justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md text-neutral-100 font-bold'>
-            Orders
-           
+            Orders 
             {viewOrdersMenu?
             <div className='flex-col z-50 absolute bg-[#6BA4B8] text-neutral-100 space-y-2 p-2'>
              <Link to="/viewallorders"> <div className='mt-4' >All Orders</div></Link>
               <hr/>
               <Link to="/createorder"> <div className='mt-4' >Create</div></Link>
-              
+              <hr/>
+              <Link to="/viewallmyorders"> <div className='mt-4' >View My Orders</div></Link>
             </div>
-:null}
-    
-           
+:null}         
             </div>
             </li>   
          <li>

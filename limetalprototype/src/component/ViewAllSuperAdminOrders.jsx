@@ -144,11 +144,19 @@ const ViewAllSuperAdminOrders = () => {
                     </td>:
                     po.overallStatus==1?
                     <td>
-                        Semi Approved
-                    </td>:
-                     <td>
-                    Approved
-                 </td>
+                    Semi Approved
+                </td>:
+                po.overallStatus==2?
+                 <td>
+                Approved
+             </td>:
+             po.overallStatus==3?
+             <td>
+             QB created
+          </td>:   
+           <td>
+          Rejected
+        </td>  
                         
                     }
                         

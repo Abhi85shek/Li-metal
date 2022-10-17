@@ -10,7 +10,7 @@ const SuperAdminOrdersView = () => {
   return (
     <>
 
-        <h1 className='text-center mt-2 text-lg font-medium'>All Suppliers</h1>
+        <h1 className='text-center mt-2 text-lg font-medium'>All Orders Admin Control</h1>
         <ViewAllSuperAdminOrders/>
     </>
     

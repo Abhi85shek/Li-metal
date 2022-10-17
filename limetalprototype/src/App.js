@@ -17,6 +17,7 @@ import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
 import AllOrders from "./component/AllOrders";
 import SuperAdminOrdersView from "./Pages/SuperAdminOrdersView";
+import ViewAllCreatedOrders from "./Pages/ViewAllCreatedOrders";
 
 
 let logoutTimer;
@@ -105,10 +106,9 @@ function App() {
                 <Route exact path="/home" element={<Home />} />   
                 <Route exact path="/dashboard" element={<Dashboard />} /> 
                 <Route exact path="/allProducts" element={<AllProducts />} /> 
-               
                 <Route exact path="/createOrder" element={<AddService />} /> 
                 <Route exact path="/viewallorders" element={<AllOrders />} /> 
-
+                <Route exact path="/viewallmyorders" element={<ViewAllCreatedOrders />} /> 
                 <Route exact path="/allSuppliers" element={<Suppliers />} /> 
                 {localStorage.getItem('quickbooksCredentials')!=null?
                 <Route exact path="/viewallqbpo" element={<ViewAllPos/>}/>
