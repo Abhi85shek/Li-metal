@@ -258,9 +258,7 @@ router.get('/deletepo/:id',async(req,res)=>{
 // Change the Status to Rejected
 
     router.get("/changestatetoreject/:poid",async (req,res)=>{
-
-
-        const poId = req.params.id;
+        const poId = req.params.poid;
 
         db.query("UPDATE limetalorders SET overallStatus=? WHERE id=?",[4,poId],(err,result)=>{
 
