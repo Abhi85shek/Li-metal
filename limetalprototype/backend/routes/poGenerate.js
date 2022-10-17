@@ -216,14 +216,12 @@ router.post("/getorderofuser",async (req,res)=>{
                 return res.status(200).send({success:true,message:result});
             }
         });
-
-
-
-
-
-
 });
 
+
+// Delete PO which is Rejected
+
+router.post()
 
 router.post("/generatePO",async (req,res)=>{
     const {areaId} =req.body;
