@@ -213,21 +213,48 @@ router.post("/getorderofuser",async (req,res)=>{
             }
             else
             {
-                return res.status(200).send({success:true,message:result});
+                return res.status(200).send({success:true,data:result});
             }
         });
 });
-
+// Checking
 
 // Delete PO which is Rejected
 
 router.post('/delete/:id',async(req,res)=>{
 
     const poId = req.params.id;
+
+
+    db.query("SEELCT * FROM limetalorders WHERE id =?",[poId],(err,result)=>{
+
+        if(err)
+            {
+                return res.status(500).json({success:false,error:err});
+            }
+
+        if(result.length < 0)
+        {
+                return res.status(404).json({success:false,message:"No PO found"});
+        }
+        else
+        {
+            db.query('DELETE FROM limetalorders WHERE id=?',[poId],(err,result)=>{
+
+                if(err)
+                    {
+                        return res.status(500).json({success:false,Error:err});
+                    }
+                    else
+                    {
+                        return res.status(200).json({success:true,message:"Po Deleted"});
+                    }
+    
+        });
+    
+        }
+    })
  
-    db.query('SELECT * FROM')
-
-
 
 });
 
