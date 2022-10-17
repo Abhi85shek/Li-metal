@@ -153,7 +153,7 @@ const AllOrders = () => {
                     </td>
                     { po.overallStatus==0||po.overallStatus==1?
                     <td>
-                        <button onClick={()=>{approveOrder(po)}}  className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
+                        <button onClick={()=>{approveOrder(po)}} disabled={po.overallStatus==1 && po.primaryApprover==localStorage.getItem('uid')}  className="p-2 font-bold text-base rounded-lg bg-green-400 text-neutral-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-neutral-500">
                      { po.overallStatus==0 ||po.overallStatus==1 && po.secondaryApprover==localStorage.getItem('uid')? `Approve`:`Approved`}
                        </button>
                     </td>:

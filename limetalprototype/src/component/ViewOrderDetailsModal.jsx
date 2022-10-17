@@ -146,9 +146,9 @@ console.log(d);
   {
     props.approver?
     <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
-    <button onClick={handleSubmit} disabled={selectedOrder.overallStatus>=2} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
+    <button onClick={handleSubmit} disabled={selectedOrder.overallStatus>=2 || (selectedOrder.overallStatus==1 && localStorage.getItem('uid')!=selectedOrder.secondaryApprover)} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
       Approve</button>
-      <button onClick={()=>{rejectOrder(selectedOrder.id)}} disabled={selectedOrder.overallStatus>=2} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed">
+      <button onClick={()=>{rejectOrder(selectedOrder.id)}} disabled={selectedOrder.overallStatus>=2 ||  (selectedOrder.overallStatus==1 && localStorage.getItem('uid')!=selectedOrder.secondaryApprover)} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed">
      Reject</button>
     
       </div>:null
@@ -162,7 +162,7 @@ Delete</button>
  </div>:null  
  
   }
-  
+
   {/* <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
 <button onClick={handleSubmit} disabled={selectedOrder.overallStatus>=3 && props.admin==true||(selectedOrder.overallStatus>=2 && !props.admin)} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
   {props.admin==true?`QB Create`:`Approve`}</button>
