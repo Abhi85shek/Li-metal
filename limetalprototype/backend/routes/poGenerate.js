@@ -255,6 +255,27 @@ router.get('/deletepo/:id',async(req,res)=>{
 
 });
 
+// Change the Status to Rejected
+
+    router.get("/changestatetoreject/:poid",async (req,res)=>{
+
+
+        const poId = req.params.id;
+
+        db.query("UPDATE limetalorders SET overallStatus=? WHERE id=?",[4,poId],(err,result)=>{
+
+            if(err)
+            {
+                return res.status(500).json({success:false,Error:err});
+            }
+            else
+            {
+                return res.status(200).json({success:true,message:"Status Changed Succesfully"});
+            }
+        });
+    });
+
+
 router.post("/generatePO",async (req,res)=>{
     const {areaId} =req.body;
     const {costCenterId} =req.body;
