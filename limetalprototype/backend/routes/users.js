@@ -41,6 +41,48 @@ router.post("/login",async (req,res)=>{
 
 });
 
+    // Change the Password of User
+
+    router.post("/changepassword",async (req,res)=>{
+
+        const {userId} = req.body;
+        const {password} = req.body;
+
+        db.query("SELECT * FROM limetalusers WHERE id=?",[userId],async (err,result)=>{
+
+            if(err)
+                {
+                    return res.status(500).json({success:false,Error:err})
+                }
+            if(result.length < 0)
+                {
+                    return res.status(404).json({success:false,message:"No User Found"});
+                }
+            else
+            {
+
+                const hashedPassword = await hashing(password);
+
+                db.query("UPDATE limetalusers SET password=? WHERE id=?",[hashedPassword,userId],(err,result)=>{
+                    if(err)
+                        {
+                            return res.status(500).json({success:false,Error:err});
+                        }
+                        if(result)
+                        {
+                            return res.status(201).json({success:true,message:"Pasword Changed Successfully"});
+                        }
+                });
+                    
+            }
+            
+
+
+        });
+
+    });
+
+
 router.use(checkAuth);
 
 module.exports = router;

@@ -365,8 +365,6 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                 console.log(response);
                 if(response.status == 200)
                 {
-                    
-
                         db.query("UPDATE limetalorders SET overallStatus =? WHERE id=?",[3,poId],(err,result)=>{
                             if(err)
                                 {

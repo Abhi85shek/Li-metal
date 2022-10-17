@@ -200,6 +200,29 @@ router.post("/approvepo",(req,res)=>{
 });
 
 
+// Get all the Orders Created By the Particular User
+
+router.post("/getorderofuser",async (req,res)=>{
+
+        const {userId} = req.body;
+
+        db.query("SELECT * FROM limetalorders WHERE createdBy=?",[userId],(err,result)=>{
+            if(err)
+            {
+                return res.status(500).json({success:false,Error:err});
+            }
+            else
+            {
+                return res.status(200).send({success:true,message:result});
+            }
+        });
+
+
+
+
+
+
+});
 
 
 router.post("/generatePO",async (req,res)=>{
@@ -221,4 +244,6 @@ router.post("/generatePO",async (req,res)=>{
    const PONumber = `0${areaId}-0${costCenter[0].costCenterCode}-0${areaOfWork[0].areaOfWorkCode}-0${locationId}`;
     res.json({PONumber});
 });
+
+
 module.exports = router;
