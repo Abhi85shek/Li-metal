@@ -290,9 +290,10 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     // Create PO Number API
 
     router.post('/createPO',async(req,res)=>{
-        console.log("Hello")
+        // console.log("Hello")
         try{
                 const {poId} = req.body;
+                const {vendorId} =req.body;
                 const {refreshToken} = req.body;
                 // console.log(refreshToken);
                 const headers = {
@@ -323,7 +324,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                             "ItemRef": {
                                 "name": Line[i].ItemBasedExpenseLineDetail.ItemRef.name, 
                                 "value": Line[i].ItemBasedExpenseLineDetail.ItemRef.value
-                              }, 
+                              },
                               "Qty": Line[i].ItemBasedExpenseLineDetail.Qty, 
                               "TaxCodeRef": {
                                 "value": "NON"
@@ -333,7 +334,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                             }
                         })
                     }
-                // console.log(finalLine);
+                
                 let purchaseOrderBody = 
                     {
                         "TotalAmt": TotalAmt, 
@@ -369,20 +370,42 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                             if(err)
                                 {
                                 return res.json({success:false,message:err});
-                              }
-                                
+                                }                               
                             res.status(201).send({message:"PO created Successfully"});
                          });
 
-                }
-        }
-        catch(e)
-        {
-            res.status(404).send({
-                message:e.message,
-                data:{e}
-            });
-        }
+                        
+                    db.query("SELECT poCount FROM vendors WHERE id=?",[vendorId],(err,result)=>{
+
+                        if(err)
+                            {
+                                return res.json({success:false,error:err});
+                            }
+                        if(result.length >0)
+                            {
+                                const count = result[0].poCount
+                                count=count +1 ;
+                                db.query("UPDATE vendors SET poCount=? WHERE id=?",[count,vendorId],(err,result)=>{
+
+                                    if(err)
+                                        {
+                                            return res.json({success:false,error:err});
+                                        }
+                                        
+                                });
+                            }
+                            return res.status(404).json({success:false,message:"Vendor Not Found"});
+                    });
+
+                         }
+                        }
+                        catch(e)
+                        {
+                            res.status(404).send({
+                                message:e.message,
+                                data:{e}
+                            });
+                        }
     });
 
 

@@ -105,19 +105,16 @@ router.post("/storelocal", async (req,res)=>{
     });
 });
 
-router.get("/getallPo",(req,res)=>{
+router.get("/getallPo/:curr_page/:curr_count",async (req,res)=>{
 
-    db.query("SELECT * FROM limetalorders",(err,result)=>{
-
-        if(err)
-            {
-                return res.status(500).json({success:false,error:err});
-            }
-            else
-            {
-                res.status(200).send({success:true,data:result});
-            }
-    });
+    const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM limetalorders`);
+    const cur_records = await db.runQuery(`SELECT * FROM limetalorders LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+    let result ={
+        total_count:total_count_array[0].total_records,
+        cur_records:cur_records,
+        message:"Success"
+      }
+      res.status(201).send({message:"Successfull",data:result});
 });
 
 router.post("/getAllApproversPo",(req,res)=>{
@@ -293,6 +290,9 @@ router.post("/generatePO",async (req,res)=>{
    const PONumber = `0${areaId}-0${costCenter[0].costCenterCode}-0${areaOfWork[0].areaOfWorkCode}-0${locationId}`;
     res.json({PONumber});
 });
+
+
+
 
 
 module.exports = router;
