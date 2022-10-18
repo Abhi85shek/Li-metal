@@ -120,7 +120,7 @@ const ViewAllSuperAdminOrders = () => {
             },data:orderObj,refreshToken:quickbooksCredentials,poId:po.id,vendorId:po.vendorId
           })
           console.log(res)
-          if(res.status==200||res.status==201)
+          if(res && (res.status==200||res.status==201))
           {
             setTimeout(()=>{
                 toast.success('Order Successfullly stored', {
@@ -134,6 +134,19 @@ const ViewAllSuperAdminOrders = () => {
                 });
               },0);
          
+    }
+    else{
+      setTimeout(()=>{
+        toast.success('Order Creation Failed', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      },0);
     }
     }
 
