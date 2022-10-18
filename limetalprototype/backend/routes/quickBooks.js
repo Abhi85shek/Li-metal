@@ -301,7 +301,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                     'Authorization': "Bearer " + refreshToken
         };
         const {vendorId} =req.body;
-        db.query("SELECT poCount FROM vendors WHERE id=?",[vendorId], async (err,result)=>{
+        db.query("SELECT poCount FROM vendors WHER id=?",[vendorId], async (err,result)=>{
 
             if(err)
                 {

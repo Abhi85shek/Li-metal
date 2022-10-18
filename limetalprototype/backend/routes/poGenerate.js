@@ -74,6 +74,7 @@ router.post("/storelocal", async (req,res)=>{
 
     // const {APAccountRef}  = req.body.orderObj;
     // console.log(req.body.orderObj.APAccountRef.name);
+    try {
     const {vendorId} =req.body.orderObj;
     const {userId} = req.body.orderObj;
     const apName = req.body.orderObj.APAccountRef.name
@@ -101,9 +102,15 @@ router.post("/storelocal", async (req,res)=>{
             }
         else
             {
-            res.status(200).send({success:true,message:"Order Created Successfully"})
+           return res.status(200).send({success:true,message:"Order Created Successfully"})
              }
     });
+    }
+    catch(err)
+        {
+            return res.status(500).json({success:false,error:err});
+        }
+  
 });
 
 router.get("/getallPo/:curr_page/:curr_count",async (req,res)=>{
