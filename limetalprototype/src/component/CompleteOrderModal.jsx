@@ -76,7 +76,7 @@ const CompleteOrderModal = (props) => {
 
     });
     
-    if(result.status === 200)
+    if(result.status == 200)
     {
     return true;
     }
@@ -164,7 +164,7 @@ const CompleteOrderModal = (props) => {
           });
         },0);
         setTimeout(()=>{
-          window.location.reload()
+          // window.location.reload()
         },100);
 
       }

@@ -117,7 +117,7 @@ const ViewAllSuperAdminOrders = () => {
     
               Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
     
-            },data:orderObj,refreshToken:quickbooksCredentials,poId:po.id
+            },data:orderObj,refreshToken:quickbooksCredentials,poId:po.id,vendorId:po.vendorId
           })
           console.log(res)
           if(res.status==200||res.status==201)
