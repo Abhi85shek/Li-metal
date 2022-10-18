@@ -305,7 +305,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
 
             if(err)
                 {
-                    return res.json({success:false,error:err});
+                    return res.status(500).json({success:false,error:err});
                 }
             if(result.length >0)
                 {
@@ -384,17 +384,18 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                                         {
                                         return res.json({success:false,message:err});
                                         }                               
-                                    res.status(201).send({message:"PO created Successfully"});
                                  });
         
                                     db.query("UPDATE vendors SET poCount=? WHERE id=?",[finalCount,vendorId],(err,result)=>{
 
                                     if(err)
                                     {
-                                        return res.json({success:false,error:err});
+                                        return res.status(404).json({success:false,error:err});
                                     }
-                                    return res.status(404).json({success:false,message:"Vendor Not Found"});
+                                    
                                  });
+
+                                 return  res.status(201).send({message:"PO created Successfully"});
    
                         }
                                 }
