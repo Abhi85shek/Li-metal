@@ -29,7 +29,7 @@ const ViewAllSuperAdminOrders = () => {
 
     const getAllOrders = async ()=>{
 
-        const result = await axios.get(`/getallPo/${currentPage}/${currentCount}`,{
+        const result = await axios.get(`http://localhost:4000/getallPo/${currentPage}/${currentCount}`,{
 
             headers:{
     
@@ -39,7 +39,8 @@ const ViewAllSuperAdminOrders = () => {
     
           });
         console.log(result)
-        SetallOrdersList(result.data.data);
+        SetallOrdersList(result.data.data.cur_records);
+        setTotalRecords(result.data.data.total_count)
        
 
     };
