@@ -289,123 +289,129 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     // require.use(checkAuth);
     // Create PO Number API
 
-    router.post('/createPO',async(req,res)=>{
+    router.post('/createPO',async (req,res)=>{
         // console.log("Hello")
-        try{
-                const {poId} = req.body;
-                const {vendorId} =req.body;
-                const {refreshToken} = req.body;
-                // console.log(refreshToken);
-                const headers = {
+        let finalCount;
+        const {poId} = req.body; 
+        const {refreshToken} = req.body;
+                        // console.log(refreshToken);
+        const headers = {
                     'Content-Type': 'application/json',
                     'Accept' : 'application/json',
                     'Authorization': "Bearer " + refreshToken
-                };
-                const data = req.body['data'];
-                const {DocNumber} =  data;
-                const {TotalAmt} = +data;
-                console.log(TotalAmt);
-                const {Line} = data;
-                console.log(Line[0].ItemBasedExpenseLineDetail);
-                const {APAccountRef} = data;
-                const {VendorRef} = data;
-                const {ShipTo} = data;
-              
-                let finalLine =[];
-                for(let i=0 ;i<Line.length;i++)
-                    {
-                        finalLine.push({
-                            "DetailType": "ItemBasedExpenseLineDetail",
-                            "Amount": Line[i].Amount, 
-                            "Id": Line[i].Id, 
-                            "Description": Line[i].Description,
-                            "LineNum": Line[i].LineNum,
-                            "ItemBasedExpenseLineDetail":{
-                            "ItemRef": {
-                                "name": Line[i].ItemBasedExpenseLineDetail.ItemRef.name, 
-                                "value": Line[i].ItemBasedExpenseLineDetail.ItemRef.value
-                              },
-                              "Qty": Line[i].ItemBasedExpenseLineDetail.Qty, 
-                              "TaxCodeRef": {
-                                "value": "NON"
-                              }, 
-                              "BillableStatus": "NotBillable",
-                              "UnitPrice": Line[i].ItemBasedExpenseLineDetail.UnitPrice
-                            }
-                        })
-                    }
-                
-                let purchaseOrderBody = 
-                    {
-                        "TotalAmt": TotalAmt, 
-                        "DocNumber": DocNumber,
-                        "Line": finalLine, 
-                        "APAccountRef": {
-                          "name": APAccountRef.name, 
-                          "value": APAccountRef.value
-                        }, 
-                        "VendorRef": {
-                          "name": VendorRef.name, 
-                          "value": VendorRef.value
-                        },
-                        "ShipTo": {
-                          "name": ShipTo.name, 
-                          "value": ShipTo.value
-                        }
-                    };
-                    // console.log(purchaseOrderBody);
-                    // Line.forEach((list)=>{
-                    //     purchaseOrderBody.Line.push(list);
-                    //     console.log(list);
-                    // })
-                    // console.log(ge)
-                console.log(purchaseOrderBody);
-                const createInvoiceUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder?minorversion=40`;
-                console.log(createInvoiceUrl);
-                const response = await axios.post(createInvoiceUrl,purchaseOrderBody,{headers}); 
-                console.log(response);
-                if(response.status == 200)
+        };
+        const {vendorId} =req.body;
+        db.query("SELECT poCount FROM vendors WHERE id=?",[vendorId], async (err,result)=>{
+
+            if(err)
                 {
-                        db.query("UPDATE limetalorders SET overallStatus =? WHERE id=?",[3,poId],(err,result)=>{
-                            if(err)
-                                {
-                                return res.json({success:false,message:err});
-                                }                               
-                            res.status(201).send({message:"PO created Successfully"});
-                         });
-
+                    return res.json({success:false,error:err});
+                }
+            if(result.length >0)
+                {
+                    finalCount = result[0].poCount +1;
+                    
+                    try{
                         
-                    db.query("SELECT poCount FROM vendors WHERE id=?",[vendorId],(err,result)=>{
-
-                        if(err)
+                        const data = req.body['data'];
+                        let {DocNumber} =  data;
+                        DocNumber = DocNumber + '-' + finalCount;
+                        const {TotalAmt} = +data;
+                        // console.log(TotalAmt);
+                        const {Line} = data;
+                        console.log(Line[0].ItemBasedExpenseLineDetail);
+                        const {APAccountRef} = data;
+                        const {VendorRef} = data;
+                        const {ShipTo} = data;
+                        
+                        let finalLine =[];
+                        for(let i=0 ;i<Line.length;i++)
                             {
-                                return res.json({success:false,error:err});
+                                finalLine.push({
+                                    "DetailType": "ItemBasedExpenseLineDetail",
+                                    "Amount": Line[i].Amount, 
+                                    "Id": Line[i].Id, 
+                                    "Description": Line[i].Description,
+                                    "LineNum": Line[i].LineNum,
+                                    "ItemBasedExpenseLineDetail":{
+                                    "ItemRef": {
+                                        "name": Line[i].ItemBasedExpenseLineDetail.ItemRef.name, 
+                                        "value": Line[i].ItemBasedExpenseLineDetail.ItemRef.value
+                                      },
+                                      "Qty": Line[i].ItemBasedExpenseLineDetail.Qty, 
+                                      "TaxCodeRef": {
+                                        "value": "NON"
+                                      }, 
+                                      "BillableStatus": "NotBillable",
+                                      "UnitPrice": Line[i].ItemBasedExpenseLineDetail.UnitPrice
+                                    }
+                                })
                             }
-                        if(result.length >0)
+                        
+                        let purchaseOrderBody = 
                             {
-                                const count = result[0].poCount
-                                count=count +1 ;
-                                db.query("UPDATE vendors SET poCount=? WHERE id=?",[count,vendorId],(err,result)=>{
-
+                                "TotalAmt": TotalAmt, 
+                                "DocNumber": DocNumber,
+                                "Line": finalLine, 
+                                "APAccountRef": {
+                                  "name": APAccountRef.name, 
+                                  "value": APAccountRef.value
+                                }, 
+                                "VendorRef": {
+                                  "name": VendorRef.name, 
+                                  "value": VendorRef.value
+                                },
+                                "ShipTo": {
+                                  "name": ShipTo.name, 
+                                  "value": ShipTo.value
+                                }
+                            };
+                            // console.log(purchaseOrderBody);
+                            // Line.forEach((list)=>{
+                            //     purchaseOrderBody.Line.push(list);
+                            //     console.log(list);
+                            // })
+                            // console.log(ge)
+                        console.log(purchaseOrderBody);
+                        const createInvoiceUrl = `${QUICK_BOOK_BASE_URL}/v3/company/${QUICK_BOOK_COMPANY_NUMBER}/purchaseorder?minorversion=40`;
+                        console.log(createInvoiceUrl);
+                        const response = await axios.post(createInvoiceUrl,purchaseOrderBody,{headers}); 
+                        console.log(response);
+                        if(response.status == 200)
+                        {
+                                db.query("UPDATE limetalorders SET overallStatus =? WHERE id=?",[3,poId],(err,result)=>{
                                     if(err)
                                         {
-                                            return res.json({success:false,error:err});
-                                        }
-                                        
-                                });
-                            }
-                            return res.status(404).json({success:false,message:"Vendor Not Found"});
-                    });
+                                        return res.json({success:false,message:err});
+                                        }                               
+                                    res.status(201).send({message:"PO created Successfully"});
+                                 });
+        
+                                    db.query("UPDATE vendors SET poCount=? WHERE id=?",[finalCount,vendorId],(err,result)=>{
 
-                         }
+                                    if(err)
+                                    {
+                                        return res.json({success:false,error:err});
+                                    }
+                                    return res.status(404).json({success:false,message:"Vendor Not Found"});
+                                 });
+   
                         }
-                        catch(e)
-                        {
-                            res.status(404).send({
-                                message:e.message,
-                                data:{e}
-                            });
-                        }
+                                }
+                                catch(e)
+                                {
+                                    res.status(404).send({
+                                        message:e.message,
+                                        data:{e}
+                                    });
+                                }
+
+                
+                }
+                
+        });
+
+      
     });
 
 
