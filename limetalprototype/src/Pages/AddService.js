@@ -23,7 +23,7 @@ const AddService = () => {
   const [primaryApprover,setPrimaryApprover]=useState("")
   const [secondaryApprover,setSecondaryApprover]=useState("")
   const [serviceCount,setServiceCount]=useState(0)
- 
+ const [vendorId,setVendorId]=useState(0)
 
 
   const connectQuickbooks=async()=>{
@@ -113,6 +113,8 @@ console.log(localStorage.getItem('quickbooksCredentials'))
         setServiceCount={setServiceCount}
         totalAmount={totalAmount}
         setTotalAmount={setTotalAmount}
+        vendorId={vendorId}
+        setVendorId={setVendorId}
         />
      { serviceList.length > 0 && serviceModalState && <AddServiceTable customerCurrency={customerCurrency} primaryApprover={primaryApprover} setPrimaryApprover={setPrimaryApprover} secondaryApprover={secondaryApprover} setSecondaryApprover ={setSecondaryApprover} serviceCount={serviceCount}  setServiceCount={setServiceCount} isReadOnly={false} totalAmount={totalAmount}
         setTotalAmount={setTotalAmount}/>}
@@ -125,6 +127,7 @@ console.log(localStorage.getItem('quickbooksCredentials'))
          customerName={customerName}
           customerCurrency={customerCurrency}
           totalAmount={totalAmount}
+          vendorId={vendorId}
         setTotalAmount={setTotalAmount}/>
      </div>
     </div>

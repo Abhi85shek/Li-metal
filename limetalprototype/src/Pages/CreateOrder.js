@@ -234,6 +234,7 @@ const CreateOrder = (props) => {
         })
         }
         let orderObj={
+            "vendorId":props.vendorId,
             "DocNumber":poGenerateData,
             "TotalAmt":TotalAmt,
             "Line":Line,

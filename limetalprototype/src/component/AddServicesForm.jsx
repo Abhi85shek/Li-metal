@@ -125,6 +125,7 @@ const handleSupplierChange=(val)=>{
   props.setSupplierNumber(supplierNum)
   props.setSupplierQbId(arr[0])
   props.setSupplierName(arr[3])
+  props.setVendorId(arr[4])
 
   // setSelectedSupplier(supplierNum)
 }
@@ -231,7 +232,7 @@ const handleSupplierChange=(val)=>{
             <option selected>Select a Supplier</option>
                     {
                          suppliers.map((cuurentsuppliers,id)=>( 
-                            <option value={cuurentsuppliers.qbId+'-'+cuurentsuppliers.supplierNumber+'-'+cuurentsuppliers.poCount+'-'+cuurentsuppliers.name} key={id}>{cuurentsuppliers.name}</option>
+                            <option value={cuurentsuppliers.qbId+'-'+cuurentsuppliers.supplierNumber+'-'+cuurentsuppliers.poCount+'-'+cuurentsuppliers.name+'-'+cuurentsuppliers.id} key={id}>{cuurentsuppliers.name}</option>
                         )
                         )
                     }
