@@ -8,6 +8,7 @@ const moment = require('moment');
 // router.use(checkAuth);
 router.get("/getAllArea",(req,res)=>{
 
+    try{
     db.query("SELECT * FROM areatable",(err,result)=>
     {
         if(err)
@@ -18,10 +19,16 @@ router.get("/getAllArea",(req,res)=>{
             res.send(result);
         
     });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 
 router.get("/getCostCenter/:areaId",(req,res)=>{
 
+    try{
         const areaId = req.params.areaId;
     db.query("SELECT * FROM costcentertable WHERE areaId=?",[areaId],(err,result)=>
     {
@@ -34,10 +41,17 @@ router.get("/getCostCenter/:areaId",(req,res)=>{
                 res.send(result);
             }
     });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
+
 });
 
 router.get("/getAreaOfWork/:costCenterId",(req,res)=>{
 
+    try{
     const constCenterId = req.params.costCenterId;
 
     db.query("SELECT * FROM areaofworktable WHERE costCenterId=?",[constCenterId],(err,result)=>{
@@ -52,10 +66,17 @@ router.get("/getAreaOfWork/:costCenterId",(req,res)=>{
         }
 
     });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
+
 });
 
 router.get("/getLocation",(req,res)=>{
 
+    try{
     db.query("SELECT * FROM locationtable",(err,result)=>{
         if(err)
         {
@@ -65,6 +86,12 @@ router.get("/getLocation",(req,res)=>{
             res.send(result);
         }
     });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
+
 });
 
 
@@ -115,6 +142,7 @@ router.post("/storelocal", async (req,res)=>{
 
 router.get("/getallPo/:curr_page/:curr_count",async (req,res)=>{
 
+    try{
     const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM limetalorders`);
     const cur_records = await db.runQuery(`SELECT * FROM limetalorders LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
     let result ={
@@ -123,10 +151,16 @@ router.get("/getallPo/:curr_page/:curr_count",async (req,res)=>{
         message:"Success"
       }
       res.status(201).send({message:"Successfull",data:result});
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 
 router.post("/getAllApproversPo",(req,res)=>{
 
+    try{
     const {primaryApproversId} = req.body;
     db.query("SELECT * FROM limetalorders WHERE primaryApprover = ? UNION SELECT * FROM limetal_dev.limetalorders WHERE secondaryApprover=? AND overallStatus IN ('1','2')",[primaryApproversId,primaryApproversId],(err,result)=>{
 
@@ -138,7 +172,13 @@ router.post("/getAllApproversPo",(req,res)=>{
             {
                 res.status(200).send({success:true,data:result});
             }
-    });
+    }); 
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
+
 
 });
 
@@ -147,6 +187,7 @@ router.post("/getAllApproversPo",(req,res)=>{
 
 router.post("/approvepo",(req,res)=>{
 
+    try{
     // const {approversId} = req.body;
     const {poId} = req.body;
     db.query("SELECT primaryApprover,secondaryApprover,overallStatus FROM limetalorders WHERE id=?",[poId],(err,result)=>{
@@ -201,6 +242,11 @@ router.post("/approvepo",(req,res)=>{
                 }
         }
     })
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 
 });
 
@@ -209,6 +255,7 @@ router.post("/approvepo",(req,res)=>{
 
 router.post("/getorderofuser",async (req,res)=>{
 
+    try{
         const {userId} = req.body;
 
         db.query("SELECT * FROM limetalorders WHERE createdBy=?",[userId],(err,result)=>{
@@ -221,12 +268,18 @@ router.post("/getorderofuser",async (req,res)=>{
                 return res.status(200).send({success:true,data:result});
             }
         });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 // Checking
 
 // Delete PO which is Rejected
 
 router.get('/deletepo/:id',async(req,res)=>{
+    try{
     const poId = req.params.id;
     db.query("SELECT * FROM limetalorders WHERE id =?",[poId],(err,result)=>{
 
@@ -256,6 +309,11 @@ router.get('/deletepo/:id',async(req,res)=>{
     
         }
     })
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
  
 
 });
@@ -263,6 +321,7 @@ router.get('/deletepo/:id',async(req,res)=>{
 // Change the Status to Rejected
 
     router.get("/changestatetoreject/:poid",async (req,res)=>{
+        try{
         const poId = req.params.poid;
 
         db.query("UPDATE limetalorders SET overallStatus=? WHERE id=?",[4,poId],(err,result)=>{
@@ -276,10 +335,16 @@ router.get('/deletepo/:id',async(req,res)=>{
                 return res.status(200).json({success:true,message:"Status Changed Succesfully"});
             }
         });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
     });
 
 
 router.post("/generatePO",async (req,res)=>{
+    try{
     const {areaId} =req.body;
     const {costCenterId} =req.body;
     const {areaOfWorkId} =req.body;
@@ -296,7 +361,11 @@ router.post("/generatePO",async (req,res)=>{
     //     locationCode:locationId
     // };
    const PONumber = `0${areaId}-0${costCenter[0].costCenterCode}-0${areaOfWork[0].areaOfWorkCode}-0${locationId}`;
-    res.json({PONumber});
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 
 
@@ -320,7 +389,7 @@ router.post("/generatePO",async (req,res)=>{
         }
         catch(e)
         {
-                    return res.status(404).send({success:false,data:[]});
+                    return res.status(404).send({success:false,data:[],error:e});
         }
 
 
