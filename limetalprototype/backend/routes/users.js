@@ -83,6 +83,24 @@ router.post("/login",async (req,res)=>{
     });
 
 
+    router.get("/test",async (req,res)=>{
+
+        // const {userId} = req.body;
+
+        db.query("SELECT * FROM limetaluses",(err,result)=>{
+
+            if(err)
+            {
+                return res.status(404).send({data:[],error:err})
+            }
+            else
+            {
+                return res.status(200).send({data:result,message:"Successfully"});
+            }
+        });
+
+    });
+
 router.use(checkAuth);
 
 module.exports = router;
