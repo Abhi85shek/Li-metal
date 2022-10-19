@@ -152,6 +152,7 @@ router.post("/editProduct/:id",(req,res)=>{
 
 router.get("/taxDetails",async(req,res)=>{
 
+    try{
     db.query("SELECT * FROM qbtax",(err,result)=>{
 
         if(err)
@@ -161,12 +162,18 @@ router.get("/taxDetails",async(req,res)=>{
 
         res.status(201).send({message:"Successfull",data:result});
     });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 
 // GET all the Approvers
 
 router.get('/getApprovers',(req,res)=>{
  
+    try{
     db.query('SELECT * FROM limetalusers WHERE type=?',["approver"],(err,result)=>{
 
         if(err)
@@ -177,6 +184,12 @@ router.get('/getApprovers',(req,res)=>{
           return res.status(201).send({success:true,data:result});
         }
     });
+      }
+      catch(e)
+      {
+        res.status(500).send({success:false,data:[],error:e});
+      }
+
 });
 
 
@@ -184,6 +197,7 @@ router.get('/getApprovers',(req,res)=>{
 
     router.get("/getsecondaryapprovers", (req,res)=>{
 
+        try{
         db.query('SELECT * FROM limetalusers WHERE type=? AND approverType = ?',["approver",1],(err,result)=>{
 
             if(err)
@@ -194,10 +208,34 @@ router.get('/getApprovers',(req,res)=>{
               return res.status(201).send({success:true,data:result});
             }
         });
-
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
     });
 
+    // Filter API for the Orders
 
+    router.post("/filterorders/:curr_page/:curr_count",async (req,res)=>{
+        try{
+            const {filterId} = req.body;
+            const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM limetalorders WHERE overallStatus IN (${filterId})`);
+            let cur_records = await db.runQuery(`SELECT * FROM limetalorders WHERE overallStatus IN (${filterId}) LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+            let result ={
+                total_count:total_count_array[0].total_records,
+                cur_records:cur_records,
+                message:"Success"
+          };
+          res.status(201).send({message:"Successfull",data:result});  
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
+
+
+    });
 
 
 module.exports = router;
