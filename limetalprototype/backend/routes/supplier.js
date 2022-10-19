@@ -110,6 +110,7 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
 
     router.get('/getAllAccounts',async (req,res)=>{
 
+        try{
         db.query('SELECT * FROM qbaccounts',(err,result)=>{
             if(err)
             {
@@ -122,11 +123,17 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
 
 
         });
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
     });
 
 // Search a Supplier
     router.post('/searchSupplier/:curr_page/:curr_count',async(req,res)=>
     {
+        try{
     const {supplierName} = req.body;   
     const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM vendors WHERE supplier LIKE '%${supplierName}%'`);
     let cur_records = await db.runQuery(`SELECT * FROM vednors WHERE supplier LIKE '%${supplierName}%' LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
@@ -136,6 +143,11 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
         message:"Success"
   };
   res.status(201).send({message:"Successfull",data:result});
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
 });
 
 

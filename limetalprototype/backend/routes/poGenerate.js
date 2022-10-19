@@ -300,7 +300,31 @@ router.post("/generatePO",async (req,res)=>{
 });
 
 
+// API to Get all the Status
 
+    router.get("/getallstatus",async (req,res)=>{
+
+        try{
+
+            db.query("SELECT * FROM limetalstatustable", (err,result)=>{
+                if(err)
+                {
+                    return res.status(500).json({success:false,error:err});
+                }
+                else
+                {
+                    return res.status(200).send({success:true,data:result});
+                }
+            });
+
+        }
+        catch(e)
+        {
+                    return res.status(404).send({success:false,data:[]});
+        }
+
+
+    });
 
 
 module.exports = router;

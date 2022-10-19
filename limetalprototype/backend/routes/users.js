@@ -6,6 +6,7 @@ const hashing  = require('../helpers/bcrypt');
 const bcrypt = require('bcrypt');
 
 router.post("/login",async (req,res)=>{
+    try{
   const email = req.body.email;
   const password = req.body.password;
   db.query(`SELECT * FROM limetalusers WHERE email=?`,[email],async (err,result)=>{
@@ -38,6 +39,12 @@ router.post("/login",async (req,res)=>{
                   res.json({message:"No User Found",userValid:false});
       } 
   })
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
+
 
 });
 
@@ -45,6 +52,7 @@ router.post("/login",async (req,res)=>{
 
     router.post("/changepassword",async (req,res)=>{
 
+        try{
         const {userId} = req.body;
         const {password} = req.body;
 
@@ -79,6 +87,11 @@ router.post("/login",async (req,res)=>{
 
 
         });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 
     });
 
@@ -86,6 +99,7 @@ router.post("/login",async (req,res)=>{
     router.get("/test",async (req,res)=>{
 
         // const {userId} = req.body;
+        try{
 
         db.query("SELECT * FROM limetaluses",(err,result)=>{
 
@@ -98,6 +112,11 @@ router.post("/login",async (req,res)=>{
                 return res.status(200).send({data:result,message:"Successfully"});
             }
         });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 
     });
 

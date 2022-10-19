@@ -10,6 +10,8 @@ const checkAuth = require('../middleware/check-auth');
 
 router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
 
+    try{
+
     let total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM allservices`);
 
     let cur_records = await db.runQuery(`SELECT * FROM allservices LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
@@ -20,12 +22,18 @@ router.get("/allProducts/:curr_page/:curr_count",async (req,res)=>{
         message:"Success"
     };
      res.status(201).send({message:"Successfull",data:result});
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 
 // API for 
 // Get All Product API WHICH ARE CURRENTLY ACTIVE
 
 router.get('/allProductsActive',(req,res)=>{
+    try{
     db.query("SELECT * FROM allservices WHERE active=?",[1],(err,result)=>{
         if(err)
             {
@@ -34,11 +42,17 @@ router.get('/allProductsActive',(req,res)=>{
             res.send(result);
 
     });
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 
 // CREATE Product API
 
 router.post("/createProduct",(req,res)=>{    
+    try{
     const {productName} = req.body;
     const {productDescription} = req.body;
     const {type} = req.body;
@@ -52,6 +66,11 @@ router.post("/createProduct",(req,res)=>{
         }
         
     });
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
 });
 
 
@@ -60,6 +79,7 @@ router.post("/createProduct",(req,res)=>{
 
 router.post("/archiveProductById",(req,res)=>{
 
+    try{
     const {id} =req.body;
     const {active} = req.body;
     
@@ -70,6 +90,11 @@ router.post("/archiveProductById",(req,res)=>{
         }
         res.json({message:"Product Archive Successfully"});
     });
+}
+catch(e)
+{
+    res.status(500).send({success:false,data:[],error:e});
+}
 });
 
 
@@ -77,6 +102,7 @@ router.post("/archiveProductById",(req,res)=>{
 
     router.post("/searchOrder/:curr_page/:curr_count",async (req,res)=>{
 
+        try{
         const {productName} = req.body;
         
         const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM allservices WHERE serviceName LIKE '%${productName}%'`);
@@ -89,12 +115,18 @@ router.post("/archiveProductById",(req,res)=>{
             message:"Success"
       };
       res.status(201).send({message:"Successfull",data:result});
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
     });
 
 // SORT Product By Type API
 
 router.post("/filterServices/:curr_page/:curr_count",async (req,res)=>{
 
+    try{
     const {category} = req.body;
     const {filter} = req.body;
     const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM allservices WHERE ${category} IN (${filter})`);
@@ -105,6 +137,11 @@ router.post("/filterServices/:curr_page/:curr_count",async (req,res)=>{
         message:"Success"
   };
   res.status(201).send({message:"Successfull",data:result});
+    }
+    catch(e)
+    {
+        res.status(500).send({success:false,data:[],error:e});
+    }
 });
 
 
@@ -134,6 +171,7 @@ catch(err)
 
 router.post("/editProduct/:id",(req,res)=>{
 
+    try{
     // const {id} = req.body;
     const {productName} = req.body;
     const {description} = req.body;
@@ -146,6 +184,11 @@ router.post("/editProduct/:id",(req,res)=>{
         }
         res.status(201).send({message:"Product Upated Successfully"});
     });
+}
+catch(e)
+{
+    res.status(500).send({success:false,data:[],error:e});
+}
 });
 
 // Get The Tax Details 
