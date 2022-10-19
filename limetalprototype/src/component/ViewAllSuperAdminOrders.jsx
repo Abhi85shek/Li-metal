@@ -23,6 +23,7 @@ const ViewAllSuperAdminOrders = () => {
     let totalNumberOfPages;
     let [isStageFilterVisible,setStageFilterVisible]=useState(false)
     let [filtersArray,setFiltersArray]=useState([])
+    let [stageFilters,setStageFilters]=useState([])
     const filterRef=useRef([])
     let types=[{id:0,name:'Approval Pending'},{id:1,name:'Semi-Approved'},{id:2,name:'Approved'},{id:3,name:'QB created'},{id:4,name:'Rejected'}]
     
@@ -44,6 +45,12 @@ const ViewAllSuperAdminOrders = () => {
        
 
     };
+
+    const getAllStageTypes=async()=>{
+      try{
+      await axios.get('http://localhost:4000/getallstatus').then(res=>setStageFilters(res.data.data))
+      }catch(err){throw err}
+    }
     const handleFilterReset=async()=>{
       setStageFilterVisible(false)
       
@@ -211,7 +218,8 @@ const ViewAllSuperAdminOrders = () => {
 
     useEffect(()=>{
         console.log("useeffect")
-        getAllOrders()
+        getAllOrders();
+        getAllStageTypes();
        
     },[])
 
@@ -240,11 +248,11 @@ const ViewAllSuperAdminOrders = () => {
                     </span>
                 {isStageFilterVisible?
                     <div className='h-15 w-42 bg-white outline-2 border-2 outline-slate-600 absolute z-100'> 
-                      { types.map((type,i)=>{
+                      { stageFilters?.map((type,i)=>{
                         return(
                             <div className='p-1 h-7 items-center normal-case font-medium hover:cursor-pointer hover:bg-[#6BA4B8] hover:text-white'>
                                 <input type="checkbox" className='checkbox' ref={el => filterRef.current[i] = el}  id={type.id} name={type.id} onClick={()=>updateFiltersArray(type.id)} value={type.id}/>
-                                        <label className='mt-[-5px]' > {type.name}</label>
+                                        <label className='mt-[-5px]' > {type.status}</label>
                                 </div>
                         )
                        })
