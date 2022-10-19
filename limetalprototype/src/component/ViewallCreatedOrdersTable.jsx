@@ -34,7 +34,7 @@ const ViewAllCreatedOrdersTable = () => {
     
    
     const deleteOrder=async(id)=>{
-        const result = await axios.get(`http://localhost:4000/deletepo/${id}`,{
+        await axios.get(`http://localhost:4000/deletepo/${id}`,{
 
             headers:{
     
@@ -42,36 +42,53 @@ const ViewAllCreatedOrdersTable = () => {
     
             }
     
-          });
-          if(result.status==201||result.status==200)
-       {
-        console.log("toasting")
-        
-            toast.success('Order Deleted Successfuly', {
-              position: "top-right",
+          }).then(res=>{console.log(res); 
+            toast.success('Order Successfullly deleted', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });getAllOrders()}).catch(err=>{console.log(err);
+            if(err.response?.status==404){
+              toast.error('Not Found', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+            }
+           else if(err.response?.status==500){
+            toast.error('Internal Server Error', {
+              position: "top-center",
               autoClose: 2000,
               hideProgressBar: true,
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
+            })
+            }
+            else if(err.response?.status==401){
+              toast.error('You are not authorized', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+        
+            }
+        
             });
-            await getAllOrders();
-          }
-   
-else{
-    setTimeout(()=>{
-        toast.error('Error Occoured', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      },0);
-}
+      
     }
  
 

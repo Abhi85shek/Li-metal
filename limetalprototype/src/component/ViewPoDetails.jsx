@@ -53,7 +53,7 @@ const downloadPdf=async()=>{
 
 const sendEmail=async()=>{
     const quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-    const res=await axios.post('http://localhost:4000/sendPO',{refreshToken:quickbooksCredentials,pOId:props.selectedPoId,email:email},{
+    await axios.post('http://localhost:4000/sendPO',{refreshToken:quickbooksCredentials,pOId:props.selectedPoId,email:email},{
 
         headers:{
 
@@ -61,36 +61,54 @@ const sendEmail=async()=>{
 
         }
 
-      })
-    if(res.status==200)
-    {
-     console.log("toasting")
-     
-         toast.success('Approval Email Sent Successfuly', {
-           position: "top-center",
-           autoClose: 2000,
-           hideProgressBar: true,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           progress: undefined,
-         });
-       }
-
-else{
- 
-     toast.error('Error Occoured', {
-       position: "top-center",
-       autoClose: 2000,
-       hideProgressBar: true,
-       closeOnClick: true,
-       pauseOnHover: true,
-       draggable: true,
-       progress: undefined,
-     });
+      }).then(res=>{console.log(res); 
+        toast.success('PO Emailed successfully', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });}).catch(err=>{console.log(err);
+        if(err.response?.status==404){
+          toast.error('Not Found', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+        }
+       else if(err.response?.status==500){
+        toast.error('Internal Server Error', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        }
+        else if(err.response?.status==401){
+          toast.error('You are not authorized', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+    
+        }})
+  
   
 }
-}
+
 
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">

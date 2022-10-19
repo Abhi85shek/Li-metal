@@ -21,7 +21,7 @@ const ViewOrderDetailsModal = (props) => {
     }
     const rejectOrder=async(id)=>{
       const poid=id
-      const result = await axios.get(`http://localhost:4000/changestatetoreject/${poid}`,{
+      await axios.get(`http://localhost:4000/changestatetoreject/${poid}`,{
 
         headers:{
 
@@ -29,36 +29,53 @@ const ViewOrderDetailsModal = (props) => {
 
         }
 
-      });
-      if(result.status==201||result.status==200)
-   {
-    console.log("toasting")
-    
-        toast.success('Order Rejected Successfuly', {
-          position: "top-right",
+      }).then(res=>{console.log(res); 
+        toast.success('Order Successfullly rejected', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });}).catch(err=>{console.log(err);
+        if(err.response?.status==404){
+          toast.error('Not Found', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+        }
+       else if(err.response?.status==500){
+        toast.error('Internal Server Error', {
+          position: "top-center",
           autoClose: 2000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        });
-       setShowModal(false)
-      }
-
-else{
-setTimeout(()=>{
-    toast.error('Error Occoured', {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  },0);
-}
+        })
+        }
+        else if(err.response?.status==401){
+          toast.error('You are not authorized', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+    
+        }
+    
+        })
+    
     }
 
     const handleSubmit=async()=>{
@@ -129,12 +146,36 @@ console.log(d);
            </div>
           </div>
           </div>
-
+          <div className='p-2 flex flex-row  w-[100%]'>
+          <div className='p-2 basis-1/2 flex flex-row'>
+           <b>Status : </b> &nbsp;&nbsp; 
+           { selectedOrder.overallStatus==0?
+                    <span>
+                        Approval Pending
+                    </span>:
+                    selectedOrder.overallStatus==1?
+                    <span>
+                    Semi Approved
+                </span>:
+                selectedOrder.overallStatus==2?
+                 <span>
+                Approved
+             </span>:
+             selectedOrder.overallStatus==3?
+             <span>
+             QB created
+          </span>:   
+           <span>
+          Rejected
+        </span>}
+        
+          </div>
+</div>
   
 {/* adin console */}
 {props.admin?
 <div className='p-2 flex flex-row justify-center items-center w-[100%] space-x-2'>
-<button onClick={handleSubmit} disabled={selectedOrder.overallStatus!=2} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
+<button onClick={handleSubmit} disabled={selectedOrder.overallStatus!=2 || localStorage.getItem('quickbooksCredentials')==null} className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed ">
   QB Create</button>
   <button onClick={()=>{rejectOrder(selectedOrder.id)}} disabled={selectedOrder.overallStatus>=3} className="text-white bg-[#a83743] hover:bg-[#672e2b] p-2 rounded-md disabled:bg-neutral-500 disabled:cursor-not-allowed">
  Reject</button>

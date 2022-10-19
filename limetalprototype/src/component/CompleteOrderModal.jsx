@@ -66,7 +66,7 @@ const CompleteOrderModal = (props) => {
   // API function to store the Pi in the Local Database
 
   const createOrderHandler = async(orderObj)=>{
-    const result = await axios.post("http://localhost:4000/storelocal",{orderObj:orderObj},{
+  await axios.post("http://localhost:4000/storelocal",{orderObj:orderObj},{
 
       headers:{
 
@@ -74,14 +74,9 @@ const CompleteOrderModal = (props) => {
 
       }
 
-    });
+    }).then(res=>{console.log(res);return res}).catch(err=>{console.log(err);return null});
     
-    if(result.status == 200)
-    {
-    return true;
-    }
-
-    return false;
+    
   };
 
   useEffect(()=>{
@@ -97,7 +92,7 @@ const CompleteOrderModal = (props) => {
     
   },[])
 
-  const createOrderSubmit=()=>{
+  const createOrderSubmit=async()=>{
     if(primaryApprover==localStorage.getItem('uid')||secondaryApprover==localStorage.getItem('uid'))
     {
       setTimeout(()=>{
@@ -149,39 +144,81 @@ const CompleteOrderModal = (props) => {
     orderObj.totalApprovers=totalApprovers
     orderObj.userId=localStorage.getItem('uid')
     orderObj.creationDate=moment().format('YYYY-MM-DD HH:MI:SS')
+ 
+  
+   await axios.post("http://localhost:4000/storelocal",{orderObj:orderObj},{
 
-    if(createOrderHandler(orderObj))
-      {
-        setTimeout(()=>{
-          toast.success('Order Successfullly stored', {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        },0);
-        setTimeout(()=>{
-          // window.location.reload()
-        },100);
+    headers:{
 
-      }
-      else
-      {
-        setTimeout(()=>{
-          toast.error('Error Occoured', {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        },0);
-      }
+      // Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+
+    }
+
+  }).then(res=>{console.log(res); 
+    toast.success('Order Successfullly stored', {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });}).catch(err=>{console.log(err);
+    if(err.response?.status==404){
+      toast.error('Not Found', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+   else if(err.response?.status==500){
+    toast.error('Internal Server Error', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+    }
+    else if(err.response?.status==401){
+      toast.error('You are not authorized', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+
+    }
+
+    })
+    
+
+
+
+    //   }
+    //   else
+    //   {
+    //     setTimeout(()=>{
+    //       toast.error('Error Occoured', {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //         hideProgressBar: true,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //       });
+    //     },0);
+    //   }
     console.log(orderObj);
   
   }

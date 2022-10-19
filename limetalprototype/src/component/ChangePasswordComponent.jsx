@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 function ChangePasswordComponent(props) {
 
     const updateUserPassword=async(id)=>{
-        const result = await axios.post(`http://localhost:4000/users/changepassword`,{
+       await axios.post(`http://localhost:4000/users/changepassword`,{
 
             headers:{
     
@@ -13,37 +13,73 @@ function ChangePasswordComponent(props) {
     
             },userId:localStorage.getItem('uid'),password:newPassword
     
-          });
-          if(result.status==201||result.status==200)
-       {
-        console.log("toasting")
-        
-            toast.success('Password Changed Successfuly', {
-              position: "top-right",
+          }).then(res=>{console.log(res); 
+            toast.success('Password succesfully changed', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });}).catch(err=>{console.log(err);
+            if(err.response?.status==404){
+              toast.error('Not Found', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+            }
+           else if(err.response?.status==500){
+            toast.error('Internal Server Error', {
+              position: "top-center",
               autoClose: 2000,
               hideProgressBar: true,
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-            });
-          
-          }
-   
-else{
-    setTimeout(()=>{
-        toast.error('Error Occoured', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      },0);
-}
+            })
+            }
+            else if(err.response?.status==401){
+              toast.error('You are not authorized', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+        
+            }});
+      
     }
+
+const fetchUsers=async()=>{
+  try{
+  await axios.get('http://localhost:4000/users/test').then(res=>{console.log(res)}).
+   catch(err=>{
+    alert(err.message)
+  })
+
+// console.log(res)
+// console.log('result')
+//   if(res && res.data.data.length>0)
+//   {
+//     alert('success')
+//   }
+//   else{
+// alert('faliure')
+//   }
+//   }catch(err)
+//   {
+//     console.log(err)
+}catch(e){return}}
 
 const [newPassword,setNewPassword]=useState("")
 
@@ -56,6 +92,7 @@ const [newPassword,setNewPassword]=useState("")
                     </div>
                     <div className='p-2 flex flex-row justify-center items-center w-[100%]'>
 <button className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md " onClick={updateUserPassword}>Update Password</button>
+<button className="text-white bg-[#426b79] hover:bg-[#223c45] p-2 rounded-md " onClick={fetchUsers}>test</button>
   </div>
             </div>
             

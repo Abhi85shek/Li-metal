@@ -39,7 +39,7 @@ const AddProductModal = () => {
           accountNumber:accountNumber
         }
         console.log(productDetails)
-        const result = await axios.post('http://localhost:4000/createProduct', {
+      await axios.post('http://localhost:4000/createProduct', {
 
           headers:{
   

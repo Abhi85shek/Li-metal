@@ -17,7 +17,7 @@ const EditProductModal = (props) => {
     const editProduct= async (e)=>{
         e.preventDefault();
         let id=productId
-        const result = await axios.post(`http://localhost:4000/editProduct/${id}`,{productName:productName,description:description,type:type},{
+        await axios.post(`http://localhost:4000/editProduct/${id}`,{productName:productName,description:description,type:type},{
 
           headers:{
   
@@ -25,27 +25,8 @@ const EditProductModal = (props) => {
   
           }
   
-        });
-        setShowModal(false);
-        console.log(result)
-        if(result.status==201)
-       {
-        console.log("toasting")
-        
-            toast.success('Product updted successfully', {
-              position: "top-center",
-              autoClose: 2000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-   
-else{
-    setTimeout(()=>{
-        toast.error('Error Occoured', {
+        }).then(res=>{console.log(res); 
+          toast.success('Product succesfully edited', {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: true,
@@ -53,9 +34,45 @@ else{
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        });
-      },0);
-}
+        });}).catch(err=>{console.log(err);
+          if(err.response?.status==404){
+            toast.error('Not Found', {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            })
+          }
+         else if(err.response?.status==500){
+          toast.error('Internal Server Error', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+          }
+          else if(err.response?.status==401){
+            toast.error('You are not authorized', {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            })
+      
+          }})
+        setShowModal(false);
+       
+        
+      
    }
 
   return (

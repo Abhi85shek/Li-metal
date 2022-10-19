@@ -2,6 +2,8 @@ import React,{useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import ViewPoDetails from './ViewPoDetails';
 import { useRecoilState } from 'recoil';
+import { ToastContainer, toast } from 'react-toastify';
+
 import orderDetailsModalVisibleAtom from '../atoms/orderDetailsModalVisibleAtom';
 import ViewOrderDetailsModal from './ViewOrderDetailsModal';
 
@@ -44,7 +46,7 @@ const AllOrders = () => {
             orderObj.action="Approved"
             orderObj.uid=localStorage.getItem('uid')
             console.log(orderObj)
-            const result = await axios.post(`http://localhost:4000/approvepo`,{poId:selectedOrder.id},{
+            await axios.post(`http://localhost:4000/approvepo`,{poId:selectedOrder.id},{
 
                 headers:{
         
@@ -52,22 +54,53 @@ const AllOrders = () => {
         
                 }
         
-              });
-            if(result.status === 200)
-            {
-                setTimeout(()=>{
-                    window.location.reload();
-                    // toast.success('Order Successfullly stored', {
-                    //   position: "top-center",
-                    //   autoClose: 2000,
-                    //   hideProgressBar: true,
-                    //   closeOnClick: true,
-                    //   pauseOnHover: true,
-                    //   draggable: true,
-                    //   progress: undefined,
-                    // });
-                  },0);
-            }
+              }).then(res=>{console.log(res); 
+                toast.success('PO Successfully approved', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+              getAllOrders();
+              ;}).catch(err=>{console.log(err);
+                if(err.response?.status==404){
+                  toast.error('Not Found', {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  })
+                }
+               else if(err.response?.status==500){
+                toast.error('Internal Server Error', {
+                  position: "top-center",
+                  autoClose: 2000,
+                  hideProgressBar: true,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                })
+                }
+                else if(err.response?.status==401){
+                  toast.error('You are not authorized', {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  })
+            
+                }})
+          
         
     }
 

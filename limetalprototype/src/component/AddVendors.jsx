@@ -108,7 +108,7 @@ useEffect(()=>{
         }
     console.log(vendorDetails, refreshToken)
 
-        const result = await axios.post('http://localhost:4000/createVendor',{vendorDetails: vendorDetails, refreshToken: refreshToken},{
+        await axios.post('http://localhost:4000/createVendor',{vendorDetails: vendorDetails, refreshToken: refreshToken},{
 
             headers:{
     
@@ -116,13 +116,29 @@ useEffect(()=>{
     
             }
     
-          });
-        console.log(result.status)
-        if(result.status==200)
-       {
-        console.log("toasting")
-        
-            toast.success('Vendor added successfully', {
+          }).then(res=>{console.log(res); 
+            toast.success('Vendor succesfully added', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });}).catch(err=>{console.log(err);
+            if(err.response?.status==404){
+              toast.error('Not Found', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+            }
+           else if(err.response?.status==500){
+            toast.error('Internal Server Error', {
               position: "top-center",
               autoClose: 2000,
               hideProgressBar: true,
@@ -130,25 +146,26 @@ useEffect(()=>{
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-            });
-          }
-   
-else{
-    setTimeout(()=>{
-        toast.error('Error Occoured', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      },0);
-}
-        setShowModal(false);
+            })
+            }
+            else if(err.response?.status==401){
+              toast.error('You are not authorized', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
         
-   };
+            }});
+            setShowModal(false);
+       
+}
+      
+        
+ 
 
    const validateField=value=> {
     let error;

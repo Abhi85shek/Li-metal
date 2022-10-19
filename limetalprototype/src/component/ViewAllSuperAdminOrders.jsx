@@ -111,43 +111,59 @@ const ViewAllSuperAdminOrders = () => {
         }
         console.log(po)
         let quickbooksCredentials=localStorage.getItem('quickbooksCredentials')
-        const res=await axios.post(`http://localhost:4000/createPO`,{
+        await axios.post(`http://localhost:4000/createPO`,{
 
             headers:{
     
               Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
     
             },data:orderObj,refreshToken:quickbooksCredentials,poId:po.id,vendorId:po.vendorId
-          })
-          console.log(res)
-          if(res && res.status==200)
-          {
-            setTimeout(()=>{
-                toast.success('Order Successfullly stored', {
-                  position: "top-center",
-                  autoClose: 2000,
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });
-              },0);
-         
-    }
-    else{
-      setTimeout(()=>{
-        toast.success('Order Creation Failed', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      },0);
-    }
+          }).then(res=>{console.log(res); 
+            toast.success('PO successfully created on Quickbooks', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });getAllOrders()}).catch(err=>{console.log(err);
+            if(err.response?.status==404){
+              toast.error('Not Found', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+            }
+           else if(err.response?.status==500){
+            toast.error('Internal Server Error', {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            })
+            }
+            else if(err.response?.status==401){
+              toast.error('You are not authorized', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+        
+            }})
+          
+        
     }
 
     const previousPageHandler =()=>{
