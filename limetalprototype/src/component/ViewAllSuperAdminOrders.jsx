@@ -44,6 +44,12 @@ const ViewAllSuperAdminOrders = () => {
        
 
     };
+    const handleFilterReset=async()=>{
+      setStageFilterVisible(false)
+      
+        setFiltersArray([])
+         await getAllOrders()
+     }
     
     const applyFilters=async()=>{
 
@@ -62,18 +68,19 @@ const ViewAllSuperAdminOrders = () => {
       }
   }
       console.log(newfilterString)
-      // const result = await axios.post(`http://localhost:4000/filterServices/${currentPage}/${currentCount}`, {category:'Type',filter:newfilterString},{
+      const result = await axios.post(`http://localhost:4000/filterorders/${currentPage}/${currentCount}`, {filterId:newfilterString},{
 
-      //     headers:{
+          headers:{
   
-      //       Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
+            Authorization:`Bearer+ ${JSON.parse(localStorage.getItem("userData")).token}`
   
-      //     }
+          }
   
-      //   });
-      // setAllProducts(result.data.data.cur_records);
-      // setTotalRecords(result.data.data.total_count);
-      // setStageFilterVisible(false)
+        });
+      SetallOrdersList(result.data.data.cur_records);
+      setTotalRecords(result.data.data.total_count);
+      setFiltersArray([])
+      setStageFilterVisible(false)
   
   }
 
@@ -232,7 +239,7 @@ const ViewAllSuperAdminOrders = () => {
                     <AiFillFilter onClick={()=>{setStageFilterVisible(!isStageFilterVisible)}} size={12} className="ml-2 hover:cursor-pointer"/>
                     </span>
                 {isStageFilterVisible?
-                    <div className='h-15 w-42 bg-white outline-2 border-2 outline-slate-600 absolute'> 
+                    <div className='h-15 w-42 bg-white outline-2 border-2 outline-slate-600 absolute z-100'> 
                       { types.map((type,i)=>{
                         return(
                             <div className='p-1 h-7 items-center normal-case font-medium hover:cursor-pointer hover:bg-[#6BA4B8] hover:text-white'>
@@ -246,7 +253,7 @@ const ViewAllSuperAdminOrders = () => {
                     <button type='button' onClick={applyFilters} className={'w-15 rounded inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-green-400'} >
                         
                             Apply</button>
-                            <button type='button' onClick={()=>{return}} className={'w-15 rounded inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-blue-400'} >
+                            <button type='button' onClick={()=>{handleFilterReset()}} className={'w-15 rounded inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-white-500 bg-blue-400'} >
                         
                             Reset</button>
                             </div>
