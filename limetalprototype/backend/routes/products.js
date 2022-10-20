@@ -276,9 +276,98 @@ router.get('/getApprovers',(req,res)=>{
         {
             res.status(500).send({success:false,data:[],error:e});
         }
-
-
     });
+
+
+    // Total Order Placed Created
+
+    router.get("/gettotalorders", async (req,res)=>{
+
+        try{
+
+            db.query("SELECT COUNT(*) as totalorders FROM limetalorders",(err,result)=>{
+                if(err)
+                {
+                    return res.status(500).json({success:false,error:err});
+                }
+                
+                return res.status(201).send({success:true,data:result});
+            });
+
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
+        
+    });
+
+
+    // Total Order Approved. 
+
+    router.get("/getallapprovedpo",async (req,res)=>{
+
+        try{
+
+            db.query("SELECT COUNT(*) as totalApprovedPO FROM limetalorders WHERE overallStatus=?",[2],(err,result)=>{
+                if(err)
+                {
+                    return res.status(500).json({success:false,error:err});
+                }
+                
+                return res.status(201).send({success:true,data:result});
+            });
+
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
+    });
+
+
+    // Total Approval Pending
+
+    router.get("/getallpendingpo",async (req,res)=>{
+
+        try{
+
+            db.query("SELECT COUNT(*) as totalPendingPo FROM limetalorders WHERE overallStatus=?",[0],(err,result)=>{
+                if(err)
+                {
+                    return res.status(500).json({success:false,error:err});
+                }
+                return res.status(201).send({success:true,data:result});
+            });
+
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
+    });
+
+    // Total QB Created
+
+    router.get("/getallqbcreated",async (req,res)=>{
+
+        try{
+
+            db.query("SELECT COUNT(*) as totalqbcreated FROM limetalorders WHERE overallStatus=?",[3],(err,result)=>{
+                if(err)
+                {
+                    return res.status(500).json({success:false,error:err});
+                }
+                return res.status(201).send({success:true,data:result});
+            });
+
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
+    });
+
 
 
 module.exports = router;

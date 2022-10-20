@@ -7,6 +7,7 @@ const OAuthClient =  require('intuit-oauth');
 const Customer = require('../helpers/customer');
 const account = require('../helpers/accounts');
 const db =require("../helpers/db");
+const { route } = require('./poGenerate');
 
 const quickBookLocalID = config.qb.quickBookLocalID
 const quickBookUrl = 'http://localhost:3001/home';
@@ -698,6 +699,39 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             }
     
         });
+    });
+
+    // Get the total Number of Products from the Quickbook
+
+    route.get("/getproductcountfromquickbooks",async (req,res)=>{
+        try{
+            const {refreshToken} = req.body;
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept' : 'application/json',
+                'Authorization': "Bearer " + refreshToken
+            };
+
+            const itemQuery =`select COUNT(*) from Item`;
+            const getitemCountURL = `${QUICK_BOOK_BASE_URL}/v3/company/${COMPANY_NUMBER}/query?query=${itemQuery}&minorversion=65`;
+            const response = await axios.get(getitemCountURL,{headers});
+            if(response.status == 200)
+            {
+                res.send({message:'successfull',data:response.data});
+            }
+            else
+            {
+                res.status(401).send({message:"Data Not Found"});
+            }
+        }
+        catch(e)
+        {
+            res.status(404).send({
+                message:e.message,
+                data:{e}
+            });
+
+        }
     });
 
 module.exports = router;
