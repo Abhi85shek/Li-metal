@@ -1,5 +1,6 @@
 import React, { useEffect,useState } from 'react'
 import axios from 'axios'
+import HomepageStatitisticsCard from '../component/HomepageStatitisticsCard'
 
 
 const Home = () => {
@@ -56,37 +57,15 @@ const Home = () => {
   return (
     <div className='flex flex-col flex-1'> 
        <div className='p-4 flex flex-row justify-around items-center space-x-2 mt-10'> 
-      <div className='flex justify-center items-center h-60 w-60 shadow-2xl rounded bg-[#508193] text-neutral-50'>
-        <div className='flex flex-col p-4  justify-center items-center'>
-          <div className='text-3xl font-bold p-2 justify-center items-center'>Total Orders Placed</div>
-          <div className='text-6xl justify-center items-center font-bold p-2'>{ordersCount}</div>
-        </div>
-      </div>
-      <div className='flex justify-center items-center h-60 w-60 shadow-2xl rounded bg-[#508193] text-neutral-50'>
-        <div className='flex flex-col p-4  justify-center items-center'>
-          <div className='text-3xl font-bold p-2 justify-center items-center'>Total Approved PO's</div>
-          <div className='text-6xl justify-center items-center font-bold p-2'>{allApprovedOrdersCount}</div>
-        </div>
-      </div>
-      <div className='flex justify-center items-center h-60 w-60 shadow-2xl rounded bg-[#508193] text-neutral-50'>
-        <div className='flex flex-col p-4  justify-center items-center'>
-          <div className='text-3xl font-bold p-2 justify-center items-center'>Total QB created PO's</div>
-          <div className='text-6xl justify-center items-center font-bold p-2'>{allQbOrdersCount}</div>
-        </div>
-      </div>
+      <HomepageStatitisticsCard title="Total Orders Placed" value={ordersCount} bg='bg-[#cf4232]'/>
+      <HomepageStatitisticsCard title="Total Approved PO's" value={allApprovedOrdersCount} bg='bg-[#36b45a]'/>
+      <HomepageStatitisticsCard title="Total QB Created PO's" value={allQbOrdersCount} bg='bg-[#3653b4]'/>
+     
+      
     </div>  
     <div className='p-8 flex flex-row justify-around items-center space-x-2'> 
-    <div className='flex justify-center items-center h-60 w-60 shadow-2xl rounded bg-[#508193] text-neutral-50'>
-        <div className='flex flex-col p-4  justify-center items-center'>
-          <div className='text-3xl font-bold p-2 justify-center items-center'>Total Unapproved PO's</div>
-          <div className='text-6xl justify-center items-center font-bold p-2'>{allUnapprovedOrdersCount}</div>
-        </div>
-      </div><div className='flex justify-center items-center h-60 w-60 shadow-2xl rounded bg-[#508193] text-neutral-50'>
-        <div className='flex flex-col p-4  justify-center items-center'>
-          <div className='text-3xl font-bold p-2 justify-center items-center'>Total Products Present</div>
-          <div className='text-6xl justify-center items-center font-bold p-2'>{allProductscount}</div>
-        </div>
-      </div> 
+    <HomepageStatitisticsCard title="Total Unapproved PO's" value={allUnapprovedOrdersCount} bg='bg-[#36b4a1]'/>
+    <HomepageStatitisticsCard title="Total Products Present" value={allProductscount} bg='bg-[#ae36b4]' />
     </div>
     </div>
   
