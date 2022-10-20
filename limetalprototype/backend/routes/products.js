@@ -368,6 +368,27 @@ router.get('/getApprovers',(req,res)=>{
         }
     });
 
+    // Get all the Products Count
 
+    
+    
+    router.get("/getallproductcount",async (req,res)=>{
+
+        try{
+
+            db.query("SELECT COUNT(*) as totalproducts FROM allservices",(err,result)=>{
+                if(err)
+                {
+                    return res.status(500).json({success:false,error:err});
+                }
+                return res.status(201).send({success:true,data:result});
+            });
+
+        }
+        catch(e)
+        {
+            res.status(500).send({success:false,data:[],error:e});
+        }
+    });
 
 module.exports = router;

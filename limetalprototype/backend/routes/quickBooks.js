@@ -703,7 +703,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
 
     // Get the total Number of Products from the Quickbook
 
-    route.get("/getproductcountfromquickbooks",async (req,res)=>{
+    router.get("/getproductcountfromquickbooks",async (req,res)=>{
         try{
             const {refreshToken} = req.body;
             const headers = {
