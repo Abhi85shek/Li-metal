@@ -1,4 +1,5 @@
 const express = require('express');
+const { qb } = require('../config/config');
 var router = express.Router();
 const db = require('../helpers/db');
 const checkAuth = require('../middleware/check-auth');
@@ -389,6 +390,28 @@ router.get('/getApprovers',(req,res)=>{
         {
             res.status(500).send({success:false,data:[],error:e});
         }
+    });
+
+    // Create Items in local Database
+
+    router.post("/createlocalItem",async (req,res)=>{
+
+        const {serviceName} = req.body;
+        const {description} = req.body;
+        const {type} = req.body;
+        const {qbId} = req.body;
+
+        qb.query("INSERT INTO allservices (serviceName,description,type,qbId) VALUES (?,?,?,?)",[serviceName,description,type,qbId],(err,result)=>{
+
+            if(err)
+                {
+                    return res.status(500).json({success:false,error:err});
+                }
+                else
+                {
+                    return res.status(201).json({success:true,message:"Item Successfully Created Locally"});
+                }
+        });
     });
 
 module.exports = router;
