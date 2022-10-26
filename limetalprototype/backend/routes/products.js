@@ -392,7 +392,7 @@ router.get('/getApprovers',(req,res)=>{
         }
     });
 
-    // Create Items in local Database
+    // Create Items in local Database 
 
     router.post("/createlocalItem",async (req,res)=>{
 
@@ -400,11 +400,12 @@ router.get('/getApprovers',(req,res)=>{
         const {description} = req.body.productDetails;
         const {type} = req.body.productDetails;
         const {qbId} = req.body.productDetails;
-
-        qb.query("INSERT INTO allservices (serviceName,description,type,qbId) VALUES (?,?,?,?)",[serviceName,description,type,qbId],(err,result)=>{
+        console.log(req.body.productDetails);
+        db.query("INSERT INTO allservices (serviceName,description,type,qbId) VALUES (?,?,?,?)",[serviceName,description,type,qbId],(err,result)=>{
 
             if(err)
                 {
+                    console.log(err);
                     return res.status(500).json({success:false,error:err});
                 }
                 else
