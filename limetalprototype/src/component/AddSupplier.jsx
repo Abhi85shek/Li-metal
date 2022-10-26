@@ -99,6 +99,7 @@ useEffect(()=>{
             postalCode:values.postalCode,
             taxSlip:values.taxSlip,
             phone:values.phone,
+            qbId:values.qbId,
             email:values.email,
             openBalance:values.openBalance,
             supplierNumber:values.supplierNumber,
@@ -229,6 +230,7 @@ useEffect(()=>{
         postalCode:'',
         taxSlip:'',
         phone:'',
+        qbId:'',
         email:'',
         openBalance:'',
         supplierNumber:'',
@@ -347,12 +349,17 @@ useEffect(()=>{
                     </div>
 
                     <div className='flex space-x-2 mt-4  '>
-                        <div className='basis-1/2'>
+                        <div className='basis-1/3'>
                         <label htmlFor='phone' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Phone</label>
                         <Field placeholder="Enter Supplier Phone Number" type="text" id="phone" validate={validatePhoneNumber} name="phone" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.phone && touched.phone && <div className='text-red-700'>{errors.phone}</div>}
                         </div>
-                        <div className='basis-1/2'>
+                        <div className='basis-1/3'>
+                        <label htmlFor='qbId' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Quickbooks Id</label>
+                        <Field placeholder="Enter Supplier Quickbooks Id" type="text" id="qbId" validate={validateField} name="qbId" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        {errors.qbId && touched.qbId && <div className='text-red-700'>{errors.qbId}</div>}
+                        </div>
+                        <div className='basis-1/3'>
                         <label htmlFor='email' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Email</label>
                         <Field placeholder="Enter Supplier Email" type="email" id="email" validate={validateField} name="email" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                         {errors.email && touched.email && <div className='text-red-700'>{errors.email}</div>}

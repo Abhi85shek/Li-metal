@@ -11,12 +11,15 @@ import { BsSearch } from "react-icons/bs";
 import {AiFillFilter} from "react-icons/ai"
 import editProductModalVisible from '../atoms/editProductModalVisible';
 import EditProductModal from '../component/EditProductModal';
+import addNewLocalProductVisibleAtom from '../atoms/addNewLocalProductVisibleAtom';
+import AddLocalProduct from '../component/AddLocalProduct';
 
 const AllProducts = () => {
 
     const [showModal,setShowModal] = useRecoilState(addProductModalAtom);
     const [showEditModal,setShowEditModal]=useRecoilState(editProductModalVisible)
     const [archiveShowModal,setArchiveShowModal] = useRecoilState(archiveProductModalAtom);
+    const [showAddLocalProductModal,setShowAddLocalProductModal]=useRecoilState(addNewLocalProductVisibleAtom)
     const [allProducts,setAllProducts] = useState([]);
     const [selectedArchivedProduct,setSelectedArchivedProduct] = useState(null);
     const [totalRecords,setTotalRecords] = useState(0);
@@ -228,6 +231,7 @@ const AllProducts = () => {
   { showModal ? <AddProduct /> : " "}
   { showEditModal ? <EditProductModal selectedProduct={selectedProduct}  /> : " "}
    {archiveShowModal ? <ProductArchiveModal  product={selectedArchivedProduct} /> : " "}
+   {showAddLocalProductModal? <AddLocalProduct/>:" "}
     {/* <div>Products Page</div> */}
     <CreateProduct />
     <div className='w-full px-40 py-2 '>
