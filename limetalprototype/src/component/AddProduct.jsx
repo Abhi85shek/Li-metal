@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
 import addProductModalAtom from '../atoms/addProductModalAtom';
-import {toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AddProduct = () => {
@@ -24,7 +24,7 @@ const AddProduct = () => {
       console.log(accounts.data.data);
       setAccounts(accounts.data.data)
     }
-
+    
    const addProductHandler= async ()=>{
         const refreshToken = localStorage.getItem('quickbooksCredentials')
         const productDetails = {
@@ -39,7 +39,7 @@ const AddProduct = () => {
         }
         console.log(productDetails)
         await axios.post('http://localhost:4000/createItem', {productDetails: productDetails, refreshToken: refreshToken})
-        .then(res=>{console.log(res); 
+        .then(res=>{console.log(res);
             toast.success('Product succesfully added', {
             position: "top-center",
             autoClose: 2000,
