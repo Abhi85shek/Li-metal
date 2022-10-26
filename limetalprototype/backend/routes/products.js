@@ -396,10 +396,10 @@ router.get('/getApprovers',(req,res)=>{
 
     router.post("/createlocalItem",async (req,res)=>{
 
-        const {serviceName} = req.body;
-        const {description} = req.body;
-        const {type} = req.body;
-        const {qbId} = req.body;
+        const {serviceName} = req.body.productDetails;
+        const {description} = req.body.productDetails;
+        const {type} = req.body.productDetails;
+        const {qbId} = req.body.productDetails;
 
         qb.query("INSERT INTO allservices (serviceName,description,type,qbId) VALUES (?,?,?,?)",[serviceName,description,type,qbId],(err,result)=>{
 
