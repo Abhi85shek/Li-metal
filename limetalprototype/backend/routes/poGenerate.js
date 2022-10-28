@@ -162,7 +162,7 @@ router.post("/getAllApproversPo",(req,res)=>{
 
     try{
     const {primaryApproversId} = req.body;
-    db.query("SELECT * FROM limetalorders WHERE primaryApprover = ? UNION SELECT * FROM limetal_dev.limetalorders WHERE secondaryApprover=? AND overallStatus IN ('1','2')",[primaryApproversId,primaryApproversId],(err,result)=>{
+    db.query("SELECT * FROM (SELECT * FROM limetalorders WHERE primaryApprover = ?  UNION SELECT * FROM limetal_dev.limetalorders WHERE secondaryApprover=? AND overallStatus IN ('1','2')) results ORDER BY id DESC",[primaryApproversId,primaryApproversId],(err,result)=>{
 
         if(err)
             {
@@ -170,6 +170,7 @@ router.post("/getAllApproversPo",(req,res)=>{
             }
             else
             {
+                console.log(result);
                 res.status(200).send({success:true,data:result});
             }
     }); 
