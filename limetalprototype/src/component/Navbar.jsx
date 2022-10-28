@@ -137,7 +137,8 @@ const disconnectQuickbooks=()=>{
         </a> 
     <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
       <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium items-center">
-      <li>
+      {viewAdminMenu?
+      <>      <li>
           {localStorage.getItem('qbConnectVisible')==null || (localStorage.getItem('qbConnectVisible')=='1' && window.location.href.split('?').length!=2 ) ?
           <div  onClick={()=>{connectwithquickbooks()}}className='flex justufy-center hover:cursor-pointer items-center space-x-2 p-2 rounded-md bg-neutral-100 text-[#4d7e90] font-bold'>
             <SiQuickbooks size={24}/>
@@ -163,6 +164,7 @@ const disconnectQuickbooks=()=>{
             }
           
         </li>
+        </>:null}
         {/* <li className='flex flex-row space-x-2 gap-2'>
           <BiUser size={20}/>{auth.userName}
         </li> */}
