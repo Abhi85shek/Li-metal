@@ -302,7 +302,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                     'Authorization': "Bearer " + refreshToken
         };
         const {vendorId} =req.body;
-        db.query("SELECT poCount FROM vendors WHER id=?",[vendorId], async (err,result)=>{
+        db.query("SELECT poCount FROM vendors WHERE id=?",[vendorId], async (err,result)=>{
 
             if(err)
                 {
@@ -502,7 +502,19 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             const response = await axios.post(createItemURL,createItemBody,{headers});
             if(response.status == 200)
             {
-                res.send({message:'successfull',data:response.data});
+             
+                const qbId = response.data.Item.Id;
+                db.query("INSERT INTO allservices (serviceName,description,type,active,qbId) VALUE (?,?,?,?,?)",[productName,productDescription,type,1,qbId],(err,result)=>{
+
+                    if(err)
+                        {
+                            res.status(500).send({error:err,sucess:false});
+                        }
+
+                        res.send({message:'successfull',data:response.data});
+                }); 
+                
+              
             }
             else
             {

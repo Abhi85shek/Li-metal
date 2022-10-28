@@ -4,33 +4,33 @@ var router = express.Router();
 const db = require('../helpers/db');
 const checkAuth = require('../middleware/check-auth');
 
-
-    // router.use(checkAuth);
-
 // Create a Supplier
 
-    // router.post('/createSupplier',(req,res)=>{
-    //     const {supplierName} = req.body.supplierDetails;
-    //     const {company} = req.body.supplierDetails;
-    //     const {streetAddress} = req.body.supplierDetails;
-    //     const {city} = req.body.supplierDetails;
-    //     const {Province} = req.body.supplierDetails;
-    //     const {country} = req.body.supplierDetails;
-    //     const {postalCode} = req.body.supplierDetails;
-    //     const {taxSlip} = req.body.supplierDetails;
-    //     const {phone} = req.body.supplierDetails;
-    //     const {email} = req.body.supplierDetails;
-    //     const {openBalance}= req.body.supplierDetails;
-    //     const {supplierNumber} = req.body.supplierDetails;
-    //     const {currency} = req.body.supplierDetails;
-    //     db.query("INSERT INTO suppliertable (supplier,company,streetAddress,city,Province,Country,postalCode,taxSlip,phone,email,openBalance,supplierNumber,currency) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[supplierName,company,streetAddress,city,Province,country,postalCode,taxSlip,phone,email,openBalance,supplierNumber,currency],(err,result)=>{
-    //         if(err)
-    //             {
-    //                 throw err;
-    //             }
-    //         res.status(201).send({message:'Supplier Successfull Created'});
-    //     })
-    // });
+    router.post('/createSupplier',(req,res)=>{
+        const {supplierName} = req.body.supplierDetails;
+        
+        const {streetAddress} = req.body.supplierDetails;
+        const {city} = req.body.supplierDetails;
+        const {Province} = req.body.supplierDetails;
+        const {country} = req.body.supplierDetails;
+        const {postalCode} = req.body.supplierDetails;
+       
+        const {phone} = req.body.supplierDetails;
+        const {email} = req.body.supplierDetails;
+        const {openBalance}= req.body.supplierDetails;
+        const {supplierNumber} = req.body.supplierDetails;
+        const {currency} = req.body.supplierDetails;
+        const {currencyValue} = req.body.supplierDetails;
+        const {qbId} =req.body.supplierDetails;
+
+        db.query("INSERT INTO vendors (name,supplierNumber,streetAddress,city,Province,Country,postalCode,phone,email,openBalance,currency,currencyValue,qbId,provinceCode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[supplierName,streetAddress,city,Province,country,postalCode,taxSlip,phone,email,openBalance,supplierNumber,currency],(err,result)=>{
+            if(err)
+                {
+                    throw err;
+                }
+            res.status(201).send({message:'Supplier Successfull Created'});
+        })
+    });
 
     // Edit or Update a Supplier
 

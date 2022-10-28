@@ -144,7 +144,7 @@ router.get("/getallPo/:curr_page/:curr_count",async (req,res)=>{
 
     try{
     const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM limetalorders`);
-    const cur_records = await db.runQuery(`SELECT * FROM limetalorders LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+    const cur_records = await db.runQuery(`SELECT * FROM limetalorders ORDER BY id DESC LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
     let result ={
         total_count:total_count_array[0].total_records,
         cur_records:cur_records,
