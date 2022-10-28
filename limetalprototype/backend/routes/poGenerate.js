@@ -259,7 +259,7 @@ router.post("/getorderofuser",async (req,res)=>{
     try{
         const {userId} = req.body;
 
-        db.query("SELECT * FROM limetalorders WHERE createdBy=?",[userId],(err,result)=>{
+        db.query("SELECT * FROM limetalorders WHERE createdBy=? ORDER BY id DESC ",[userId],(err,result)=>{
             if(err)
             {
                 return res.status(500).json({success:false,Error:err});
