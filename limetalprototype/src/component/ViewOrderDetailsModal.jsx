@@ -122,8 +122,18 @@ console.log(d);
           </div>
           <div className='p-2 basis-1/2 flex flex-row justify-end'>
             <div className='float-right'>
-           <b>Date: </b> {selectedOrder.creationDate}
-           </div>
+           <b>Date Y-M-D: </b> {
+           
+          //  var date = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+
+// console.log(date); 
+// 2015-09-13 03:39:27var stillUtc = moment.utc(date).toDate();
+// var local = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+           
+           moment(moment.utc(moment(selectedOrder.creationDate).format('YYYY-MM-DD hh:mm a ')).toDate()).local().format('YYYY-MM-DD hh:mm a')}
+          {/* // moment(moment.utc(selectedOrder.creationDate).toDate()).local().format('YYYY-MM-DD HH:mm:ss')  */}
+           
+          </div>
           </div>
           </div>
            <div className='p-2 flex flex-row justify-center items-center w-[100%]'>

@@ -7,7 +7,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import viewQbPoDetailModalAtom from '../atoms/viewQbPoDetailsModalAtom';
 import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import moment from 'moment'
 
 
 const ViewPoDetails = (props) => {
@@ -150,7 +150,7 @@ const sendEmail=async()=>{
         <div className='flex  p-2 space-x-2'>
             <div className='flex basis-1/2  justify-start items-center space-x-2'>
                 <div className='font-semibold text-[#32535f]  '>Creation Date :</div>
-                <div className='font-medium'>{poDetails.creationDate}</div>
+                <div className='font-medium'> {moment(poDetails.creationDate).format('DD-MM-YYYY HH:mm a')}</div>
             </div>
             <div className='flex basis-1/2  justify-end items-center space-x-2'>
             <div className='font-semibold  text-[#32535f] '>Currency :</div>
@@ -250,11 +250,11 @@ const sendEmail=async()=>{
         </div>
         <hr className='h-4 mt-8'/>
         <div className=' flex justify-start  items-center p-2 space-x-2'>
-                Approval
+                Email PO
             </div>
             
         <div className='flex justify-start items-center p-2 space-x-2'>
-        <input className="appearance-none block w-[80%] text-gray-700 border border-gray-500 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="approveremail" type="text" placeholder="Enter approver email id" onChange={(e)=>{setEmail(e.target.value)}} />
+        <input className="appearance-none block w-[80%] text-gray-700 border border-gray-500 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="approveremail" type="text" placeholder="Enter Email Id to Send PO" onChange={(e)=>{setEmail(e.target.value)}} />
         <button onClick={()=>{sendEmail()}}  className='w-[20%] font-medium p-2 rounded-md bg-[#426b79] text-neutral-100 '>Send</button>
             </div>
            

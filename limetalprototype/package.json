@@ -11,6 +11,7 @@
     "cors": "^2.8.5",
     "country-state-city": "^3.0.1",
     "currency-list": "^1.0.8",
+    "dateformat": "^5.0.3",
     "formik": "^2.2.9",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.4",
