@@ -380,7 +380,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                         console.log(response);
                         if(response.status == 200)
                         {
-                                db.query("UPDATE limetalorders SET overallStatus =? WHERE id=?",[3,poId],(err,result)=>{
+                                db.query("UPDATE limetalorders SET overallStatus =?,docNumber=? WHERE id=?",[3,DocNumber,poId],(err,result)=>{
                                     if(err)
                                         {
                                         return res.json({success:false,message:err});
@@ -535,11 +535,13 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
 
     router.post('/createVendor',async (req,res)=>{
     try{    
+        
         const {refreshToken} = req.body;
         const {accountNumber} = req.body.vendorDetails;
         const {addressLineOne} = req.body.vendorDetails;
         const {addressLineTwo} = req.body.vendorDetails;
         const {addressLineThree} = req.body.vendorDetails;
+        const {supplierNumber} =req.body.vendorDetails;
         const {country} = req.body.vendorDetails;
         const {city} = req.body.vendorDetails;
         const {CompanyName}  =req.body.vendorDetails;
@@ -596,7 +598,27 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
         const response = await axios.post(createVendorUrl,createBodyVendor,{headers});
         if(response.status == 200)
         {
-            res.send({message:'Vendor Successfull Created',data:response.data});
+            console.log(response.data);
+            const address = response.data.Vendor.BillAddr.Line1 + response.data.Vendor.BillAddr.Line2 + response.data.Vendor.BillAddr.Line3;
+            const openBalance = response.data.Vendor.Balance;
+            const currencyName = response.data.Vendor.CurrencyRef.name;
+            const currencyValue = response.data.Vendor.CurrencyRef.value;
+            const qbId = response.data.Vendor.Id;
+             db.query("INSERT INTO vendors (name,supplierNumber,streetAddress,city,country,currency,currencyValue,qbId,phone,email,openBalance,poCount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[vendorName,supplierNumber,address,city,country,postalCode,currencyName,currencyValue,qbId,phone,email,openBalance,0],(err,result)=>{
+
+                if(err)
+                {
+                    throw err;
+                }
+                if(result)
+                    {
+                        return res.send({message:'Vendor Successfull Created',data:response.data});
+                    }
+
+            });
+
+          
+            
         }
         else
         {
@@ -606,7 +628,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     catch(e)
     {
         res.status(404).send({
-            message:e.message,
+            message:"Vendor with same name already Exists",
             data:{e}
         });
     }
