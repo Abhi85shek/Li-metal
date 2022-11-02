@@ -25,8 +25,10 @@ const Suppliers = () => {
         {/* <FilterDropdown /> */}
         {localStorage.getItem('uType')==='admin'?
         <>
-    <button type="button" onClick={()=>{setShowAddNewSupplier(true)}} class="text-[#5ba3bd] font-medium border-[#5ba3bd] border-2 text-lg  hover:bg-[#a84136] focus:ring-4 focus:ring-blue-300 hover:text-slate-100 rounded-lg text-md px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 mt-4 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add New Supplier +</button>
-    <button type="button" onClick={()=>{setShowAddNewVendor(true)}} class="text-[#5ba3bd] font-medium border-[#5ba3bd] border-2 text-lg  hover:bg-[#a84136] focus:ring-4 focus:ring-blue-300 hover:text-slate-100 rounded-lg text-md px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 mt-4 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add Supplier QB +</button>
+    <button type="button" onClick={()=>{setShowAddNewSupplier(true)}} class="text-[#5ba3bd] font-medium border-[#5ba3bd] border-2 text-lg  hover:bg-[#5ba3bd] focus:ring-4 focus:ring-blue-300 hover:text-slate-100 rounded-lg text-md px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 mt-4 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add New Supplier +</button>
+   {localStorage.getItem('quickbooksCredentials')!=null?
+    <button type="button" onClick={()=>{setShowAddNewVendor(true)}} class="text-[#5ba3bd] font-medium border-[#5ba3bd] border-2 text-lg  hover:bg-[#5ba3bd] focus:ring-4 focus:ring-blue-300 hover:text-slate-100 rounded-lg text-md px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 mt-4 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add Supplier QB +</button>:null}
+
     </>:null }
     </div>
         <h1 className='text-center mt-2 text-2xl font-medium'>List of all Suppliers present in Database</h1>
