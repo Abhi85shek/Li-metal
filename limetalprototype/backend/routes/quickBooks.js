@@ -604,7 +604,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             const currencyName = response.data.Vendor.CurrencyRef.name;
             const currencyValue = response.data.Vendor.CurrencyRef.value;
             const qbId = response.data.Vendor.Id;
-             db.query("INSERT INTO vendors (name,supplierNumber,streetAddress,city,country,currency,currencyValue,qbId,phone,email,openBalance,poCount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[vendorName,supplierNumber,address,city,country,postalCode,currencyName,currencyValue,qbId,phone,email,openBalance,0],(err,result)=>{
+             db.query("INSERT INTO vendors (name,supplierNumber,streetAddress,city,country,postalCode,currency,currencyValue,qbId,phone,email,openBalance,poCount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[vendorName,supplierNumber,address,city,country,postalCode,currencyName,currencyValue,qbId,phone,email,openBalance,0],(err,result)=>{
 
                 if(err)
                 {
