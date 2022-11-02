@@ -143,7 +143,7 @@ const CompleteOrderModal = (props) => {
     orderObj.secondaryApprover=secondaryApprover
     orderObj.totalApprovers=totalApprovers
     orderObj.userId=localStorage.getItem('uid')
-    orderObj.creationDate=moment().format('YYYY-MM-DD HH:MI:SS')
+   
  
   
    await axios.post("http://localhost:4000/storelocal",{orderObj:orderObj},{
