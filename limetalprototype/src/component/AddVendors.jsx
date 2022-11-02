@@ -104,7 +104,8 @@ useEffect(()=>{
             province: values.province,
             city: values.city,
             postalCode: values.postalCode,
-            countrySubDivisionCode: values.country.split('-')[1]
+            countrySubDivisionCode: values.country.split('-')[1],
+            supplierNumber:values.supplierNumber
         }
     console.log(vendorDetails, refreshToken)
 
@@ -235,7 +236,8 @@ useEffect(()=>{
                                 province:'',
                                 city:'',
                                 postalCode:'',
-                                countrySubDivisionCode:''
+                                countrySubDivisionCode:'',
+                                suppplierNumber:''
                             }}
                             onSubmit={addSupplierHandler}
                         >
@@ -352,6 +354,11 @@ useEffect(()=>{
                                             <label htmlFor='postalCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Postal Code/Zip Code</label>
                                             <Field placeholder="Enter Supplier Postal Code" type="text" id="postalCode" validate={validateField} name="postalCode" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                                             {errors.postalCode && touched.postalCode && <div className='text-red-700'>{errors.postalCode}</div>}
+                                        </div>
+                                        <div className='basis-1/2'>
+                                            <label htmlFor='supplierNumber' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Supplier Number</label>
+                                            <Field placeholder="Enter Supplier Number " type="text" id="supplierNumber" validate={validateField} name="supplierNumber" className="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                                            {errors.supplierNumber && touched.supplierNumber && <div className='text-red-700'>{errors.supplierNumber}</div>}
                                         </div>
                                         {/* <div className='basis-1/2'>
                                             <label htmlFor='countrySubDivisionCode' className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Country Sub-division Code</label>
