@@ -233,7 +233,9 @@ const AllProducts = () => {
    {archiveShowModal ? <ProductArchiveModal  product={selectedArchivedProduct} /> : " "}
    {showAddLocalProductModal? <AddLocalProduct/>:" "}
     {/* <div>Products Page</div> */}
-    <CreateProduct />
+    {localStorage.getItem('uType')==='admin'?
+       
+    <CreateProduct />:null}
     <div className='w-full px-40 py-2 '>
         <div className='w-full flex border-[#6BA4B8] border-2 border- h-14 rounded-md pl-4 '>
         <BsSearch size={28} className='mt-3 text-slate-400 text-xl'/>

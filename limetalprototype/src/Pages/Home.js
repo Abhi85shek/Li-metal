@@ -57,9 +57,9 @@ const Home = () => {
   return (
     <div className='flex flex-col flex-1'> 
        <div className='p-4 flex flex-row justify-around items-center space-x-2 mt-10'> 
-      <HomepageStatitisticsCard title="Total Orders Placed" value={ordersCount} bg='bg-[#cf4232]'/>
+      <HomepageStatitisticsCard title="Total Orders Placed" value={ordersCount} bg='bg-[#3653b4]' />
       <HomepageStatitisticsCard title="Total Approved PO's" value={allApprovedOrdersCount} bg='bg-[#36b45a]'/>
-      <HomepageStatitisticsCard title="Total QB Created PO's" value={allQbOrdersCount} bg='bg-[#3653b4]'/>
+      <HomepageStatitisticsCard title="Total QB Created PO's" value={allQbOrdersCount} bg='bg-[#cf4232]' />
      
       
     </div>  
