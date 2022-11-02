@@ -11,6 +11,7 @@ import { TEST_HOME_PAGE } from '../config/basic';
 import qbConnectModalVisible from '../atoms/qbConnectModalVisible';
 import { useRecoilState } from 'recoil';
 import QuickbooksAuthModal from './QuickbooksAuthModal';
+import { USING_PRODUCTION_SERVER } from '../config/basic';
 
 const Navbar = () => {
   const auth=useContext(AuthContext)
@@ -132,8 +133,8 @@ const disconnectQuickbooks=()=>{
         <nav className="bg-[#6BA4B8] border-vlack-200 px-2 sm:pl-4 py-2.5 text-white pr-8">
         <div className="flex flex-wrap justify-between items-center mx-auto">
         <a href="#" className="flex">
-           <Link to ="/home"> <img src={logo} alt="Logo" /></Link>
-            <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white"></span>
+           <Link className='flex flex-row font-semibold text-2xl space-x-4 uppercase tracking-widest' to ="/home"> <img src={logo} alt="Logo" />{!USING_PRODUCTION_SERVER?<span className='ml-8'> Test </span>:null}</Link>
+            {/* <span className="self-center text-lg font-extrabold whitespace-nowrap dark:text-white"></span> */}
         </a> 
     <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
       <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium items-center">
