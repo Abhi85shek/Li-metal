@@ -232,7 +232,9 @@ const CreateOrder = (props) => {
                 "UnitPrice":data.rate*1
             }
         })
-        }
+        
+    id+=1
+    }
         let orderObj={
             "vendorId":props.vendorId,
             "DocNumber":poGenerateData,
