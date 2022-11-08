@@ -293,6 +293,9 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
     router.post('/createPO',async (req,res)=>{
         // console.log("Hello")
         let finalCount;
+        
+        const {TotalAmt} = req.body.data;
+        console.log(req.body.data);
         const {poId} = req.body; 
         const {refreshToken} = req.body;
                         // console.log(refreshToken);
@@ -317,14 +320,16 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
                         const data = req.body['data'];
                         let {DocNumber} =  data;
                         DocNumber = DocNumber + '-' + finalCount;
-                        const {TotalAmt} = +data;
-                        // console.log(TotalAmt);
+                        
+                        console.log(TotalAmt);
+                        // console.log()
                         const {Line} = data;
+                        console.log(Line[0].ItemBasedExpenseLineDetail);
                         console.log(Line[0].ItemBasedExpenseLineDetail);
                         const {APAccountRef} = data;
                         const {VendorRef} = data;
                         const {ShipTo} = data;
-                        
+                        console.log(TotalAmt);
                         let finalLine =[];
                         for(let i=0 ;i<Line.length;i++)
                             {
