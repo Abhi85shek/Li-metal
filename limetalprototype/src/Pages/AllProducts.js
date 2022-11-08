@@ -280,12 +280,12 @@ const AllProducts = () => {
                     </div>:null
 }
                 </th> 
-                <th   scope="col" className="px-6 py-3">
+                {/* <th   scope="col" className="px-6 py-3">
                     Edit
-                </th>
-                <th scope="col" className="px-6 py-3">
+                </th> */}
+                {/* <th scope="col" className="px-6 py-3">
                     Delete
-                </th>
+                </th> */}
             </tr>
         </thead>
         <tbody>
@@ -301,12 +301,12 @@ const AllProducts = () => {
                     <td className="px-6 py-4">
                         {product.type}
                     </td>
-                    <td onClick={()=>{setShowEditModal(true);setSelectedProduct(product)}} className="px-6 py-4">
+                    {/* <td onClick={()=>{setShowEditModal(true);setSelectedProduct(product)}} className="px-6 py-4">
                         <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Edit</p>
-                    </td>
-                    <td className="px-6 py-4">
+                    </td> */}
+                    {/* <td className="px-6 py-4">
                         <p onClick={()=>{archiveHandler(product)}} className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer">{product.active ==0 ? "Unarchive" : "Archive"}</p>
-                    </td>
+                    </td> */}
                 </tr>
                 )
            )

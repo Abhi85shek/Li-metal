@@ -143,12 +143,12 @@ const AllSuppliers = () => {
                 <th scope="col" className="px-6 py-3">
                     Currency
                 </th>
-                <th scope="col" className="px-6 py-3">
+                {/* <th scope="col" className="px-6 py-3">
                     Edit
                 </th>
                 <th scope="col" className="px-6 py-3">
                     Order
-                </th>
+                </th> */}
             </tr>
         </thead>
         <tbody>
@@ -167,12 +167,12 @@ const AllSuppliers = () => {
                     <td className="px-6 py-4">
                        {supplier.currency}
                     </td>
-                    <td onClick={()=>{setShowEditModal(true);setselectedSupplier(supplier)}} className="px-6 py-4">
+                    {/* <td onClick={()=>{setShowEditModal(true);setselectedSupplier(supplier)}} className="px-6 py-4">
                         <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Edit</p>
                     </td>
                     <td onClick={()=>{setSelectedSupplierNumber(supplier.supplierNumber)}} className="px-6 py-4">
                         <button className={index%2==0?"  text-[#3C86A1] p-2 text-[1.1vw] rounded font-md hover:underline cursor-pointer border-2 border-[#3C86A1]" :"text-neutral-100 text-[1.1vw] rounded border-[#3C86A1] border-2 p-2 font-md hover:underline cursor-pointer "}>Create</button>
-                    </td>
+                    </td> */}
                 </tr>
                 )
            )
