@@ -135,8 +135,8 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
     {
         try{
     const {supplierName} = req.body;   
-    const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM vendors WHERE supplier LIKE '%${supplierName}%'`);
-    let cur_records = await db.runQuery(`SELECT * FROM vednors WHERE supplier LIKE '%${supplierName}%' LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+    const total_count_array =  await db.runQuery(`SELECT COUNT(*) AS total_records FROM vendors WHERE name LIKE '%${supplierName}%'`);
+    let cur_records = await db.runQuery(`SELECT * FROM vendors WHERE name LIKE '%${supplierName}%' LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
     let result ={
         total_count:total_count_array[0].total_records,
         cur_records:cur_records,

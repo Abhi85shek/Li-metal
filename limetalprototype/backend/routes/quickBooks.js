@@ -314,7 +314,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             if(result.length >0)
                 {
                     finalCount = result[0].poCount +1;
-                    
+                  
                     try{
                         
                         const data = req.body['data'];
@@ -609,7 +609,9 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
             const currencyName = response.data.Vendor.CurrencyRef.name;
             const currencyValue = response.data.Vendor.CurrencyRef.value;
             const qbId = response.data.Vendor.Id;
-             db.query("INSERT INTO vendors (name,supplierNumber,streetAddress,city,country,postalCode,currency,currencyValue,qbId,phone,email,openBalance,poCount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[vendorName,supplierNumber,address,city,country,postalCode,currencyName,currencyValue,qbId,phone,email,openBalance,0],(err,result)=>{
+            const supplier_number = await db.runQuery("SELECT MAX(supplierNumber) as supplierNumber FROM vendors");
+             let newSupplierNumber= supplier_number[0].supplierNumber+1;
+             db.query("INSERT INTO vendors (name,supplierNumber,streetAddress,city,country,postalCode,currency,currencyValue,qbId,phone,email,openBalance,poCount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",[vendorName,newSupplierNumber,address,city,country,postalCode,currencyName,currencyValue,qbId,phone,email,openBalance,0],(err,result)=>{
 
                 if(err)
                 {
