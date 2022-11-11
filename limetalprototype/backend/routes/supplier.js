@@ -68,9 +68,9 @@ const checkAuth = require('../middleware/check-auth');
 
 router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
     try{
-    const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM vendors`);
+    const total_count_array = await db.runQuery(`SELECT COUNT(*) AS total_records FROM vendors ORDER by supplierNumber DESC`);
 
-    let cur_records = await db.runQuery(`SELECT * FROM vendors LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
+    let cur_records = await db.runQuery(`SELECT * FROM vendors ORDER by supplierNumber DESC LIMIT ${req.params.curr_page * 10},${req.params.curr_count}`);
 
     let result ={
         total_count:total_count_array[0].total_records,
@@ -89,7 +89,7 @@ router.get('/allSuppliers/:curr_page/:curr_count',async (req,res)=>{
 // Get SupplierName and SupplierNumber
     router.get('/getSuppliers',async (req,res)=>{
         try {
-            db.query(`SELECT id,name,supplierNumber,qbId,poCount FROM vendors WHERE supplierNumber !=' '`,(err,result)=>{
+            db.query(`SELECT id,name,supplierNumber,qbId,poCount FROM vendors WHERE supplierNumber !=' ' ORDER BY name`,(err,result)=>{
                 if(err)
                     {
                         throw err;

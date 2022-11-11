@@ -603,7 +603,7 @@ router.get('/quickBookToken/:code/:state/:realmId', async (req, res) => {
         const response = await axios.post(createVendorUrl,createBodyVendor,{headers});
         if(response.status == 200)
         {
-            console.log(response.data);
+            // console.log(response.data);
             const address = response.data.Vendor.BillAddr.Line1 + response.data.Vendor.BillAddr.Line2 + response.data.Vendor.BillAddr.Line3;
             const openBalance = response.data.Vendor.Balance;
             const currencyName = response.data.Vendor.CurrencyRef.name;
